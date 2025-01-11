@@ -1,0 +1,27 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Android" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/secondary_blue</item>
+        <item name="colorPrimaryVariant">@color/main_blue</item>
+        <item name="colorOnPrimary">@color/main_blue</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary_contrast</item>
+        <item name="colorSecondaryVariant">@color/main_contrast</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/CustomActionBarStyle</item>
+    </style>
+    <style name="CustomActionBarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="background">@color/main_blue</item>
+            <item name="titleTextAppearance">@style/CustomActionBarTitle</item>
+    </style>
+
+    <!-- Custom Action Bar Title Style -->
+    <style name="CustomActionBarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item> <!-- Adjust size if needed -->
+    </style>
+</resources>

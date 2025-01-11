@@ -1,0 +1,27 @@
+
+
+Tabla productos
+#id
+nombre
+precio
+stock?
+ruta imagen
+-id categoria
+
+Tabla usuarios
+#nombre
+password
+
+Tabla categoria
+#id categoria
+Nombre categoria
+
+Tabla compras
+#id
+nombre_usuario
+fecha_compra
+
+Tabla productos comprados
+#id_compra
+#id producto
+cantidad

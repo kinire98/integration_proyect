@@ -1,0 +1,19 @@
+package com.kinire.android.ui.fragments.products;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
+public class ProductsListViewModel extends ViewModel {
+
+    private final MutableLiveData<String> mText;
+
+    public ProductsListViewModel() {
+        mText = new MutableLiveData<>();
+        mText.setValue("This is home fragment");
+    }
+
+    public LiveData<String> getText() {
+        return mText;
+    }
+}
