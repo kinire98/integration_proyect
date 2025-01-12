@@ -1,0 +1,214 @@
+[
+  {
+    "id": 1,
+    "name": "Action Figure",
+    "price": 14.99,
+    "image_path": "./img/test.png",
+    "category_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Board Game",
+    "price": 29.99,
+    "image_path": "./img/test.png",
+    "category_id": 1
+  },
+  {
+    "id": 3,
+    "name": "T-Shirt",
+    "price": 19.99,
+    "image_path": "./img/test.png",
+    "category_id": 2
+  },
+  {
+    "id": 4,
+    "name": "Jeans",
+    "price": 49.99,
+    "image_path": "./img/test.png",
+    "category_id": 2
+  },
+  {
+    "id": 5,
+    "name": "Laptop",
+    "price": 999.99,
+    "image_path": "./img/test.png",
+    "category_id": 3
+  },
+  {
+    "id": 6,
+    "name": "Smartphone",
+    "price": 799.99,
+    "image_path": "./img/test.png",
+    "category_id": 3
+  },
+  {
+    "id": 7,
+    "name": "Knife Set",
+    "price": 79.99,
+    "image_path": "./img/test.png",
+    "category_id": 7
+  },
+  {
+    "id": 8,
+    "name": "Cooking Pan",
+    "price": 34.99,
+    "image_path": "./img/test.png",
+    "category_id": 7
+  },
+  {
+    "id": 9,
+    "name": "Soccer Ball",
+    "price": 24.99,
+    "image_path": "./img/test.png",
+    "category_id": 8
+  },
+  {
+    "id": 10,
+    "name": "Tennis Racket",
+    "price": 69.99,
+    "image_path": "./img/test.png",
+    "category_id": 8
+  },
+  {
+    "id": 11,
+    "name": "Dog Food",
+    "price": 19.99,
+    "image_path": "./img/test.png",
+    "category_id": 17
+  },
+  {
+    "id": 12,
+    "name": "Gaming Console",
+    "price": 499.99,
+    "image_path": "./img/test.png",
+    "category_id": 18
+  },
+  {
+    "id": 13,
+    "name": "Electric Guitar",
+    "price": 799.99,
+    "image_path": "./img/test.png",
+    "category_id": 19
+  },
+  {
+    "id": 14,
+    "name": "Rice",
+    "price": 1.99,
+    "image_path": "./img/test.png",
+    "category_id": 20
+  },
+  {
+    "id": 15,
+    "name": "Baby Stroller",
+    "price": 129.99,
+    "image_path": "./img/test.png",
+    "category_id": 21
+  }
+]
+[
+  {
+    "id": 1,
+    "name": "Action Figure",
+    "price": 14.99,
+    "image_path": "./img/test.png",
+    "category_id": 1
+  },
+  {
+    "id": 2,
+    "name": "Board Game",
+    "price": 29.99,
+    "image_path": "./img/test.png",
+    "category_id": 1
+  },
+  {
+    "id": 3,
+    "name": "T-Shirt",
+    "price": 19.99,
+    "image_path": "./img/test.png",
+    "category_id": 2
+  },
+  {
+    "id": 4,
+    "name": "Jeans",
+    "price": 49.99,
+    "image_path": "./img/test.png",
+    "category_id": 2
+  },
+  {
+    "id": 5,
+    "name": "Laptop",
+    "price": 999.99,
+    "image_path": "./img/test.png",
+    "category_id": 3
+  },
+  {
+    "id": 6,
+    "name": "Smartphone",
+    "price": 799.99,
+    "image_path": "./img/test.png",
+    "category_id": 3
+  },
+  {
+    "id": 7,
+    "name": "Knife Set",
+    "price": 79.99,
+    "image_path": "./img/test.png",
+    "category_id": 7
+  },
+  {
+    "id": 8,
+    "name": "Cooking Pan",
+    "price": 34.99,
+    "image_path": "./img/test.png",
+    "category_id": 7
+  },
+  {
+    "id": 9,
+    "name": "Soccer Ball",
+    "price": 24.99,
+    "image_path": "./img/test.png",
+    "category_id": 8
+  },
+  {
+    "id": 10,
+    "name": "Tennis Racket",
+    "price": 69.99,
+    "image_path": "./img/test.png",
+    "category_id": 8
+  },
+  {
+    "id": 11,
+    "name": "Dog Food",
+    "price": 19.99,
+    "image_path": "./img/test.png",
+    "category_id": 17
+  },
+  {
+    "id": 12,
+    "name": "Gaming Console",
+    "price": 499.99,
+    "image_path": "./img/test.png",
+    "category_id": 18
+  },
+  {
+    "id": 13,
+    "name": "Electric Guitar",
+    "price": 799.99,
+    "image_path": "./img/test.png",
+    "category_id": 19
+  },
+  {
+    "id": 14,
+    "name": "Rice",
+    "price": 1.99,
+    "image_path": "./img/test.png",
+    "category_id": 20
+  },
+  {
+    "id": 15,
+    "name": "Baby Stroller",
+    "price": 129.99,
+    "image_path": "./img/test.png",
+    "category_id": 21
+  }
+]

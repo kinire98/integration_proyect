@@ -11,7 +11,6 @@ local.properties
 *.class
 *.db
 *.hprof
-
 # Maven specific
 target/
 *.log
@@ -66,3 +65,10 @@ Thumbs.db
 *.war
 *.ear
 *.log
+
+
+
+
+
+
+*.env

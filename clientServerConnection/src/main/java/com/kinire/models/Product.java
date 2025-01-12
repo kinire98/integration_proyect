@@ -1,16 +1,6 @@
 package com.kinire.models;
 
-public class Product {
-    private String name;
-    public Product(String name) {
-        this.name = name;
-    }
+import java.io.Serializable;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+public record Product(long id, String name, float price, String imagePath, Category category) implements Serializable {
 }
