@@ -24,8 +24,8 @@ public class ShoppingCartFragment extends Fragment {
         binding = FragmentShoppingCartBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textShoppingCart;
-        shoppingCartViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        /*final TextView textView = binding.textShoppingCart;
+        shoppingCartViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
         return root;
     }
 

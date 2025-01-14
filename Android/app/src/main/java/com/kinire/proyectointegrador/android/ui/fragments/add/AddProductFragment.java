@@ -24,8 +24,8 @@ public class AddProductFragment extends Fragment {
         binding = FragmentAddProductBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textAddProduct;
-        addProductViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        /*final TextView textView = binding.textAddProduct;
+        addProductViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
         return root;
     }
 

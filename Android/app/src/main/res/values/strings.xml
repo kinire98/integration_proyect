@@ -10,6 +10,10 @@
     <string name="register_user">Iniciar sesión</string>
     <string name="invalid_user_name">El nombre de usuario que introdujiste no es válido</string>
     <string name="incorrect_admin_password">La contraseña de administrador que introdujiste es incorrecta</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="add_to_cart">Añadir al carrito</string>
     <string name="shared_preferences_key">4b2c3564-f6f7-4837-83da-33a9f1efcfbf</string>
     <string name="user_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
+    <string name="product_parcelable_key">c8117227-4702-4f62-bf1e-ba339e6e12e</string>
 </resources>

@@ -19,7 +19,6 @@ public class SharedPreferencesManager {
     }
 
     public String getUser() {
-
         return sharedPreferences.getString(USER_SHARED_PREFERENCES_KEY, "");
     }
 

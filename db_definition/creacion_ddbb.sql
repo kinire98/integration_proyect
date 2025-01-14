@@ -11,7 +11,7 @@ CREATE TABLE products(
   image_path VARCHAR(100),
   category_id BIGINT,
   PRIMARY KEY(ID),
-  FOREIGN KEY(category_id) REFERENCES categories(id)
+  FOREIGN KEY(category_id) REFERENCES categories(id) ON UPDATE CASCADE ON DELETE SET NULL
 );
 CREATE TABLE users (
   username VARCHAR(255) NOT NULL,
@@ -23,13 +23,13 @@ CREATE TABLE purchases (
   username VARCHAR(255),
   purchase_date DATE,
   PRIMARY KEY(id),
-  FOREIGN KEY(username) REFERENCES users(username)
+  FOREIGN KEY(username) REFERENCES users(username) ON UPDATE CASCADE ON DELETE SET NULL
 );
 CREATE TABLE purchased_products (
   purchase_id BIGINT NOT NULL,
   product_id BIGINT NOT NULL,
   amount INT,
   PRIMARY KEY(purchase_id, product_id),
-  FOREIGN KEY(purchase_id) REFERENCES purchases(id),
+  FOREIGN KEY(purchase_id) REFERENCES purchases(id) ON UPDATE CASCADE ON DELETE SET NULL,
   FOREIGN KEY(product_id) REFERENCES products(id)
 );

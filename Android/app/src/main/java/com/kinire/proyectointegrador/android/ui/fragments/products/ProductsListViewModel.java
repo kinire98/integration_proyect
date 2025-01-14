@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.kinire.proyectointegrador.models.Product;
+import com.kinire.proyectointegrador.components.Product;
 
 import java.util.ArrayList;
 

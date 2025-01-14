@@ -1,7 +1,7 @@
 package com.kinire.proyectointegrador.client;
 
-import com.kinire.proyectointegrador.models.Category;
-import com.kinire.proyectointegrador.models.Product;
+import com.kinire.proyectointegrador.components.Product;
+import com.kinire.proyectointegrador.components.Category;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -31,18 +31,20 @@ public class Connection {
 
     public ArrayList<Product> getProducts() throws SQLException {
         ArrayList<Product> products = new ArrayList<>();
-        products.add(
-                new Product(
-                        1L,
-                        "Producto prueba",
-                        15.0f,
-                        "testimage.png",
-                        new Category(
-                                1L,
-                                "Prueba"
-                        )
-                )
-        );
+        for (int i = 0; i < 50; i++) {
+            products.add(
+                    new Product(
+                            1L,
+                            "Producto prueba",
+                            15.0f,
+                            "testimage.png",
+                            new Category(
+                                    1L,
+                                    "Prueba"
+                            )
+                    )
+            );
+        }
         return products;
     }
 
@@ -73,4 +75,8 @@ public class Connection {
     public boolean isAdminPasswordCorrect(String password) {
         return true;
     }
+    public void uploadTicket(ShoppingCart shoppingCart) {
+
+    }
+
 }

@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.client.Connection;
-import com.kinire.proyectointegrador.models.Product;
+import com.kinire.proyectointegrador.components.Product;
 
 
 import java.util.List;
@@ -62,7 +62,7 @@ public class ProductListAdapter extends BaseAdapter {
             holder.priceField = view.findViewById(R.id.price_field);
             holder.imageView = view.findViewById(R.id.image_field);
             new Thread(() -> {
-                holder.image = Drawable.createFromStream(Connection.getInstance().getImage(data.get(position).imagePath()), "remote");
+                holder.image = Drawable.createFromStream(Connection.getInstance().getImage(data.get(position).getImagePath()), "remote");
                 ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
             }).start();
             view.setTag(holder);
@@ -70,9 +70,9 @@ public class ProductListAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.imageView.setImageDrawable(holder.image);
-        holder.productField.setText(data.get(position).name());
-        holder.categoryField.setText(data.get(position).category().name());
-        holder.priceField.setText(String.format(Locale.getDefault(),"%.2f€", data.get(position).price()));
+        holder.productField.setText(data.get(position).getName());
+        holder.categoryField.setText(data.get(position).getCategory().getName());
+        holder.priceField.setText(String.format(Locale.getDefault(),"%.2f€", data.get(position).getPrice()));
         return view;
     }
     private static class ViewHolder {

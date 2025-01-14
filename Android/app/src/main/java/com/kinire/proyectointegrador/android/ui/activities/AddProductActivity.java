@@ -22,5 +22,11 @@ public class AddProductActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        this.setUpToolbar();
+    }
+    private void setUpToolbar() {
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+        }
     }
 }

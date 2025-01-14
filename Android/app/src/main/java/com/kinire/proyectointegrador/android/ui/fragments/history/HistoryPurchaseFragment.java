@@ -24,8 +24,8 @@ public class HistoryPurchaseFragment extends Fragment {
         binding = FragmentHistoryPurchaseBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textHistoryPurchase;
-        historyPurchaseViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        /*final TextView textView = binding.textHistoryPurchase;
+        historyPurchaseViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);*/
         return root;
     }
 

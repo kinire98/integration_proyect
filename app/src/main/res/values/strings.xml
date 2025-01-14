@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">Caja registradora</string>
-    <string name="title_products">Productos</string>
-    <string name="title_cart">Carrito</string>
-    <string name="title_buys">Historial</string>
-    <string name="title_add_product">Añadir productos</string>
-    <string name="settings">Ajustes</string>
-    <string name="login">Iniciar sesión</string>
-</resources>

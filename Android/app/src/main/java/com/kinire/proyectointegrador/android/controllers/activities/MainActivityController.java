@@ -8,7 +8,7 @@ import com.kinire.proyectointegrador.android.ui.activities.SettingsActivity;
 import com.kinire.proyectointegrador.android.ui.activities.UserActivity;
 import com.kinire.proyectointegrador.android.users.UserAdmin;
 import com.kinire.proyectointegrador.client.Connection;
-import com.kinire.proyectointegrador.models.Product;
+import com.kinire.proyectointegrador.components.Product;
 
 import java.io.IOException;
 import java.sql.SQLException;
