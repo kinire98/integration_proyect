@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_products_list">
+
+    <fragment
+        android:id="@+id/navigation_products_list"
+        android:name="com.kinire.android.proyectointegrador.ui.fragments.products.ProductsListFragment"
+        android:label="@string/title_products"
+        tools:layout="@layout/fragment_products_list" />
+
+    <fragment
+        android:id="@+id/navigation_shopping_cart"
+        android:name="com.kinire.android.proyectointegrador.ui.fragments.cart.ShoppingCartFragment"
+        android:label="@string/title_cart"
+        tools:layout="@layout/fragment_shopping_cart" />
+
+    <fragment
+        android:id="@+id/navigation_history_purchase"
+        android:name="com.kinire.android.proyectointegrador.ui.fragments.history.HistoryPurchaseFragment"
+        android:label="@string/title_buys"
+        tools:layout="@layout/fragment_history_purchase" />
+
+    <fragment
+        android:id="@+id/navigation_add_product"
+        android:name="com.kinire.android.proyectointegrador.ui.fragments.add.AddProductFragment"
+        android:label="@string/title_add_product"
+        tools:layout="@layout/fragment_add_product" />
+</navigation>
