@@ -10,27 +10,20 @@ import java.util.logging.Logger;
 
 public class CategoryImpl implements CategoryDAO {
 
-    private final Connection connection;
-
     private final Logger logger;
 
-    public CategoryImpl() throws SQLException, ClassNotFoundException {
-        Class.forName("org.mariadb.jdbc.Driver");
-        this.connection = DriverManager.getConnection("jdbc:mariadb://localhost/tpv_test", "admin", "");
+    public CategoryImpl() {
         this.logger = Logger.getLogger(CategoryImpl.class.getName());
     }
 
-    public void close() throws SQLException {
-        this.connection.close();
-    }
 
     @Override
     public boolean insertCategory(Category category) {
         boolean success = false;
-        String query = "INSERT INTO categories VALUES (? , ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, category.getId());
-            statement.setString(2, category.getName());
+        String query = "INSERT INTO categories (name) VALUES (?)";
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, category.getName());
             success = statement.executeUpdate() == 1;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
@@ -42,7 +35,8 @@ public class CategoryImpl implements CategoryDAO {
     public Category selectCategory(long id) {
         String query = "SELECT * FROM categories WHERE id = ?";
         Category category = null;
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
             ResultSet set = statement.executeQuery();
             set.next();
@@ -61,7 +55,8 @@ public class CategoryImpl implements CategoryDAO {
     public boolean updateCategory(long id, Category category) {
         boolean success = false;
         String query = "UPDATE categories SET name = ? WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, category.getName());
             statement.setLong(2, id);
             success = statement.executeUpdate() == 1;
@@ -75,7 +70,8 @@ public class CategoryImpl implements CategoryDAO {
     public boolean deleteCategory(long id) {
         boolean success = false;
         String query = "DELETE FROM categories WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
             success = statement.executeUpdate() == 1;
         } catch (SQLException e) {

@@ -8,24 +8,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class UserImpl implements UserDAO {
-    private final Connection connection;
 
     private final Logger logger;
 
-    public UserImpl() throws SQLException, ClassNotFoundException {
-        Class.forName("org.mariadb.jdbc.Driver");
-        this.connection = DriverManager.getConnection("jdbc:mariadb://localhost/tpv_test", "admin", "");
+    public UserImpl() {
         this.logger = Logger.getLogger(CategoryImpl.class.getName());
     }
 
-    public void close() throws SQLException {
-        this.connection.close();
-    }
     @Override
     public boolean insertUser(User user) {
         boolean success = false;
         String query = "INSERT INTO users VALUES (?, PASSWORD(?))";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getUser());
             statement.setString(2, user.getPassword());
             success = statement.executeUpdate() == 1;
@@ -39,7 +34,8 @@ public class UserImpl implements UserDAO {
     public User selectUser(String username) {
         User user = null;
         String query = "SELECT * FROM users WHERE username=?";
-        try (PreparedStatement statement = connection.prepareStatement(query)){
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, username);
             ResultSet set = statement.executeQuery();
             set.next();
@@ -58,7 +54,8 @@ public class UserImpl implements UserDAO {
     public boolean updateUser(String username, User user) {
         boolean success = false;
         String query = "UPDATE users SET username=?, password=PASSWORD(?) WHERE username=?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getUser());
             statement.setString(2, user.getPassword());
             statement.setString(3, username);
@@ -73,7 +70,8 @@ public class UserImpl implements UserDAO {
     public boolean deleteUser(String username) {
         boolean success = false;
         String query = "DELETE FROM users WHERE username=?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
             success = statement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -86,7 +84,8 @@ public class UserImpl implements UserDAO {
     public boolean correctUserData(User user) {
         boolean correct = false;
         String query = "SELECT * FROM users WHERE username = ? AND password = PASSWORD(?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getUser());
             statement.setString(2, user.getPassword());
             ResultSet set = statement.executeQuery();
