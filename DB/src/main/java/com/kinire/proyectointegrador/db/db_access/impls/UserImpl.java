@@ -47,6 +47,7 @@ public class UserImpl implements UserDAO {
                     set.getString("username"),
                     set.getString("password")
             );
+            set.close();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
         }
@@ -79,5 +80,21 @@ public class UserImpl implements UserDAO {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
         }
         return success;
+    }
+
+    @Override
+    public boolean correctUserData(User user) {
+        boolean correct = false;
+        String query = "SELECT * FROM users WHERE username = ? AND password = PASSWORD(?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getUser());
+            statement.setString(2, user.getPassword());
+            ResultSet set = statement.executeQuery();
+            correct = set.next();
+            set.close();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return correct;
     }
 }
