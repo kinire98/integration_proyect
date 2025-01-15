@@ -87,7 +87,7 @@ public class ProductImpl implements ProductDAO {
     }
 
     @Override
-    public List<Product> getProductsByIds(long[] ids) {
+    public List<Product> selectProductsByIds(long[] ids) {
         if(ids.length < 2)
             throw new IllegalArgumentException("If you are going to use just one id use the getOne method");
         List<Product> products = new ArrayList<>();
@@ -106,7 +106,7 @@ public class ProductImpl implements ProductDAO {
 
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> selectAllProducts() {
         List<Product> products = new ArrayList<>();
         String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on p.category_id = c.id";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
