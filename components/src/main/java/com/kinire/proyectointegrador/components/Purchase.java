@@ -1,10 +1,14 @@
 package com.kinire.proyectointegrador.components;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Purchase implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 5L;
 
     private long id;
 

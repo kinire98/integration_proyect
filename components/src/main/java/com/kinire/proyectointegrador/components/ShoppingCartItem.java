@@ -1,8 +1,12 @@
 package com.kinire.proyectointegrador.components;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class ShoppingCartItem implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 4L;
 
     private Product product;
 
