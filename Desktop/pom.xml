@@ -7,6 +7,25 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <exec.mainClass>com.kinire.proyectointegrador.desktop.Desktop</exec.mainClass>
+        <exec.mainClass>com.kinire.proyectointegrador.desktop.Main</exec.mainClass>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.kinire.proyectointegrador</groupId>
+            <artifactId>components</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.kinire.proyectointegrador</groupId>
+            <artifactId>clientServerConnection</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.formdev/flatlaf -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.5.4</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
 </project>
