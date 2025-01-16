@@ -53,6 +53,7 @@ public class PurchaseProductImpl implements PurchasedProductDAO {
                            set.getString("p.name"),
                            set.getFloat("price"),
                            set.getString("image_path"),
+                           set.getDate("last_modification").toLocalDate(),
                            new Category(
                                    set.getLong("c.id"),
                                    set.getString("c.name")
@@ -93,6 +94,7 @@ public class PurchaseProductImpl implements PurchasedProductDAO {
                                 set.getString("p.name"),
                                 set.getFloat("price"),
                                 set.getString("image_path"),
+                                set.getDate("last_modification").toLocalDate(),
                                 new Category(
                                         set.getLong("c.id"),
                                         set.getString("c.name")

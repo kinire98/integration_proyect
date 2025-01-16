@@ -2,6 +2,7 @@ package com.kinire.proyectointegrador.components;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 public class Product implements Serializable {
 
@@ -16,13 +17,16 @@ public class Product implements Serializable {
 
     private String imagePath;
 
+    private LocalDate lastModified;
+
     private Category category;
 
-    public Product(long id, String name, float price, String imagePath, Category category) {
+    public Product(long id, String name, float price, String imagePath,  LocalDate lastModified, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imagePath = imagePath;
+        this.lastModified = lastModified;
         this.category = category;
     }
 
@@ -31,6 +35,7 @@ public class Product implements Serializable {
         this.name = "";
         this.price = 0.0f;
         this.imagePath = "";
+        this.lastModified = LocalDate.now();
         this.category = new Category();
     }
 
@@ -48,6 +53,10 @@ public class Product implements Serializable {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public LocalDate getLastModified() {
+        return lastModified;
     }
 
     public Category getCategory() {
@@ -70,7 +79,12 @@ public class Product implements Serializable {
         this.imagePath = imagePath;
     }
 
+    public void setLastModified(LocalDate lastModified) {
+        this.lastModified = lastModified;
+    }
+
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }

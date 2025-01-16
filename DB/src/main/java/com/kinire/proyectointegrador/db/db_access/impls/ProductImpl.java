@@ -55,6 +55,7 @@ public class ProductImpl implements ProductDAO {
                     set.getString("p.name"),
                     set.getFloat("price"),
                     set.getString("image_path"),
+                    set.getDate("last_modification").toLocalDate(),
                     new Category(
                             set.getLong("c.id"),
                             set.getString("c.name")
@@ -114,6 +115,12 @@ public class ProductImpl implements ProductDAO {
         return products;
     }
 
+    /**
+     *
+     * @param id
+     * @param product
+     * @return
+     */
     @Override
     public boolean updateProduct(long id, Product product) {
         if(categoryDAO.selectCategory(product.getCategory().getId()) == null)
@@ -157,6 +164,7 @@ public class ProductImpl implements ProductDAO {
                             set.getString("p.name"),
                             set.getFloat("price"),
                             set.getString("image_path"),
+                            set.getDate("last_modification").toLocalDate(),
                             new Category(
                                     set.getLong("c.id"),
                                     set.getString("c.name")

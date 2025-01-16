@@ -71,6 +71,7 @@ public class PurchaseImpl implements PurchaseDAO {
                                         set.getString("p.name"),
                                         set.getFloat("price"),
                                         set.getString("image_path"),
+                                        set.getDate("last_modification").toLocalDate(),
                                         new Category(
                                                 set.getLong("c.id"),
                                                 set.getString("c.name")
@@ -115,11 +116,13 @@ public class PurchaseImpl implements PurchaseDAO {
                 "INNER JOIN tpv_test.products p on p.id = pp.product_id " +
                 "INNER JOIN tpv_test.categories c on c.id = p.category_id " +
                 "INNER JOIN tpv_test.users u on u.username = purchases.username " +
-                "WHERE MONTH(purchase_date) = MONTH(?) " +
+                "WHERE MONTH(purchase_date) = MONTH(?) AND " +
+                "YEAR(purchase_date) = YEAR(?) " +
                 "ORDER BY purchases.id";
         try (Connection connection = DataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDate(1, Date.valueOf(date));
+            statement.setDate(2, Date.valueOf(date));
             selectPurchases(purchases, statement);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
@@ -157,6 +160,7 @@ public class PurchaseImpl implements PurchaseDAO {
                                     set.getString("p.name"),
                                     set.getFloat("price"),
                                     set.getString("image_path"),
+                                    set.getDate("last_modification").toLocalDate(),
                                     new Category(
                                             set.getLong("c.id"),
                                             set.getString("c.name")
