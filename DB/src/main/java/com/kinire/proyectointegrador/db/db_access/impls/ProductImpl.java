@@ -2,11 +2,9 @@ package com.kinire.proyectointegrador.db.db_access.impls;
 
 import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;
-import com.kinire.proyectointegrador.components.User;
 import com.kinire.proyectointegrador.db.db_access.DAOs.CategoryDAO;
 import com.kinire.proyectointegrador.db.db_access.DAOs.ProductDAO;
 
-import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;

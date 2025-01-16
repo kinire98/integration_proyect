@@ -2,7 +2,6 @@ package com.kinire.proyectointegrador.db.db_access.impls;
 
 import com.kinire.proyectointegrador.components.*;
 import com.kinire.proyectointegrador.db.db_access.DAOs.PurchaseDAO;
-import jdk.jfr.DataAmount;
 
 import java.sql.*;
 import java.time.LocalDate;

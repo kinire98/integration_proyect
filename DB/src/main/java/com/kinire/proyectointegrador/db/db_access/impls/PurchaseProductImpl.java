@@ -3,7 +3,6 @@ package com.kinire.proyectointegrador.db.db_access.impls;
 import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.ShoppingCartItem;
-import com.kinire.proyectointegrador.db.db_access.DAOs.ProductDAO;
 import com.kinire.proyectointegrador.db.db_access.DAOs.PurchasedProductDAO;
 
 import java.sql.*;
