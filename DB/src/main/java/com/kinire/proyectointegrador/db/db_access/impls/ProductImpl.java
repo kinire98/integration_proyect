@@ -6,8 +6,11 @@ import com.kinire.proyectointegrador.components.User;
 import com.kinire.proyectointegrador.db.db_access.DAOs.CategoryDAO;
 import com.kinire.proyectointegrador.db.db_access.DAOs.ProductDAO;
 
+import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,6 +118,47 @@ public class ProductImpl implements ProductDAO {
         return products;
     }
 
+    @Override
+    public List<Product> selectMissingProducts(List<Product> productsAlreadyFetched) {
+        if(productsAlreadyFetched.isEmpty())
+            throw new IllegalArgumentException("Product list must have some product");
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT * FROM products INNER JOIN tpv_test.categories c on products.category_id = c.id" +
+                " WHERE products.id NOT IN (?" + ", ?".repeat(productsAlreadyFetched.size() - 1) + ")";
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            for (int i = 0; i < productsAlreadyFetched.size(); i++) {
+                statement.setLong(i + 1, productsAlreadyFetched.get(i).getId());
+            }
+            getProductsWithStatement(products, statement);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return products;
+    }
+
+    @Override
+    public List<Product> selectUpdatedProducts(List<Product> productsToCheck) {
+        if(productsToCheck.isEmpty())
+            throw new IllegalArgumentException("Product list must have some product");
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT id, last_modification FROM products";
+        final HashMap<Long, LocalDate> lastUpdatedById = new HashMap<>();
+        try (Connection connection = DataSource.getConnection();
+               PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet set = statement.executeQuery();
+            while(set.next())
+                lastUpdatedById.put(set.getLong("id"), set.getDate("last_modification").toLocalDate());
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        for (Product product : productsToCheck) {
+            LocalDate modifiedDate = lastUpdatedById.get(product.getId());
+            if(modifiedDate.isAfter(product.getLastModified()))
+                products.add(product);
+        }
+        return products;
+    }
     /**
      *
      * @param id

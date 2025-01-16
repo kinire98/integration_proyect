@@ -2,16 +2,20 @@ package com.kinire.proyectointegrador.client;
 
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Category;
+import com.kinire.proyectointegrador.components.Purchase;
+import com.kinire.proyectointegrador.components.User;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Connection {
 
-    private java.sql.Connection connection;
-
     private static Connection self;
+
+    private User user;
+
 
     public static Connection getInstance() {
         if(self == null) {
@@ -23,11 +27,7 @@ public class Connection {
         }
         return self;
     }
-    Connection() throws ClassNotFoundException, SQLException {
-
-        /*Class.forName("org.mariadb.jdbc.Driver");
-        this.connection = DriverManager.getConnection("jdbc:mariadb://localhost/tpv_test", "admin", "");*/
-    }
+    Connection() {}
 
     public ArrayList<Product> getProducts() throws SQLException {
         ArrayList<Product> products = new ArrayList<>();
@@ -38,6 +38,7 @@ public class Connection {
                             "Producto prueba",
                             15.0f,
                             "testimage.png",
+                            LocalDate.now(),
                             new Category(
                                     1L,
                                     "Prueba"
@@ -47,36 +48,19 @@ public class Connection {
         }
         return products;
     }
-
-    /*public ArrayList<Product> getProducts() throws SQLException {
-        ArrayList<Product> products = new ArrayList<>();
-        Statement statement = connection.createStatement();
-        String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on p.category_id = c.id;";
-        ResultSet set = statement.executeQuery(query);
-        while(set.next()) {
-            products.add(
-                    new Product(
-                            set.getLong("p.id"),
-                            set.getString("p.name"),
-                            set.getFloat("price"),
-                            set.getString("image_path"),
-                            new Category(
-                                    set.getLong("c.id"),
-                                    set.getString("c.name")
-                            )
-                    )
-            );
-        }
-        return products;
-    }*/
     public InputStream getImage(String path) {
         return null;
     }
     public boolean isAdminPasswordCorrect(String password) {
         return true;
     }
-    public void uploadTicket(ShoppingCart shoppingCart) {
+    public void uploadPurchase(Purchase purchase) {}
 
+    public User getUser() {
+        return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
