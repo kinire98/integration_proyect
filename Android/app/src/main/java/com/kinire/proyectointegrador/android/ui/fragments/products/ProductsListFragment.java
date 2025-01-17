@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,6 +22,8 @@ import java.util.List;
 
 public class ProductsListFragment extends Fragment {
 
+    private final static String CANT_GET_PRODUCTS_ERROR_MESSAGE = "No se pudo obtener la lista de productos";
+
     private FragmentProductsListBinding binding;
 
     private ListView productList;
@@ -28,7 +31,6 @@ public class ProductsListFragment extends Fragment {
     private ProductListFragmentController controller;
 
     private ProductsListViewModel viewModel;
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,6 +58,10 @@ public class ProductsListFragment extends Fragment {
     }
     private void setListeners() {
         this.productList.setOnItemClickListener(controller);
+    }
+
+    public void errorFetchingProducts() {
+        Toast.makeText(this.getContext(), CANT_GET_PRODUCTS_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -17,6 +17,8 @@ import com.kinire.proyectointegrador.components.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProductListFragmentController implements AdapterView.OnItemClickListener {
 
@@ -24,19 +26,22 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
 
     private ProductsListFragment fragment;
 
-    private ArrayList<Product> products;
-
     private final String PRODUCT_PARCELABLE_KEY;
+
+    private final Logger logger = Logger.getLogger(ProductListFragmentController.class.getName());
 
     public ProductListFragmentController(ProductsListFragment fragment, ProductsListViewModel viewModel) {
         this.fragment = fragment;
         this.viewModel = viewModel;
         this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
         try {
-            this.products = Connection.getInstance().getProducts();
-        } catch (Exception e) {}
-        if(products != null) {
-            this.viewModel.setProducts(products);
+            Connection.startInstance(new byte[]{10, 0, 2, 2}, () -> {
+                logger.log(Level.INFO, "Connection started");
+                Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.errorFetchingProducts();});
+                logger.log(Level.INFO, "Products request sent");
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -44,7 +49,7 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(fragment.requireActivity(), AddProductActivity.class);
-        intent.putExtra(PRODUCT_PARCELABLE_KEY, new ParcelableProduct(products.get(position), ((ImageView) view.findViewById(R.id.image_field)).getDrawable()));
+        intent.putExtra(PRODUCT_PARCELABLE_KEY, new ParcelableProduct(viewModel.getProductsData().get(position), ((ImageView) view.findViewById(R.id.image_field)).getDrawable()));
         fragment.getActivity().startActivity(intent);
     }
 }

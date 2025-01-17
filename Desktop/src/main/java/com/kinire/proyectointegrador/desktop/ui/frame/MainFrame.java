@@ -64,7 +64,9 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        settingsButton.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        settingsButton.setBackground(new java.awt.Color(21, 94, 149));
+        settingsButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        settingsButton.setForeground(new java.awt.Color(255, 255, 255));
         settingsButton.setText("Ajustes");
         settingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -73,7 +75,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         savePurchase.setBackground(new java.awt.Color(21, 94, 149));
-        savePurchase.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        savePurchase.setFont(new java.awt.Font("Dialog", 2, 18)); // NOI18N
         savePurchase.setForeground(new java.awt.Color(255, 255, 255));
         savePurchase.setText("Guardar compra");
         savePurchase.addActionListener(new java.awt.event.ActionListener() {
@@ -170,8 +172,6 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(shoppingCartItemsScroll))
         );
-
-        roundedPanel2.setBackground(new java.awt.Color(21, 94, 149));
 
         jLabel1.setFont(new java.awt.Font("Dialog", 3, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));

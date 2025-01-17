@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.MainActivityController;
 import com.kinire.proyectointegrador.android.databinding.ActivityMainBinding;
+import com.kinire.proyectointegrador.client.Connection;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         this.bottomMenu = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

@@ -17,8 +17,13 @@ import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 public class ProductListAdapter extends BaseAdapter {
@@ -28,6 +33,8 @@ public class ProductListAdapter extends BaseAdapter {
     private @LayoutRes int layout;
 
     private List<Product> data;
+
+    private Logger logger = Logger.getLogger(ProductListAdapter.class.getName());
 
     public ProductListAdapter(Context context, @LayoutRes int layout, List<Product> data) {
         this.context = context;
@@ -61,10 +68,14 @@ public class ProductListAdapter extends BaseAdapter {
             holder.categoryField = view.findViewById(R.id.category_field);
             holder.priceField = view.findViewById(R.id.price_field);
             holder.imageView = view.findViewById(R.id.image_field);
-            new Thread(() -> {
-                holder.image = Drawable.createFromStream(Connection.getInstance().getImage(data.get(position).getImagePath()), "remote");
+            logger.log(Level.INFO, "Asking for image");
+            Connection.getInstance().getImage(data.get(position).getImagePath(), (stream) -> {
+                logger.log(Level.SEVERE, "Asking for image");
+                holder.image = Drawable.createFromStream(stream, "remote");
                 ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
-            }).start();
+            }, (e) -> {
+                logger.log(Level.SEVERE, "Error while loading image");
+            });
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();

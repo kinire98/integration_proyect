@@ -7,19 +7,23 @@ import androidx.lifecycle.ViewModel;
 import com.kinire.proyectointegrador.components.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductsListViewModel extends ViewModel {
 
-    private final MutableLiveData<ArrayList<Product>> mProducts;
+    private final MutableLiveData<List<Product>> mProducts;
 
     public ProductsListViewModel() {
         mProducts = new MutableLiveData<>();
     }
 
-    public LiveData<ArrayList<Product>> getProducts() {
+    public LiveData<List<Product>> getProducts() {
         return mProducts;
     }
-    public void setProducts(ArrayList<Product> products) {
+    public void setProducts(List<Product> products) {
         this.mProducts.setValue(products);
+    }
+    public List<Product> getProductsData() {
+        return mProducts.getValue();
     }
 }
