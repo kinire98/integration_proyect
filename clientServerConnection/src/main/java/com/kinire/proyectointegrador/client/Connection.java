@@ -42,13 +42,15 @@ public class Connection {
 
     private final Logger logger = Logger.getLogger(Connection.class.getName());
 
+    private static final byte[] ADDRESS = new byte[] {(byte) 147, 93, 53, 48};
+    //private static final byte[] ADDRESS = new byte[] {(byte) 127, 0, 0 ,1};
 
-    public static Connection startInstance(byte[] address, EmptyFunction promise) {
+    public static Connection startInstance(EmptyFunction promise) {
         if(self == null) {
             try {
                 new Thread(() -> {
                     try {
-                        self = new Connection(InetAddress.getByAddress(address));
+                        self = new Connection();
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -60,6 +62,7 @@ public class Connection {
         }
         return self;
     }
+
     public static Connection getInstance() {
         return self;
     }
@@ -67,12 +70,19 @@ public class Connection {
         System.out.println(socket.isConnected());
         System.out.println(inputStream.available());
     }
-    Connection(InetAddress address) throws IOException, ClassNotFoundException {
-        this.socket = new Socket(address, CommonValues.tcpListeningPort);
+    Connection() throws IOException, ClassNotFoundException {
+        InetAddress inetAddress = InetAddress.getByAddress(ADDRESS);
+        this.socket = new Socket(inetAddress, CommonValues.tcpListeningPort);
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
         Integer port = (Integer) inputStream.readObject();
-        this.udpConnection = new UDPConnection(address, port);
+        try {
+            Thread.sleep(100);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        this.udpConnection = new UDPConnection(inetAddress, port);
+        logger.log(Level.INFO, String.valueOf(port));
         udpConnection.start();
     }
     public void close() throws IOException {

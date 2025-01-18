@@ -1,5 +1,6 @@
 package com.kinire.proyectointegrador.android.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -57,6 +58,7 @@ public class ProductListAdapter extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder;
@@ -68,10 +70,12 @@ public class ProductListAdapter extends BaseAdapter {
             holder.categoryField = view.findViewById(R.id.category_field);
             holder.priceField = view.findViewById(R.id.price_field);
             holder.imageView = view.findViewById(R.id.image_field);
-            logger.log(Level.INFO, "Asking for image");
             Connection.getInstance().getImage(data.get(position).getImagePath(), (stream) -> {
-                logger.log(Level.SEVERE, "Asking for image");
-                holder.image = Drawable.createFromStream(stream, "remote");
+                try {
+                    holder.image = Drawable.createFromStream(stream, "remote");
+                } catch (Exception e) {
+                    holder.image = context.getDrawable(R.drawable.square_xmark_solid);
+                }
                 ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
             }, (e) -> {
                 logger.log(Level.SEVERE, "Error while loading image");

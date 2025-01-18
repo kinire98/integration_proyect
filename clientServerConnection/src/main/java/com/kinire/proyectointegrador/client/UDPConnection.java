@@ -40,11 +40,13 @@ class UDPConnection extends Thread {
 
     UDPConnection(InetAddress address, int port) throws SocketException {
         this.address = address;
+        System.out.println(address.getCanonicalHostName());
         this.port = port;
         this.listeningPort = port + 1;
-        logger.log(Level.INFO, "Listening port: " + this.listeningPort);
-        logger.log(Level.INFO, "Sending to port: " + this.port);
-        this.socket = new DatagramSocket(this.listeningPort);
+        this.socket = new DatagramSocket(listeningPort);
+        System.out.println(this.port);
+        System.out.println(listeningPort);
+        System.out.println(address.getCanonicalHostName());
         this.imageSolicitudes = new ArrayList<>();
     }
 
@@ -70,7 +72,7 @@ class UDPConnection extends Thread {
     public void run() {
        while(running) {
            //Si hay una solicitud para una imagen se atiende primero, antes que la prueba de conexion
-           logger.log(Level.INFO, "Number of image requests awaiting" + imageSolicitudes.size());
+           //logger.log(Level.INFO, "Number of image requests awaiting" + imageSolicitudes.size());
            if(!imageSolicitudes.isEmpty()) {
                askforImageToServer();
                continue;
@@ -88,10 +90,19 @@ class UDPConnection extends Thread {
         logger.log(Level.INFO, "Asking for image to the server");
         try {
 
+
+            /*System.out.println("before");
+            byte[] buffer = new byte[] {1};
+            DatagramPacket packet = new DatagramPacket(buffer,  buffer.length, address, port);
+            socket.send(packet);
+            System.out.println("after");
+
             logger.log(Level.SEVERE, "xd?");
-            DatagramPacket packet = new DatagramPacket(new byte[0], 0);
-            socket.receive(packet);
-            logger.log(Level.SEVERE, "xd");
+            logger.log(Level.SEVERE, String.valueOf(socket.isConnected()));
+            logger.log(Level.SEVERE, String.valueOf(socket.isBound()));
+            DatagramPacket packet1 = new DatagramPacket(new byte[0], 0, address, port);
+            socket.receive(packet1);
+            logger.log(Level.SEVERE, "xd");*/
 
             logger.log(Level.INFO, "Started Thread for connection");
             byte[] sendBuffer = new byte[4096];

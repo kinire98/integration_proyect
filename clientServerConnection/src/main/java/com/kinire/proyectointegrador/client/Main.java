@@ -1,11 +1,14 @@
 package com.kinire.proyectointegrador.client;
 
 import java.io.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.concurrent.CountDownLatch;
 
 public class Main {
     public static void main(String[] args) {
-        Connection.startInstance(new byte[]{127 , 0 ,0, 1}, () -> {
+        Connection.startInstance(() -> {
             System.out.println("thing");
             CountDownLatch countDownLatch = new CountDownLatch(10);
             for (int i = 0; i < 1; i++) {
@@ -16,6 +19,7 @@ public class Main {
                             System.out.println(inputStream);
                             File file = new File("./test/test" + finalI + ".png");
                             try {
+                                System.out.println(file.getAbsoluteFile());
                                 file.createNewFile();
                                 System.out.println("aqui");
                                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file));
@@ -31,7 +35,7 @@ public class Main {
                                 throw new RuntimeException(e);
                             }
                             countDownLatch.countDown();
-                        }, (e) -> System.out.println("a;djfalksdjflk;"));
+                        }, (e) -> e.printStackTrace());
             }
             try {
                 countDownLatch.await();
@@ -40,6 +44,5 @@ public class Main {
                 throw new RuntimeException(e);
             }
         });
-
     }
 }
