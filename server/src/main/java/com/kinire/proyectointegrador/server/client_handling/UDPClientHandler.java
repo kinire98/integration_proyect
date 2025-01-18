@@ -46,9 +46,11 @@ public class UDPClientHandler extends Thread {
     public void run() {
         while (running) {
             try {
+                DatagramPacket packet = new DatagramPacket(new byte[0], 0);
+                socket.receive(packet);
 
-                DatagramPacket packet = new DatagramPacket(new byte[512], 512, address, port);
-                socket.send(packet);
+                DatagramPacket packet1 = new DatagramPacket(new byte[512], 512, address, port);
+                socket.send(packet1);
 
 
                 byte[] receiveBuffer = new byte[4096];
