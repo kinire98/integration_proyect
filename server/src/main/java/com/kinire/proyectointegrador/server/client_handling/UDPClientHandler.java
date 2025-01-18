@@ -45,7 +45,7 @@ public class UDPClientHandler extends Thread {
         while (running) {
             try {
 
-                DatagramPacket packet = new DatagramPacket(new byte[0], 0, address, port);
+                DatagramPacket packet = new DatagramPacket(new byte[512], 512, address, port);
                 System.out.println("before");
                 socket.send(packet);
                 System.out.println("after");
