@@ -30,6 +30,7 @@ public class UDPClientHandler extends Thread {
         this.port = port;
         try {
             this.socket = new DatagramSocket(this.port);
+            this.socket.connect(address, port);
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
@@ -37,6 +38,7 @@ public class UDPClientHandler extends Thread {
 
     public void close() {
         this.running = false;
+        socket.disconnect();
         socket.close();
     }
 
@@ -46,9 +48,7 @@ public class UDPClientHandler extends Thread {
             try {
 
                 DatagramPacket packet = new DatagramPacket(new byte[512], 512, address, port);
-                System.out.println("before");
                 socket.send(packet);
-                System.out.println("after");
 
 
                 byte[] receiveBuffer = new byte[4096];
