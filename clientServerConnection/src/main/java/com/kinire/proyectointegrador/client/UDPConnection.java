@@ -24,9 +24,11 @@ import java.util.stream.IntStream;
 
 class UDPConnection extends Thread {
 
-    private InetAddress address;
+    private final InetAddress address;
 
-    private int port;
+    private final int port;
+
+    private final int listeningPort;
 
     private volatile boolean running = true;
 
@@ -39,7 +41,10 @@ class UDPConnection extends Thread {
     UDPConnection(InetAddress address, int port) throws SocketException {
         this.address = address;
         this.port = port;
-        this.socket = new DatagramSocket(port);
+        this.listeningPort = port + 1;
+        logger.log(Level.INFO, "Listening port: " + this.listeningPort);
+        logger.log(Level.INFO, "Sending to port: " + this.port);
+        this.socket = new DatagramSocket(this.listeningPort);
         this.imageSolicitudes = new ArrayList<>();
     }
 
@@ -65,7 +70,7 @@ class UDPConnection extends Thread {
     public void run() {
        while(running) {
            //Si hay una solicitud para una imagen se atiende primero, antes que la prueba de conexion
-           System.out.println(imageSolicitudes.size());
+           logger.log(Level.INFO, "Number of image requests awaiting" + imageSolicitudes.size());
            if(!imageSolicitudes.isEmpty()) {
                askforImageToServer();
                continue;
@@ -83,30 +88,42 @@ class UDPConnection extends Thread {
         logger.log(Level.INFO, "Asking for image to the server");
         try {
 
+            logger.log(Level.SEVERE, "xd?");
+            DatagramPacket packet = new DatagramPacket(new byte[0], 0);
+            socket.receive(packet);
+            logger.log(Level.SEVERE, "xd");
+
+            logger.log(Level.INFO, "Started Thread for connection");
             byte[] sendBuffer = new byte[4096];
             sendBuffer[0] = CommonValues.udpImageRequest;
             byte[] imagePath = imageSolicitude.imagePath.getBytes(StandardCharsets.UTF_8);
             System.arraycopy(imagePath, 0, sendBuffer, 1, imagePath.length);
             DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, address, port);
+            logger.log(Level.INFO, "Sending image request info");
             socket.send(sendPacket);
+            logger.log(Level.INFO, "Image request sent");
 
 
             byte[] receiveBuffer = new byte[1025];
             DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
+            logger.log(Level.INFO, "Starting image reception");
             socket.receive(receivePacket);
+            logger.log(Level.INFO, "First package received");
+
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             while(receiveBuffer[0] == CommonValues.udpImageRequestSucceded) {
                 outputStream.write(Arrays.copyOfRange(receiveBuffer, 1, receiveBuffer.length));
                 socket.receive(receivePacket);
             }
-            System.out.println("acabo");
             if (receiveBuffer[0] == CommonValues.udpImageRequestEnded) {
+                logger.log(Level.INFO, "Image reception has finished");
                 imageSolicitude.successPromise.apply(
                         new ByteArrayInputStream(
                                 outputStream.toByteArray()
                         )
                 );
             } else if(receiveBuffer[0] == CommonValues.udpImageRequestFailure) {
+                logger.log(Level.SEVERE, "Image reception has stopped, due to an error");
                 if(receiveBuffer[1] == CommonValues.udpImageRequestFailureFileNotFound) {
                     imageSolicitude.failurePromise.apply(new FileDoesNotExistException(""));
                 } else if(receiveBuffer[1] == CommonValues.udpImageRequestFailureInternalServerError) {

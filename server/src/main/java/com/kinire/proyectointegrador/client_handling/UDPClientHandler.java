@@ -15,9 +15,11 @@ import java.util.logging.Logger;
 public class UDPClientHandler extends Thread {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(UDPClientHandler.class);
-    private InetAddress address;
+    private final InetAddress address;
 
-    private int port;
+    private final int port;
+
+    private final int listeningPort;
 
     private final DatagramSocket socket;
 
@@ -27,9 +29,12 @@ public class UDPClientHandler extends Thread {
 
     public UDPClientHandler(InetAddress address, int port) {
         this.address = address;
-        this.port = port;
+        this.port = port + 1;
+        this.listeningPort = port;
+        logger.log(Level.INFO, "Listening port: " + this.listeningPort);
+        logger.log(Level.INFO, "Sending to port: " + this.port);
         try {
-            this.socket = new DatagramSocket(port);
+            this.socket = new DatagramSocket(this.listeningPort);
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
@@ -44,6 +49,13 @@ public class UDPClientHandler extends Thread {
     public void run() {
         while (running) {
             try {
+
+                DatagramPacket packet = new DatagramPacket(new byte[0], 0, address, port);
+                System.out.println(address.getHostAddress());
+                System.out.println(port);
+                socket.send(packet);
+
+
                 byte[] receiveBuffer = new byte[4096];
                 DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
                 logger.log(Level.INFO, "Awaiting UPD request");
