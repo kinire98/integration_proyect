@@ -12,7 +12,7 @@ CREATE TABLE products(
   last_modification DATE,
   category_id BIGINT,
   PRIMARY KEY(ID),
-  FOREIGN KEY(category_id) REFERENCES categories(id) ON UPDATE CASCADE ON DELETE SET NULL
+  FOREIGN KEY(category_id)
 );
 CREATE TABLE users (
   username VARCHAR(255) NOT NULL,
@@ -31,6 +31,6 @@ CREATE TABLE purchased_products (
   product_id BIGINT NOT NULL,
   amount INT,
   PRIMARY KEY(purchase_id, product_id),
-  FOREIGN KEY(purchase_id) REFERENCES purchases(id) ON UPDATE CASCADE ON DELETE SET NULL,
+  FOREIGN KEY(purchase_id) REFERENCES purchases(id),
   FOREIGN KEY(product_id) REFERENCES products(id)
 );
