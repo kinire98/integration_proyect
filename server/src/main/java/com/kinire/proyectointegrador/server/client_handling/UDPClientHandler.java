@@ -1,4 +1,4 @@
-package com.kinire.proyectointegrador.client_handling;
+package com.kinire.proyectointegrador.server.client_handling;
 
 import com.kinire.proyectointegrador.CommonValues;
 import org.slf4j.LoggerFactory;

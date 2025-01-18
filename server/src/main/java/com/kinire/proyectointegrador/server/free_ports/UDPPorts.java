@@ -1,4 +1,4 @@
-package com.kinire.proyectointegrador.free_ports;
+package com.kinire.proyectointegrador.server.free_ports;
 
 import java.util.HashSet;
 

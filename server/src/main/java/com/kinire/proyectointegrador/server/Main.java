@@ -1,7 +1,8 @@
-package com.kinire.proyectointegrador;
+package com.kinire.proyectointegrador.server;
 
-import com.kinire.proyectointegrador.client_handling.ClientHandler;
-import com.kinire.proyectointegrador.graceful_shutdown.HandleConnections;
+import com.kinire.proyectointegrador.CommonValues;
+import com.kinire.proyectointegrador.server.client_handling.ClientHandler;
+import com.kinire.proyectointegrador.server.graceful_shutdown.HandleConnections;
 
 import java.io.IOException;
 import java.net.ServerSocket;

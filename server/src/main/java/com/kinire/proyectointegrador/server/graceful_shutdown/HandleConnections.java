@@ -1,6 +1,6 @@
-package com.kinire.proyectointegrador.graceful_shutdown;
+package com.kinire.proyectointegrador.server.graceful_shutdown;
 
-import com.kinire.proyectointegrador.client_handling.ClientHandler;
+import com.kinire.proyectointegrador.server.client_handling.ClientHandler;
 
 import java.util.ArrayList;
 

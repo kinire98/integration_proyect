@@ -1,4 +1,4 @@
-package com.kinire.proyectointegrador.DAOInstances;
+package com.kinire.proyectointegrador.server.DAOInstances;
 
 import com.kinire.proyectointegrador.db.db_access.DAOs.*;
 import com.kinire.proyectointegrador.db.db_access.impls.*;

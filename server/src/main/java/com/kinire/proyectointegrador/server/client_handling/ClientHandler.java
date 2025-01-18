@@ -1,7 +1,7 @@
-package com.kinire.proyectointegrador.client_handling;
+package com.kinire.proyectointegrador.server.client_handling;
 
-import com.kinire.proyectointegrador.DAOInstances.DAOInstances;
-import com.kinire.proyectointegrador.free_ports.UDPPorts;
+import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
+import com.kinire.proyectointegrador.server.free_ports.UDPPorts;
 import com.kinire.proyectointegrador.products.ProductMessage;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class ClientHandler extends Thread {
         try {
             this.inputStream = new ObjectInputStream(socket.getInputStream());
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException _) {}
+        } catch (IOException e) {}
         this.udpPort = UDPPorts.getFreePort();
         this.udpClientHandler = new UDPClientHandler(socket.getInetAddress(), udpPort);
         this.udpClientHandler.start();
