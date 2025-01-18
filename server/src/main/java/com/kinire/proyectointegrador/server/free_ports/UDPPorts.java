@@ -7,7 +7,7 @@ public class UDPPorts {
 
     public static int getFreePort() {
         while(true) {
-            int randomPort = (int) ((Math.random() * 16383) + 49153);
+            int randomPort = (int) ((Math.random() * 16382) + 49153);
             if(!takenPorts.contains(randomPort)) {
                 takenPorts.add(randomPort);
                 return randomPort;
