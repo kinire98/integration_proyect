@@ -3,6 +3,7 @@ package com.kinire.proyectointegrador.server.client_handling;
 import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
 import com.kinire.proyectointegrador.server.free_ports.UDPPorts;
 import com.kinire.proyectointegrador.products.ProductMessage;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,6 +14,7 @@ import java.util.logging.Logger;
 
 public class ClientHandler extends Thread {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(ClientHandler.class);
     private final Socket socket;
 
     private ObjectInputStream inputStream;
@@ -61,6 +63,7 @@ public class ClientHandler extends Thread {
 
     private void handleConnections() throws IOException, ClassNotFoundException {
         logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": Writing UDP Port");
+        logger.log(Level.INFO, String.valueOf(udpPort));
         outputStream.writeObject(udpPort);
         logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": UDP Port written");
         while(running) {

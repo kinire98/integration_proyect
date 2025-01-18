@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 public class UDPClientHandler extends Thread {
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(UDPClientHandler.class);
     private final InetAddress address;
 
     private final int port;
@@ -47,7 +46,9 @@ public class UDPClientHandler extends Thread {
             try {
 
                 DatagramPacket packet = new DatagramPacket(new byte[0], 0, address, port);
+                System.out.println("before");
                 socket.send(packet);
+                System.out.println("after");
 
 
                 byte[] receiveBuffer = new byte[4096];
