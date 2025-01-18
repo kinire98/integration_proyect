@@ -1,7 +1,6 @@
 package com.kinire.proyectointegrador.server.client_handling;
 
 import com.kinire.proyectointegrador.CommonValues;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.DatagramPacket;
@@ -18,6 +17,7 @@ public class UDPClientHandler extends Thread {
 
     private final int port;
 
+    private final int listeningPort;
 
     private final DatagramSocket socket;
 
@@ -27,10 +27,14 @@ public class UDPClientHandler extends Thread {
 
     public UDPClientHandler(InetAddress address, int port) {
         this.address = address;
-        this.port = port;
+        System.out.println(address.getCanonicalHostName());
+        this.port = port + 1;
+        this.listeningPort = port;
+        System.out.println(this.port);
+        System.out.println(listeningPort);
+        System.out.println(address.getCanonicalHostName());
         try {
-            this.socket = new DatagramSocket(this.port);
-            this.socket.connect(address, port);
+            this.socket = new DatagramSocket(this.listeningPort);
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
@@ -46,16 +50,6 @@ public class UDPClientHandler extends Thread {
     public void run() {
         while (running) {
             try {
-                logger.log(Level.SEVERE, "Awaiting test");
-                DatagramPacket packet = new DatagramPacket(new byte[0], 0);
-                socket.receive(packet);
-                logger.log(Level.SEVERE, "Test received");
-
-                logger.log(Level.SEVERE, "Sending test");
-
-                DatagramPacket packet1 = new DatagramPacket(new byte[512], 512, address, port);
-                socket.send(packet1);
-
 
                 byte[] receiveBuffer = new byte[4096];
                 DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);

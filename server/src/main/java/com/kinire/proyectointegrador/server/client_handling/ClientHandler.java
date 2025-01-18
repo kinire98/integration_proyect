@@ -21,7 +21,7 @@ public class ClientHandler extends Thread {
 
     private ObjectOutputStream outputStream;
 
-    private final UDPClientHandler udpClientHandler;
+    private UDPClientHandler udpClientHandler;
 
     private Logger logger = Logger.getLogger(ClientHandler.class.getName());
 
@@ -31,13 +31,17 @@ public class ClientHandler extends Thread {
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
+        this.udpPort = UDPPorts.getFreePort();
         try {
             this.inputStream = new ObjectInputStream(socket.getInputStream());
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+            logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": Writing UDP Port");
+            logger.log(Level.INFO, String.valueOf(udpPort));
+            outputStream.writeObject(udpPort);
+            logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": UDP Port written");
+            this.udpClientHandler = new UDPClientHandler(socket.getInetAddress(), udpPort);
+            this.udpClientHandler.start();
         } catch (IOException e) {}
-        this.udpPort = UDPPorts.getFreePort();
-        this.udpClientHandler = new UDPClientHandler(socket.getInetAddress(), udpPort);
-        this.udpClientHandler.start();
     }
 
     public void close() throws IOException {
@@ -62,10 +66,6 @@ public class ClientHandler extends Thread {
     }
 
     private void handleConnections() throws IOException, ClassNotFoundException {
-        logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": Writing UDP Port");
-        logger.log(Level.INFO, String.valueOf(udpPort));
-        outputStream.writeObject(udpPort);
-        logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": UDP Port written");
         while(running) {
             logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": Awaiting request");
             Object message = inputStream.readObject();
