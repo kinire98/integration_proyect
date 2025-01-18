@@ -19,7 +19,6 @@ public class UDPClientHandler extends Thread {
 
     private final int port;
 
-    private final int listeningPort;
 
     private final DatagramSocket socket;
 
@@ -29,12 +28,9 @@ public class UDPClientHandler extends Thread {
 
     public UDPClientHandler(InetAddress address, int port) {
         this.address = address;
-        this.port = port + 1;
-        this.listeningPort = port;
-        logger.log(Level.INFO, "Listening port: " + this.listeningPort);
-        logger.log(Level.INFO, "Sending to port: " + this.port);
+        this.port = port;
         try {
-            this.socket = new DatagramSocket(this.listeningPort);
+            this.socket = new DatagramSocket(this.port);
         } catch (SocketException e) {
             throw new RuntimeException(e);
         }
@@ -51,8 +47,6 @@ public class UDPClientHandler extends Thread {
             try {
 
                 DatagramPacket packet = new DatagramPacket(new byte[0], 0, address, port);
-                System.out.println(address.getHostAddress());
-                System.out.println(port);
                 socket.send(packet);
 
 
