@@ -96,6 +96,7 @@ public class UDPClientHandler extends Thread {
                socket.send(lastImagePacket);
                logger.log(Level.INFO, "Image request fulfilled");
         } catch (IOException e) {
+            e.printStackTrace();
             byte[] errorBuffer = new byte[512];
             errorBuffer[0] = CommonValues.udpImageRequestFailureInternalServerError;
             DatagramPacket errorPacket = new DatagramPacket(errorBuffer, errorBuffer.length, address, port);
