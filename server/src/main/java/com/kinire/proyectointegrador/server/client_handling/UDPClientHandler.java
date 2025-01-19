@@ -82,10 +82,10 @@ public class UDPClientHandler extends Thread {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try (InputStream inputStream = new FileInputStream(file)) {
-               byte[] fileBuffer = new byte[65527];
+               byte[] fileBuffer = new byte[65000];
                int bytesRead;
                while((bytesRead = inputStream.read(fileBuffer)) != -1) {
-                   byte[] sendBuffer = new byte[65528];
+                   byte[] sendBuffer = new byte[65001];
                    sendBuffer[0] = CommonValues.udpImageRequestSucceded;
                    System.arraycopy(fileBuffer, 0, sendBuffer, 1, fileBuffer.length);
                    DatagramPacket packet =  new DatagramPacket(sendBuffer, sendBuffer.length, address, port);
@@ -96,6 +96,7 @@ public class UDPClientHandler extends Thread {
                socket.send(lastImagePacket);
                logger.log(Level.INFO, "Image request fulfilled");
         } catch (IOException e) {
+
             e.printStackTrace();
             byte[] errorBuffer = new byte[512];
             errorBuffer[0] = CommonValues.udpImageRequestFailureInternalServerError;
