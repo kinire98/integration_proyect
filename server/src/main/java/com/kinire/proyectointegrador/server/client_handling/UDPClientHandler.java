@@ -109,13 +109,13 @@ public class UDPClientHandler extends Thread {
         }
     }
     private InputStream getImageCompressed(File file) throws IOException {
-        byte[] buffer = new byte[104857600];
+        /*byte[] buffer = new byte[104857600];
         BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
         logger.log(Level.INFO, "File read started");
         while(inputStream.read(buffer) != 1){}
-        logger.log(Level.INFO, "File read ended");
-        ByteArrayInputStream imageInputStream = new ByteArrayInputStream(buffer);
-        BufferedImage img = ImageIO.read(imageInputStream);
+        logger.log(Level.INFO, "File read ended");*/
+        //ByteArrayInputStream imageInputStream = new ByteArrayInputStream(buffer);
+        BufferedImage img = ImageIO.read(file);
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
         ImageWriter writer = writers.next();
 
@@ -131,7 +131,7 @@ public class UDPClientHandler extends Thread {
 
         outputStream.close();
         byteArrayInputStream.close();
-        inputStream.close();
+        //inputStream.close();
         return byteArrayInputStream;
     }
 }
