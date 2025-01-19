@@ -3,6 +3,7 @@ package com.kinire.proyectointegrador.server.client_handling;
 import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
 import com.kinire.proyectointegrador.server.free_ports.UDPPorts;
 import com.kinire.proyectointegrador.products.ProductMessage;
+import com.kinire.proyectointegrador.users.UserMessage;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -71,10 +72,12 @@ public class ClientHandler extends Thread {
             Object message = inputStream.readObject();
             if(message instanceof ProductMessage)
                 handleProductMessage((ProductMessage) message);
+            else if(message instanceof UserMessage)
+                handleUserMessage((UserMessage) message);
         }
     }
     private void handleProductMessage(ProductMessage message) throws IOException {
-        logger.log(Level.INFO, socket.getInetAddress().getHostAddress() + ": Processing product request");
+        logger.log(Level.INFO, "Processing product request");
         if(message.isAllProductsRequest()) {
             outputStream.writeObject(
                     DAOInstances.getProductDAO().selectAllProducts()
@@ -100,7 +103,22 @@ public class ClientHandler extends Thread {
                     DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts())
             );
         }
-
+    }
+    private void handleUserMessage(UserMessage message) throws IOException {
+        logger.log(Level.INFO, "Processing user request");
+        if(message.isUserDataCorrectRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getUserDAO().selectUser(message.getUsername())
+            );
+        } else if(message.isInsertUserRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getUserDAO().insertUser(message.getUser())
+            );
+        } else if(message.isUserDataCorrectRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getUserDAO().correctUserData(message.getUser())
+            );
+        }
 
     }
 }

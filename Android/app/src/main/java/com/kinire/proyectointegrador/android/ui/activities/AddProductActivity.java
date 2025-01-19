@@ -3,19 +3,23 @@ package com.kinire.proyectointegrador.android.ui.activities;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.AddProductActivityController;
+import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
 import com.kinire.proyectointegrador.components.Product;
 
@@ -39,6 +43,10 @@ public class AddProductActivity extends AppCompatActivity {
 
     private String IMAGE_PARCELABLE_KEY;
 
+    private String AMOUNT_PARCELABLE_KEY;
+
+    private final static String ACTION_BAR_TITLE_PREFIX = "Añadir al carrito: ";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +58,17 @@ public class AddProductActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        this.setUpToolbar();
         this.initializeElements();
         this.setProductInformation();
+        this.setUpToolbar();
         this.setListeners();
+        StyleDissonancesCorrection.setStatusBarCorrectColor(this);
     }
 
     private void initializeElements() {
         this.PRODUCT_PARCELABLE_KEY = getString(R.string.product_parcelable_key);
         this.IMAGE_PARCELABLE_KEY = getString(R.string.image_parcelable_key);
+        this.AMOUNT_PARCELABLE_KEY = getString(R.string.amount_parcelable_key);
         this.imageView = findViewById(R.id.product_image);
         this.productName = findViewById(R.id.product_name);
         this.productCategory = findViewById(R.id.product_category);
@@ -80,6 +90,7 @@ public class AddProductActivity extends AppCompatActivity {
             this.productCategory.setText(product.getCategoryName());
             this.productPrice.setText(String.format(Locale.getDefault(), "%.2f€", product.getPrice()));
             controller.setPrice(product.getPrice());
+            controller.setAmount(bundle.getInt(AMOUNT_PARCELABLE_KEY));
         }
     }
 
@@ -91,8 +102,18 @@ public class AddProductActivity extends AppCompatActivity {
 
     private void setUpToolbar() {
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("");
+            getSupportActionBar().setTitle(ACTION_BAR_TITLE_PREFIX + this.productName.getText().toString());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void setAmount(int amount) {

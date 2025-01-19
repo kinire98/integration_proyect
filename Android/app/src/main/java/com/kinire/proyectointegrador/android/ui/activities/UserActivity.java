@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.UserActivityController;
+import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -36,6 +37,7 @@ public class UserActivity extends AppCompatActivity {
         });
         this.initializeElements();
         this.setListeners();
+        StyleDissonancesCorrection.setStatusBarCorrectColor(this);
     }
 
     private void initializeElements() {

@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -22,5 +23,7 @@ public class SettingsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        StyleDissonancesCorrection.setStatusBarCorrectColor(this);
     }
 }

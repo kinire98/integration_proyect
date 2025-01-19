@@ -6,22 +6,20 @@ import com.kinire.proyectointegrador.client.lamba_interfaces.ErrorFunction;
 import com.kinire.proyectointegrador.client.lamba_interfaces.InputStreamFunction;
 import com.kinire.proyectointegrador.client.lamba_interfaces.ProductArrayFunction;
 import com.kinire.proyectointegrador.components.Product;
-import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.components.User;
 import com.kinire.proyectointegrador.products.ProductMessageBuilder;
+import com.kinire.proyectointegrador.users.UserMessageBuilder;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -43,9 +41,11 @@ public class Connection {
     private final Logger logger = Logger.getLogger(Connection.class.getName());
 
     private static final byte[] ADDRESS = new byte[] {(byte) 147, 93, 53, 48};
-    //private static final byte[] ADDRESS = new byte[] {(byte) 127, 0, 0 ,1};
 
-    public static Connection startInstance(EmptyFunction promise) {
+    public static boolean isInstanceStarted() {
+        return self != null;
+    }
+    public static void startInstance(EmptyFunction promise) {
         if(self == null) {
             try {
                 new Thread(() -> {
@@ -60,7 +60,6 @@ public class Connection {
                 throw new RuntimeException(e);
             }
         }
-        return self;
     }
 
     public static Connection getInstance() {
@@ -123,14 +122,62 @@ public class Connection {
     public void getImage(String path, InputStreamFunction successPromise, ErrorFunction errorPromise) {
         udpConnection.askForImage(path, successPromise, errorPromise);
     }
-    public boolean isAdminPasswordCorrect(String password) {
-        return true;
-    }
     public void uploadPurchase(Purchase purchase) {}
-    public User getUser() {
-        return user;
+    public void userExists(String username, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new UserMessageBuilder()
+                                .selectUserRequest(username)
+                                .build()
+                );
+                User user = (User) inputStream.readObject();
+                if(user != null)
+                    truePromise.apply();
+                else
+                    falsePromise.apply();
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
+
     }
-    public void setUser(User user) {
-        this.user = user;
+
+    public void isUserDataCorrect(User user, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new UserMessageBuilder()
+                                .isUserDataCorrect(user)
+                                .build()
+                );
+                Boolean isCorrect = (Boolean) inputStream.readObject();
+                if(isCorrect)
+                    truePromise.apply();
+                else
+                    falsePromise.apply();
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
+    }
+
+    public void insertUserData(User user, EmptyFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new UserMessageBuilder()
+                                .insertUserRequest(user)
+                                .build()
+                );
+                Boolean success = (Boolean) inputStream.readObject();
+                if(success)
+                    successPromise.apply();
+                else
+                    failurePromise.apply(null);
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
     }
 }

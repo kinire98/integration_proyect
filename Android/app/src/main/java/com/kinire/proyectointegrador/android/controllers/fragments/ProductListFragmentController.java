@@ -35,12 +35,17 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
         this.viewModel = viewModel;
         this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
         this.IMAGE_PARCELABLE_KEY = fragment.getString(R.string.image_parcelable_key);
+        System.out.println("Aqui controller");
         try {
-            Connection.startInstance(() -> {
-                logger.log(Level.INFO, "Connection started");
+            if(!Connection.isInstanceStarted()) {
+                Connection.startInstance(() -> {
+                    logger.log(Level.INFO, "Connection started");
+                    Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.errorFetchingProducts();});
+                    logger.log(Level.INFO, "Products request sent");
+                });
+            } else {
                 Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.errorFetchingProducts();});
-                logger.log(Level.INFO, "Products request sent");
-            });
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -38,11 +38,12 @@ public class UserImpl implements UserDAO {
                 PreparedStatement statement = connection.prepareStatement(query)){
             statement.setString(1, username);
             ResultSet set = statement.executeQuery();
-            set.next();
-            user = new User(
-                    set.getString("username"),
-                    set.getString("password")
-            );
+            if(set.next()) {
+                user = new User(
+                        set.getString("username"),
+                        set.getString("password")
+                );
+            }
             set.close();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());

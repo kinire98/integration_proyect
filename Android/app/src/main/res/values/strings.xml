@@ -17,4 +17,5 @@
     <string name="user_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
     <string name="product_parcelable_key">c8117227-4702-4f62-bf1e-ba339e6e12e</string>
     <string name="image_parcelable_key">1a29ab5f-e52d-484a-a0e4-d234fc9112d3</string>
+    <string name="amount_parcelable_key">331844e4-a47d-4013-84d2-e4a1d8b3a4ad</string>
 </resources>

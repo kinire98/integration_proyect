@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.client.Connection;
@@ -58,7 +59,6 @@ public class ProductListAdapter extends BaseAdapter {
         return position;
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder;
@@ -70,25 +70,36 @@ public class ProductListAdapter extends BaseAdapter {
             holder.categoryField = view.findViewById(R.id.category_field);
             holder.priceField = view.findViewById(R.id.price_field);
             holder.imageView = view.findViewById(R.id.image_field);
-            Connection.getInstance().getImage(data.get(position).getImagePath(), (stream) -> {
-                try {
-                    holder.image = Drawable.createFromStream(stream, "remote");
-                } catch (Exception e) {
-                    holder.image = context.getDrawable(R.drawable.square_xmark_solid);
-                }
-                ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
-            }, (e) -> {
-                logger.log(Level.SEVERE, "Error while loading image");
-            });
+            askForImage(position, holder);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
+            if(holder.image == null) {
+                askForImage(position, holder);
+            }
         }
         holder.imageView.setImageDrawable(holder.image);
         holder.productField.setText(data.get(position).getName());
         holder.categoryField.setText(data.get(position).getCategory().getName());
         holder.priceField.setText(String.format(Locale.getDefault(),"%.2f€", data.get(position).getPrice()));
         return view;
+    }
+
+    private void askForImage(int position, ViewHolder holder) {
+        Connection.getInstance().getImage(data.get(position).getImagePath(), (stream) -> {
+            try {
+                holder.image = Drawable.createFromStream(stream, "remote");
+            } catch (Exception e) {
+                holder.image = AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid);
+            }
+            if(holder.image == null)
+                askForImage(position, holder);
+            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
+        }, (e) -> {
+            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while loading image");
+            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
+        });
     }
     private static class ViewHolder {
         private TextView productField;

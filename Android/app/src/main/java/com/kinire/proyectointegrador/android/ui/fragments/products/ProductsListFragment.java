@@ -34,10 +34,15 @@ public class ProductsListFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         this.viewModel =
                 new ViewModelProvider(this).get(ProductsListViewModel.class);
 
         binding = FragmentProductsListBinding.inflate(inflater, container, false);
+        binding.getRoot().setOnApplyWindowInsetsListener((v, insets) -> {
+            // Consume the system window insets so they don't add margins
+            return insets.consumeSystemWindowInsets();
+        });
         this.getElements();
         this.setAdapter();
         this.setListeners();
@@ -46,12 +51,13 @@ public class ProductsListFragment extends Fragment {
 
     private void getElements() {
         this.productList = binding.productsList;
+        System.out.println("Aqui getElements");
         this.controller = new
                 ProductListFragmentController(this, viewModel);
     }
 
     private void setAdapter() {
-        viewModel.getProducts().observe(getViewLifecycleOwner(), (Observer<List<Product>>) products -> {
+        viewModel.getProducts().observe(getViewLifecycleOwner(), products -> {
             ProductListAdapter adapter = new ProductListAdapter(ProductsListFragment.this.getActivity(), R.layout.product_list_layout, products);
             productList.setAdapter(adapter);
         });
