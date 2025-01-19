@@ -11,6 +11,8 @@ public class User implements Serializable {
     private String user;
     private String password;
 
+    private static final String ADMIN_USERNAME = "admin";
+
     public User(String user, String password) {
         this.user = user;
         this.password = password;
@@ -34,5 +36,13 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return user.equals(ADMIN_USERNAME);
+    }
+
+    public static String getAdminUsername() {
+        return ADMIN_USERNAME;
     }
 }
