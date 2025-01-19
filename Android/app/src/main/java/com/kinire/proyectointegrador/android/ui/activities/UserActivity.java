@@ -25,6 +25,8 @@ public class UserActivity extends AppCompatActivity {
     private String invalidUserName;
     private String incorrectAdminPassword;
 
+    private String connectivityError;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class UserActivity extends AppCompatActivity {
         this.button = findViewById(R.id.accept_username);
         this.incorrectAdminPassword = getString(R.string.incorrect_admin_password);
         this.invalidUserName = getString(R.string.invalid_user_name);
+        this.connectivityError = getString(R.string.connectivity_error);
         this.controller = new UserActivityController(this);
     }
 
@@ -64,7 +67,20 @@ public class UserActivity extends AppCompatActivity {
         Toast.makeText(this, incorrectAdminPassword, Toast.LENGTH_SHORT).show();
     }
 
+    public void connectivityError() {
+        Toast.makeText(this, connectivityError, Toast.LENGTH_SHORT).show();
+    }
+
     public String askForPassword() {
         return "";
     }
+
+    public String askForNewPassword() {
+        return "";
+    }
+
+    public void incorrectPassword() {
+
+    }
+
 }

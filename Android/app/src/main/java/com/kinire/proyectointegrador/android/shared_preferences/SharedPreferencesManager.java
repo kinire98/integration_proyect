@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.components.User;
 
 public class SharedPreferencesManager {
     private Context context;
@@ -22,9 +23,9 @@ public class SharedPreferencesManager {
         return sharedPreferences.getString(USER_SHARED_PREFERENCES_KEY, "");
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(USER_SHARED_PREFERENCES_KEY, user);
+        editor.putString(USER_SHARED_PREFERENCES_KEY, user.getUser());
         editor.apply();
     }
 

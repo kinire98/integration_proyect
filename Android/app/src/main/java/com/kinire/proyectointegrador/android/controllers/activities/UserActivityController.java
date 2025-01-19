@@ -6,14 +6,16 @@ import android.view.View;
 import com.kinire.proyectointegrador.android.shared_preferences.SharedPreferencesManager;
 import com.kinire.proyectointegrador.android.ui.activities.MainActivity;
 import com.kinire.proyectointegrador.android.ui.activities.UserActivity;
-import com.kinire.proyectointegrador.android.users.UserAdmin;
 import com.kinire.proyectointegrador.client.Connection;
+import com.kinire.proyectointegrador.components.User;
 
 public class UserActivityController implements View.OnClickListener {
 
     private UserActivity activity;
 
-    private UserAdmin user;
+    private User user;
+
+    private String username;
 
     private SharedPreferencesManager sharedPreferencesManager;
 
@@ -24,23 +26,40 @@ public class UserActivityController implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        this.user = new UserAdmin(activity.getUserNameContent());
-        if(!user.isValidUser()) {
-            activity.invalidUserName();
-            return;
+        this.username = activity.getUserNameContent();
+        if(!Connection.isInstanceStarted()) {
+            Connection.startInstance(() -> {
+                Connection.getInstance().userExists(this.username, this::userExists, this::userDoesntExist, (e) -> {
+                    activity.connectivityError();
+                });
+            });
+        } else {
+            Connection.getInstance().userExists(this.username, this::userExists, this::userDoesntExist, (e) -> {
+                activity.connectivityError();
+            });
         }
-        if(user.isAdmin()) {
-            String password = activity.askForPassword();
-            if(Connection.getInstance().isAdminPasswordCorrect(password)) {
-                sharedPreferencesManager.setUser(user.getUser());
-                returnToMainActivity();
-            } else {
-                activity.incorrectAdminPassword();
-            }
-            return;
-        }
-        sharedPreferencesManager.setUser(user.getUser());
-        returnToMainActivity();
+    }
+
+    private void userExists() {
+        this.user = new User(username, activity.askForPassword());
+        Connection.getInstance().isUserDataCorrect(user, () -> {
+           sharedPreferencesManager.setUser(user);
+           returnToMainActivity();
+        },  () -> {
+            activity.incorrectPassword();
+        }, (e) -> {
+            activity.connectivityError();
+        });
+    }
+
+    private void userDoesntExist() {
+        this.user = new User(username, activity.askForNewPassword());
+        Connection.getInstance().insertUserData(user, () -> {
+            sharedPreferencesManager.setUser(user);
+        }, (e) -> {
+            activity.connectivityError();
+        });
+
     }
     private void returnToMainActivity() {
         Intent intent = new Intent(activity, MainActivity.class);
