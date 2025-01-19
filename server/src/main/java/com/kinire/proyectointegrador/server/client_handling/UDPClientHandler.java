@@ -2,14 +2,22 @@ package com.kinire.proyectointegrador.server.client_handling;
 
 import com.kinire.proyectointegrador.CommonValues;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class UDPClientHandler extends Thread {
 
@@ -81,7 +89,7 @@ public class UDPClientHandler extends Thread {
         }
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try (InputStream inputStream = new FileInputStream(file)) {
+        try (InputStream inputStream = getImageCompressed(file)) {
                byte[] fileBuffer = new byte[65000];
                int bytesRead;
                while((bytesRead = inputStream.read(fileBuffer)) != -1) {
@@ -103,5 +111,29 @@ public class UDPClientHandler extends Thread {
             DatagramPacket errorPacket = new DatagramPacket(errorBuffer, errorBuffer.length, address, port);
             socket.send(errorPacket);
         }
+    }
+    private InputStream getImageCompressed(File file) throws IOException {
+        byte[] buffer = new byte[104857600];
+        BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        while(inputStream.read(buffer) != 1){}
+        ByteArrayInputStream imageInputStream = new ByteArrayInputStream(buffer);
+        BufferedImage img = ImageIO.read(imageInputStream);
+        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
+        ImageWriter writer = writers.next();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ImageOutputStream outputStream = ImageIO.createImageOutputStream(byteArrayOutputStream);
+
+        writer.setOutput(outputStream);
+        ImageWriteParam params = writer.getDefaultWriteParam();
+        params.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        params.setCompressionQuality(.75f);
+        writer.write(null, new IIOImage(img, null, null), params);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+
+        outputStream.close();
+        byteArrayInputStream.close();
+        inputStream.close();
+        return byteArrayInputStream;
     }
 }
