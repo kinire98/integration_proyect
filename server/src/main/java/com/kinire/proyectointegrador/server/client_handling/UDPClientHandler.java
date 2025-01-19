@@ -82,10 +82,10 @@ public class UDPClientHandler extends Thread {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try (InputStream inputStream = new FileInputStream(file)) {
-               byte[] fileBuffer = new byte[1024];
+               byte[] fileBuffer = new byte[65527];
                int bytesRead;
                while((bytesRead = inputStream.read(fileBuffer)) != -1) {
-                   byte[] sendBuffer = new byte[1025];
+                   byte[] sendBuffer = new byte[65528];
                    sendBuffer[0] = CommonValues.udpImageRequestSucceded;
                    System.arraycopy(fileBuffer, 0, sendBuffer, 1, fileBuffer.length);
                    DatagramPacket packet =  new DatagramPacket(sendBuffer, sendBuffer.length, address, port);
