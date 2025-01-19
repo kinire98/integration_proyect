@@ -35,12 +35,8 @@ public class UDPClientHandler extends Thread {
 
     public UDPClientHandler(InetAddress address, int port) {
         this.address = address;
-        System.out.println(address.getCanonicalHostName());
         this.port = port + 1;
         this.listeningPort = port;
-        System.out.println(this.port);
-        System.out.println(listeningPort);
-        System.out.println(address.getCanonicalHostName());
         try {
             this.socket = new DatagramSocket(this.listeningPort);
         } catch (SocketException e) {
@@ -115,7 +111,9 @@ public class UDPClientHandler extends Thread {
     private InputStream getImageCompressed(File file) throws IOException {
         byte[] buffer = new byte[104857600];
         BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        logger.log(Level.INFO, "File read started");
         while(inputStream.read(buffer) != 1){}
+        logger.log(Level.INFO, "File read ended");
         ByteArrayInputStream imageInputStream = new ByteArrayInputStream(buffer);
         BufferedImage img = ImageIO.read(imageInputStream);
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
