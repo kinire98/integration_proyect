@@ -109,7 +109,7 @@ public class ClientHandler extends Thread {
         if(message.isUserDataCorrectRequest()) {
             logger.log(Level.INFO, "Processing User data request");
             outputStream.writeObject(
-                    DAOInstances.getUserDAO().selectUser(message.getUsername())
+                    DAOInstances.getUserDAO().selectUser(message.getUsername()) != null
             );
         } else if(message.isInsertUserRequest()) {
             logger.log(Level.INFO, "Processing insert User data request");
