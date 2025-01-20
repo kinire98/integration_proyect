@@ -122,8 +122,6 @@ public class ClientHandler extends Thread {
                     DAOInstances.getUserDAO().correctUserData(message.getUser())
             );
         }
-        outputStream.flush();
         logger.log(Level.INFO, "User request processed");
-
     }
 }
