@@ -232,24 +232,4 @@ public class Connection {
             );
         }).start();
     }
-    public void deletePurchase(Purchase purchase, EmptyFunction successPromise, ErrorFunction failurePromise) {
-        new Thread(() -> {
-            try {
-                outputStream.writeObject(
-                        new PurchaseMessageBuilder()
-                                .deletePurchaseRequest(purchase.getId())
-                                .build()
-                );
-                Boolean success = (Boolean) inputStream.readObject();
-                if(success) {
-                    successPromise.apply();
-                } else {
-                    failurePromise.apply(null);
-                }
-
-            } catch (IOException | ClassNotFoundException e) {
-                failurePromise.apply(e);
-            }
-        }).start();
-    }
 }

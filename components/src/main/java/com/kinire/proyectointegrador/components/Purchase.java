@@ -62,4 +62,12 @@ public class Purchase implements Serializable {
     public void setShoppingCartItems(ArrayList<ShoppingCartItem> shoppingCartItems) {
         this.shoppingCartItems = shoppingCartItems;
     }
+
+    public float getTotalPrice() {
+        float totalPrice = 0.0f;
+        for(ShoppingCartItem shoppingCartItem : shoppingCartItems) {
+            totalPrice += shoppingCartItem.getPrice();
+        }
+        return totalPrice;
+    }
 }
