@@ -13,6 +13,13 @@
         android:layout_height="match_parent"
         app:layout_constraintGuide_percent=".92"
         />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/grid_bottom"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintGuide_percent=".87"
+        />
     <GridView
         android:id="@+id/shopping_cart_list"
         android:layout_width="match_parent"
@@ -36,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/content_description_show_shopping_cart_options"
-        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintBottom_toBottomOf="@id/grid_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="15dp"
         android:layout_marginVertical="17dp"
@@ -66,7 +73,7 @@
         android:layout_marginVertical="17dp"
         android:text="@string/save_purchase"
         android:textSize="17sp"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnContainer"
         android:visibility="invisible"
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -92,8 +99,33 @@
         android:layout_marginVertical="17dp"
         android:text="@string/empty_purchase"
         android:textSize="17sp"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnContainer"
         android:visibility="invisible"
+        />
+    <TextView
+        android:id="@+id/total_price_label"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/grid_bottom"
+        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/total_price_field"
+        android:gravity="center"
+        android:textStyle="italic"
+        android:text="@string/total_price"
+        android:textSize="25sp"
+        />
+    <TextView
+        android:id="@+id/total_price_field"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/grid_bottom"
+        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintStart_toEndOf="@id/total_price_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="25sp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

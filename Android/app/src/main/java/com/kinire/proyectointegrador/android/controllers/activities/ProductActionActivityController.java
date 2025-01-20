@@ -64,6 +64,7 @@ public class ProductActionActivityController implements View.OnClickListener {
             ShoppingCartFragmentController.changeProduct(activity.getProduct(), amount, position);
             activity.finish();
             ShoppingCartFragmentController.refreshData();
+            ShoppingCartFragmentController.updatePrice();
         } else {
             ShoppingCartFragmentController.addProduct(activity.getProduct(), amount);
             activity.finish();

@@ -18,6 +18,7 @@ import com.kinire.proyectointegrador.android.adapters.ShopingCartAdapter;
 import com.kinire.proyectointegrador.android.controllers.fragments.ShoppingCartFragmentController;
 import com.kinire.proyectointegrador.android.databinding.FragmentShoppingCartBinding;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
@@ -36,6 +37,8 @@ public class ShoppingCartFragment extends Fragment {
     private TextView emptyPurchaseText;
 
     private TextView noProductsText;
+
+    private TextView totalPriceText;
 
     private ShoppingCartViewModel viewModel;
 
@@ -56,7 +59,7 @@ public class ShoppingCartFragment extends Fragment {
         View root = binding.getRoot();
         this.initalizeElements();
         this.setListeners();
-        this.setAdapter();
+        this.setObservers();
         return root;
     }
 
@@ -69,8 +72,10 @@ public class ShoppingCartFragment extends Fragment {
         this.emptyPurchaseText = binding.deleteShoppingCartDescriptor;
         this.noProductsText = binding.shoppingCartListEmpty;
         this.shoppingList = binding.shoppingCartList;
+        this.totalPriceText = binding.totalPriceField;
         this.SUCCESS_SAVED_PURCHASE_MESSAGE = getString(R.string.purchase_saved_succesfully);
         this.controller = new ShoppingCartFragmentController(this, viewModel);
+        this.controller.updatePrice();
     }
 
     private void setListeners() {
@@ -81,7 +86,7 @@ public class ShoppingCartFragment extends Fragment {
         this.shoppingList.setOnItemClickListener(controller);
     }
 
-    public void setAdapter() {
+    public void setObservers() {
         viewModel.getData().observe(getViewLifecycleOwner(), purchase -> {
             if(adapter == null) {
                 adapter = new ShopingCartAdapter(getContext(), R.layout.shopping_cart_item_layout, purchase);
@@ -128,6 +133,14 @@ public class ShoppingCartFragment extends Fragment {
                     .setToastHeaderText(ERROR_SAVED_PURCHASE_MESSAGE)
                     .show();
         });
+    }
+
+    public void setTotalPriceText(float price) {
+        if(price == 0.0f) {
+            this.totalPriceText.setText(null);
+        } else {
+            this.totalPriceText.setText(String.format(Locale.getDefault(), "%.2f€", price));
+        }
     }
 
     @Override

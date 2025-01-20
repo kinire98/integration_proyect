@@ -12,8 +12,11 @@ public class HistoryPurchaseViewModel extends ViewModel {
 
     private final MutableLiveData<List<Purchase>> mPurchases;
 
+    private final MutableLiveData<String> mNoPurchases;
+
     public HistoryPurchaseViewModel() {
         mPurchases = new MutableLiveData<>();
+        mNoPurchases = new MutableLiveData<>();
     }
 
     public void setPurchases(List<Purchase> purchases) {
@@ -21,5 +24,13 @@ public class HistoryPurchaseViewModel extends ViewModel {
     }
     public LiveData<List<Purchase>> getPurchases() {
         return mPurchases;
+    }
+
+    public void setNoPurchasesMessage(String noPurchases) {
+        mNoPurchases.setValue(noPurchases);
+    }
+
+    public MutableLiveData<String> getNoPurchasesMessage() {
+        return mNoPurchases;
     }
 }

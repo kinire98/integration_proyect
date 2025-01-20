@@ -24,7 +24,7 @@ import java.time.LocalDate;
 
 public class ShoppingCartFragmentController implements AdapterView.OnItemClickListener, View.OnClickListener {
 
-    private final ShoppingCartFragment fragment;
+    private static ShoppingCartFragment fragment;
 
     private static ShoppingCartViewModel viewModel;
 
@@ -44,9 +44,9 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
 
     public ShoppingCartFragmentController(ShoppingCartFragment fragment, ShoppingCartViewModel viewModel) {
         this.fragment = fragment;
-        this.viewModel = viewModel;
-        this.viewModel.setData(purchase);
-        this.viewModel.setEmptyMessage(fragment.getString(R.string.empty_shopping_cart));
+        ShoppingCartFragmentController.viewModel = viewModel;
+        ShoppingCartFragmentController.viewModel.setData(purchase);
+        ShoppingCartFragmentController.viewModel.setEmptyMessage(fragment.getString(R.string.empty_shopping_cart));
         this.showPurchasesButtons = false;
         this.sharedPreferencesManager = new SharedPreferencesManager(fragment.requireContext());
         this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
@@ -59,6 +59,14 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
     }
     public static void changeProduct(Product product, int amount, int position) {
         purchase.getShoppingCartItems().set(position, new ShoppingCartItem(product, amount));
+    }
+
+    /**
+     * Este metodo debe ser llamado con MUCHO cuidado.
+     * Se tiene que haber asegurado que se haya abierto el fragmento del carrito por lo menos una vez
+     */
+    public static void updatePrice() {
+        fragment.setTotalPriceText(purchase.getTotalPrice());
     }
 
     @Override
