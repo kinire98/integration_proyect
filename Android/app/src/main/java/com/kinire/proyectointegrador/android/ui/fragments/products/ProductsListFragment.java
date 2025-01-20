@@ -20,6 +20,8 @@ import com.kinire.proyectointegrador.components.Product;
 
 import java.util.List;
 
+import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
+
 public class ProductsListFragment extends Fragment {
 
     private final static String CANT_GET_PRODUCTS_ERROR_MESSAGE = "No se pudo obtener la lista de productos";
@@ -32,6 +34,9 @@ public class ProductsListFragment extends Fragment {
 
     private ProductsListViewModel viewModel;
 
+
+    private String ERROR_SAVED_PURCHASE_MESSAGE;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -43,15 +48,15 @@ public class ProductsListFragment extends Fragment {
             // Consume the system window insets so they don't add margins
             return insets.consumeSystemWindowInsets();
         });
-        this.getElements();
+        this.initalizeElements();
         this.setAdapter();
         this.setListeners();
         return binding.getRoot();
     }
 
-    private void getElements() {
+    private void initalizeElements() {
+        this.ERROR_SAVED_PURCHASE_MESSAGE = getString(R.string.connectivity_error);
         this.productList = binding.productsList;
-        System.out.println("Aqui getElements");
         this.controller = new
                 ProductListFragmentController(this, viewModel);
     }
@@ -59,6 +64,7 @@ public class ProductsListFragment extends Fragment {
     private void setAdapter() {
         viewModel.getProducts().observe(getViewLifecycleOwner(), products -> {
             ProductListAdapter adapter = new ProductListAdapter(ProductsListFragment.this.getActivity(), R.layout.product_list_layout, products);
+            productList.invalidate();
             productList.setAdapter(adapter);
         });
     }
@@ -67,7 +73,10 @@ public class ProductsListFragment extends Fragment {
     }
 
     public void errorFetchingProducts() {
-        Toast.makeText(this.getContext(), CANT_GET_PRODUCTS_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
+        SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
+                        ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                .setToastHeaderText(ERROR_SAVED_PURCHASE_MESSAGE)
+                .show();
     }
 
     @Override

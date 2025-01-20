@@ -106,7 +106,6 @@ class UDPConnection extends Thread {
                 outputStream.write(Arrays.copyOfRange(receiveBuffer, 1, receiveBuffer.length));
                 socket.receive(receivePacket);
             }
-            logger.log(Level.SEVERE, String.valueOf(receiveBuffer[0]));
             if (receiveBuffer[0] == CommonValues.udpImageRequestEnded) {
                 logger.log(Level.INFO, "Image reception has finished");
                 imageSolicitude.successPromise.apply(

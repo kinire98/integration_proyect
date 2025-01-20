@@ -13,6 +13,7 @@ lifecycleViewmodelKtx = "2.8.7"
 navigationFragment = "2.8.5"
 navigationUi = "2.8.5"
 activity = "1.9.3"
+superiorToasts = "v1.0"
 
 [libraries]
 clientserverconnection = { module = "com.kinire.proyectointegrador:clientServerConnection", version.ref = "clientserverconnection" }
@@ -28,6 +29,7 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+superior-toasts = { module = "com.github.shubh420:Superior-Toasts", version.ref = "superiorToasts" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

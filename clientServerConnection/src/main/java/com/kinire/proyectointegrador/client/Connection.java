@@ -1,14 +1,12 @@
 package com.kinire.proyectointegrador.client;
 
 import com.kinire.proyectointegrador.CommonValues;
-import com.kinire.proyectointegrador.client.lamba_interfaces.EmptyFunction;
-import com.kinire.proyectointegrador.client.lamba_interfaces.ErrorFunction;
-import com.kinire.proyectointegrador.client.lamba_interfaces.InputStreamFunction;
-import com.kinire.proyectointegrador.client.lamba_interfaces.ProductArrayFunction;
+import com.kinire.proyectointegrador.client.lamba_interfaces.*;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.components.User;
 import com.kinire.proyectointegrador.products.ProductMessageBuilder;
+import com.kinire.proyectointegrador.purchases.PurchaseMessageBuilder;
 import com.kinire.proyectointegrador.users.UserMessageBuilder;
 
 import java.io.IOException;
@@ -122,7 +120,6 @@ public class Connection {
     public void getImage(String path, InputStreamFunction successPromise, ErrorFunction errorPromise) {
         udpConnection.askForImage(path, successPromise, errorPromise);
     }
-    public void uploadPurchase(Purchase purchase) {}
     public void userExists(String username, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -182,6 +179,74 @@ public class Connection {
                     successPromise.apply();
                 else
                     failurePromise.apply(null);
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
+    }
+    public void uploadPurchase(Purchase purchase, EmptyFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new PurchaseMessageBuilder()
+                                .insertPurchaseRequest(purchase)
+                                .build()
+                );
+                logger.log(Level.INFO, "Reading value of uploaded purchase");
+                Boolean result = (Boolean) inputStream.readObject();
+                if(result)
+                    successPromise.apply();
+                else
+                    failurePromise.apply(null);
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
+    }
+    public void getClientPurchases(User user, MultiplePurchasesFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            List<Object> purchases = null;
+            try {
+                outputStream.writeObject(
+                        new PurchaseMessageBuilder()
+                                .selectPurchasesByClientRequest(user)
+                                .build()
+                );
+                Object obj = inputStream.readObject();
+                if (obj.getClass().isArray()) {
+                    purchases = Arrays.asList((Object[])obj);
+                } else if (obj instanceof Collection) {
+                    purchases = new ArrayList<>((Collection<?>)obj);
+                }
+
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+                return;
+            }
+            if(purchases == null || purchases.isEmpty()) {
+                failurePromise.apply(null);
+                return;
+            }
+            successPromise.apply(
+                    purchases.stream().map(o -> (Purchase) o).collect(Collectors.toList())
+            );
+        }).start();
+    }
+    public void deletePurchase(Purchase purchase, EmptyFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new PurchaseMessageBuilder()
+                                .deletePurchaseRequest(purchase.getId())
+                                .build()
+                );
+                Boolean success = (Boolean) inputStream.readObject();
+                if(success) {
+                    successPromise.apply();
+                } else {
+                    failurePromise.apply(null);
+                }
+
             } catch (IOException | ClassNotFoundException e) {
                 failurePromise.apply(e);
             }

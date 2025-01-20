@@ -49,6 +49,8 @@ dependencies {
     implementation libs.clientserverconnection
     implementation libs.activity
     implementation libs.components
+    implementation libs.superior.toasts
+    runtimeOnly libs.material
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

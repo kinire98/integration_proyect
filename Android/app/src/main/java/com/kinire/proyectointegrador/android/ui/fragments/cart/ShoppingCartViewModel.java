@@ -4,16 +4,24 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.kinire.proyectointegrador.components.Purchase;
+
 public class ShoppingCartViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private final MutableLiveData<Purchase> mPurchase;
 
     public ShoppingCartViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mPurchase = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public MutableLiveData<Purchase> getData() {
+        return mPurchase;
+    }
+    public void setData(Purchase purchase) {
+        mPurchase.setValue(purchase);
+    }
+
+    public void forceRefresh() {
+        mPurchase.setValue(mPurchase.getValue());
     }
 }

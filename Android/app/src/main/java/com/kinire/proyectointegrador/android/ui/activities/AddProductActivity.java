@@ -21,6 +21,7 @@ import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.AddProductActivityController;
 import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
+import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;
 
 import java.util.Locale;
@@ -36,6 +37,8 @@ public class AddProductActivity extends AppCompatActivity {
     private Button plusButton;
     private EditText productAmount;
     private Button addProductButton;
+
+    private Product product;
 
     private AddProductActivityController controller;
 
@@ -84,6 +87,13 @@ public class AddProductActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             ParcelableProduct product = bundle.getParcelable(PRODUCT_PARCELABLE_KEY);
+
+            this.product = new Product(product.getId(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getImagePath(),
+                    product.getDate(),
+                    new Category(product.getCategoryId(), product.getCategoryName()));
             byte[] imageByteArray = bundle.getByteArray(IMAGE_PARCELABLE_KEY);
             this.imageView.setImageDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageByteArray, 0 , imageByteArray.length)));
             this.productName.setText(product.getName());
@@ -118,5 +128,15 @@ public class AddProductActivity extends AppCompatActivity {
 
     public void setAmount(int amount) {
         this.productAmount.setText(String.valueOf(amount));
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+    public int getAmount() {
+        if(this.productAmount.getText() == null || this.productAmount.getText().toString().isEmpty())
+            return 0;
+        assert this.productAmount.getText() != null && !this.productAmount.getText().toString().isEmpty();
+        return Integer.parseInt(this.productAmount.getText().toString());
     }
 }

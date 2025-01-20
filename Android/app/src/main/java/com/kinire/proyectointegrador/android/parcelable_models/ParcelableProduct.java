@@ -13,27 +13,39 @@ import com.kinire.proyectointegrador.components.Product;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ParcelableProduct implements Parcelable {
 
     private final long id;
     private final String name;
     private final float price;
+    private final long categoryId;
     private final String categoryName;
+    private final String imagePath;
+    private final LocalDate date;
 
 
     public ParcelableProduct(Product product) {
         this.id = product.getId();
         this.name = product.getName();
         this.price = product.getPrice();
+        this.categoryId = product.getCategory().getId();
         this.categoryName = product.getCategory().getName();
+        this.imagePath = product.getImagePath();
+        this.date = product.getLastModified();
     }
 
     protected ParcelableProduct(Parcel in) {
         id = in.readLong();
         name = in.readString();
         price = in.readFloat();
+        categoryId = in.readLong();
         categoryName = in.readString();
+        imagePath = in.readString();
+        date = LocalDate.parse(in.readString(), DateTimeFormatter.ISO_DATE);
     }
 
     public static final Creator<ParcelableProduct> CREATOR = new Creator<ParcelableProduct>() {
@@ -58,7 +70,10 @@ public class ParcelableProduct implements Parcelable {
         dest.writeLong(id);
         dest.writeString(name);
         dest.writeFloat(price);
+        dest.writeLong(categoryId);
         dest.writeString(categoryName);
+        dest.writeString(imagePath);
+        dest.writeString(date.format(DateTimeFormatter.ISO_DATE));
     }
 
     public long getId() {
@@ -77,4 +92,15 @@ public class ParcelableProduct implements Parcelable {
         return categoryName;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
 }

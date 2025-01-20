@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.annotation.IdRes;
 
 import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.android.controllers.fragments.ShoppingCartFragmentController;
 import com.kinire.proyectointegrador.android.ui.activities.AddProductActivity;
 
 public class AddProductActivityController implements View.OnClickListener {
@@ -46,7 +47,10 @@ public class AddProductActivityController implements View.OnClickListener {
             amount--;
         activity.setAmount(amount);
     }
-    private void addProduct() {}
+    private void addProduct() {
+        ShoppingCartFragmentController.addProduct(activity.getProduct(), activity.getAmount());
+        activity.finish();
+    }
 
 
     @Override

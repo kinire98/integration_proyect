@@ -8,6 +8,7 @@ import android.view.Window;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;

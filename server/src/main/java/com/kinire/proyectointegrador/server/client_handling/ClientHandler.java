@@ -160,7 +160,7 @@ public class ClientHandler extends Thread {
                     DAOInstances.getPurchaseDAO().deletePurchase(message.getId())
             );
         }
-
+        logger.log(Level.INFO, "Purchase request processed");
 
     }
 }

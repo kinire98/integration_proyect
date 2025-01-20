@@ -86,19 +86,20 @@ public class ProductListAdapter extends BaseAdapter {
     }
 
     private void askForImage(int position, ViewHolder holder) {
+        if(holder.image != null)
+            return;
         Connection.getInstance().getImage(data.get(position).getImagePath(), (stream) -> {
             try {
                 holder.image = Drawable.createFromStream(stream, "remote");
             } catch (Exception e) {
-                holder.image = AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid);
+                ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid)));
             }
             if(holder.image == null)
                 askForImage(position, holder);
             ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
         }, (e) -> {
-            e.printStackTrace();
             logger.log(Level.SEVERE, "Error while loading image");
-            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
+            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid)));
         });
     }
     private static class ViewHolder {
