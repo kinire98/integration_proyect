@@ -30,6 +30,7 @@
     <string name="save_purchase">Guardar compra</string>
     <string name="empty_purchase">Vaciar compra</string>
     <string name="total_price">Precio total:</string>
+    <string name="no_purchase_history">No has realizado niguna compra</string>
     <string name="shared_preferences_key">4b2c3564-f6f7-4837-83da-33a9f1efcfbf</string>
     <string name="user_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
     <string name="product_parcelable_key">c8117227-4702-4f62-bf1e-ba339e6e12e</string>

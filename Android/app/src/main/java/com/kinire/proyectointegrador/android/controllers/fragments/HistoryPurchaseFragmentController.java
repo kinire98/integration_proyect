@@ -3,6 +3,7 @@ package com.kinire.proyectointegrador.android.controllers.fragments;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.shared_preferences.SharedPreferencesManager;
 import com.kinire.proyectointegrador.android.ui.fragments.history.HistoryPurchaseFragment;
 import com.kinire.proyectointegrador.android.ui.fragments.history.HistoryPurchaseViewModel;
@@ -22,6 +23,7 @@ public class HistoryPurchaseFragmentController implements AdapterView.OnItemClic
         SharedPreferencesManager sharedPreferencesManager = new SharedPreferencesManager(fragment.requireContext());
         User user = new User();
         user.setUser(sharedPreferencesManager.getUser());
+        this.viewModel.setNoPurchasesMessage(fragment.getString(R.string.no_purchase_history));
         Connection.getInstance().getClientPurchases(user, purchases -> {
 
         }, e -> {});
