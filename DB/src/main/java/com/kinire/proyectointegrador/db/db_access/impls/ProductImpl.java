@@ -168,14 +168,15 @@ public class ProductImpl implements ProductDAO {
         if(categoryDAO.selectCategory(product.getCategory().getId()) == null)
             throw new IllegalArgumentException("The category must exist in order to be able to update it");
         boolean success = false;
-        String query = "UPDATE products SET name = ?, price = ?, image_path = ?, category_id = ? WHERE id = ?";
+        String query = "UPDATE products SET name = ?, price = ?, image_path = ?, category_id = ?, last_modification = ? WHERE id = ?";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, product.getName());
             statement.setFloat(2, product.getPrice());
             statement.setString(3, product.getImagePath());
             statement.setLong(4, product.getCategory().getId());
-            statement.setLong(5, id);
+            statement.setDate(5, Date.valueOf(LocalDate.now()));
+            statement.setLong(6, id);
             success = statement.executeUpdate() == 1;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
