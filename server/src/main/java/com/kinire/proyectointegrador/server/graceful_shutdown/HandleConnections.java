@@ -2,10 +2,11 @@ package com.kinire.proyectointegrador.server.graceful_shutdown;
 
 import com.kinire.proyectointegrador.server.client_handling.ClientHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class HandleConnections extends Thread {
-    private ArrayList<ClientHandler> handlers;
+    private final ArrayList<ClientHandler> handlers;
 
     public HandleConnections() {
         this.handlers = new ArrayList<>();
@@ -17,6 +18,18 @@ public class HandleConnections extends Thread {
 
     @Override
     public void run() {
-        super.run();
+        int attempt = 0;
+        while (true) {
+            try {
+                while (attempt < handlers.size()) {
+                    handlers.get(attempt).close();
+                    attempt++;
+                }
+            } catch (IOException e) {
+                attempt++;
+                continue;
+            }
+            return;
+        }
     }
 }

@@ -33,6 +33,8 @@ public class UDPClientHandler extends Thread {
 
     private final Logger logger = Logger.getLogger(UDPClientHandler.class.getName());
 
+    private final boolean productUpdateSignaled = false;
+
     public UDPClientHandler(InetAddress address, int port) {
         this.address = address;
         this.port = port + 1;
@@ -49,6 +51,7 @@ public class UDPClientHandler extends Thread {
         socket.disconnect();
         socket.close();
     }
+    public void queueNotificationOfProductUpdate() {}
 
     @Override
     public void run() {

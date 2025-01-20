@@ -11,6 +11,12 @@
     <string name="invalid_user_name">El nombre de usuario que introdujiste no es válido</string>
     <string name="incorrect_admin_password">La contraseña de administrador que introdujiste es incorrecta</string>
     <string name="connectivity_error">El servidor no está activo. Ponte en contacto con el desarrollador</string>
+    <string name="write_password">Escribe tu contraseña:</string>
+    <string name="create_password">Crea una contraseña:</string>
+    <string name="password_hint">Escribe aquí tu contraseña</string>
+    <string name="create_password_button">Guardar contraseña</string>
+    <string name="write_password_button">Comprobar contraseña</string>
+    <string name="incorrect_password">Contraseña incorrecta</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="add_to_cart">Añadir al carrito</string>

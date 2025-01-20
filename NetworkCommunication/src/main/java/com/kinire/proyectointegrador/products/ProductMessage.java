@@ -16,6 +16,7 @@ public class ProductMessage implements Serializable {
 
     private final boolean singleProductRequest;
 
+    private final boolean insertProductRequest;
 
     private final boolean requestByCategory;
 
@@ -31,13 +32,16 @@ public class ProductMessage implements Serializable {
 
     private final ArrayList<Product> products;
 
+    private final Product product;
 
 
-    ProductMessage(boolean allProductsRequest, boolean singleProductRequest,
+
+    ProductMessage(boolean allProductsRequest, boolean singleProductRequest, boolean insertProductRequest,
                     boolean requestByCategory, boolean requestOfMissingProducts, boolean requestOfUpdatedProducts,
-                    boolean requestByIds, long[] ids, long id, ArrayList<Product> products) {
+                    boolean requestByIds, long[] ids, long id, ArrayList<Product> products, Product product) {
         this.allProductsRequest = allProductsRequest;
         this.singleProductRequest = singleProductRequest;
+        this.insertProductRequest = insertProductRequest;
         this.requestByCategory = requestByCategory;
         this.requestOfMissingProducts = requestOfMissingProducts;
         this.requestOfUpdatedProducts = requestOfUpdatedProducts;
@@ -45,6 +49,7 @@ public class ProductMessage implements Serializable {
         this.ids = ids;
         this.id = id;
         this.products = products;
+        this.product = product;
     }
 
     public ArrayList<Product> getProducts() {
@@ -57,6 +62,10 @@ public class ProductMessage implements Serializable {
 
     public long[] getIds() {
         return ids;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 
     public boolean isAllProductsRequest() {
@@ -83,4 +92,7 @@ public class ProductMessage implements Serializable {
         return requestOfUpdatedProducts;
     }
 
+    public boolean isInsertProductRequest() {
+        return insertProductRequest;
+    }
 }

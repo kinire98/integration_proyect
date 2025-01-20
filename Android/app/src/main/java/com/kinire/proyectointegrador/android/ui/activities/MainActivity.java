@@ -55,11 +55,29 @@ public class MainActivity extends AppCompatActivity {
     private void initalizeElements() {
         this.controller = new MainActivityController(this);
     }
+
     public void hideAddProducts() {
         bottomMenu.getMenu().findItem(R.id.navigation_add_product).setVisible(false);
     }
+
     public void showAddProducts() {
         bottomMenu.getMenu().findItem(R.id.navigation_add_product).setVisible(true);
+    }
+
+    public void hideCart() {
+        bottomMenu.getMenu().findItem(R.id.navigation_shopping_cart).setVisible(false);
+    }
+
+    public void showCart() {
+        bottomMenu.getMenu().findItem(R.id.navigation_shopping_cart).setVisible(true);
+    }
+
+    public void hideHistory() {
+        bottomMenu.getMenu().findItem(R.id.navigation_history_purchase).setVisible(false);
+    }
+
+    public void showHistory() {
+        bottomMenu.getMenu().findItem(R.id.navigation_history_purchase).setVisible(true);
     }
 
 

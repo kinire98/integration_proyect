@@ -126,16 +126,23 @@ public class Connection {
     public void userExists(String username, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
+                logger.log(Level.INFO, "Sending user information");
                 outputStream.writeObject(
                         new UserMessageBuilder()
                                 .selectUserRequest(username)
                                 .build()
                 );
-                User user = (User) inputStream.readObject();
-                if(user != null)
+                logger.log(Level.INFO, "Reading user information");
+                Boolean user = (Boolean) inputStream.readObject();
+                logger.log(Level.INFO, "User information read");
+                if(user) {
+                    logger.log(Level.INFO, "User exists");
                     truePromise.apply();
-                else
+                }
+                else {
+                    logger.log(Level.INFO, "User doesn't exist");
                     falsePromise.apply();
+                }
             } catch (IOException | ClassNotFoundException e) {
                 failurePromise.apply(e);
             }

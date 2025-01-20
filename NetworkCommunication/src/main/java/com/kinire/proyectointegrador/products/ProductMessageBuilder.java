@@ -12,6 +12,8 @@ public class ProductMessageBuilder {
 
     private boolean singleProductRequest;
 
+    private boolean insertProductRequest;
+
     private boolean requestByCategory;
 
     private boolean requestOfMissingProducts;
@@ -24,8 +26,9 @@ public class ProductMessageBuilder {
 
     private long id;
 
-
     private ArrayList<Product> products;
+
+    private Product product;
 
 
     public ProductMessageBuilder() {}
@@ -126,13 +129,15 @@ public class ProductMessageBuilder {
         return new ProductMessage(
                 allProductsRequest,
                 singleProductRequest,
+                insertProductRequest,
                 requestByCategory,
                 requestOfMissingProducts,
                 requestOfUpdatedProducts,
                 requestByIds,
                 ids,
                 id,
-                products
+                products,
+                product
         );
     }
 }

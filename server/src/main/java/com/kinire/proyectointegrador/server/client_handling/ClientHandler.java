@@ -1,8 +1,10 @@
 package com.kinire.proyectointegrador.server.client_handling;
 
+import com.kinire.proyectointegrador.purchases.PurchaseMessage;
 import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
 import com.kinire.proyectointegrador.server.free_ports.UDPPorts;
 import com.kinire.proyectointegrador.products.ProductMessage;
+import com.kinire.proyectointegrador.server.updates_signaling.UpdateSignaler;
 import com.kinire.proyectointegrador.users.UserMessage;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +32,11 @@ public class ClientHandler extends Thread {
 
     private final int udpPort;
 
-    public ClientHandler(Socket socket) {
+    private final UpdateSignaler signaler;
+
+    public ClientHandler(Socket socket, UpdateSignaler signaler) {
         this.socket = socket;
+        this.signaler = signaler;
         this.udpPort = UDPPorts.getFreePort();
         try {
             this.inputStream = new ObjectInputStream(socket.getInputStream());
@@ -53,6 +58,11 @@ public class ClientHandler extends Thread {
         this.socket.close();
         this.interrupt();
     }
+    public boolean isConnected() {
+        return socket.isConnected();
+    }
+
+    public void notifyProductUpdate() {}
 
 
     @Override
@@ -74,6 +84,8 @@ public class ClientHandler extends Thread {
                 handleProductMessage((ProductMessage) message);
             else if(message instanceof UserMessage)
                 handleUserMessage((UserMessage) message);
+            else if(message instanceof PurchaseMessage)
+                handlePurchaseMessage((PurchaseMessage) message);
         }
     }
     private void handleProductMessage(ProductMessage message) throws IOException {
@@ -102,6 +114,11 @@ public class ClientHandler extends Thread {
             outputStream.writeObject(
                     DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts())
             );
+        } else if(message.isInsertProductRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getProductDAO().insertProduct(message.getProduct())
+            );
+            signaler.signalProductUpdate();
         }
     }
     private void handleUserMessage(UserMessage message) throws IOException {
@@ -124,4 +141,27 @@ public class ClientHandler extends Thread {
         }
         logger.log(Level.INFO, "User request processed");
     }
+    private void handlePurchaseMessage(PurchaseMessage message) throws IOException {
+        logger.log(Level.INFO, "Processing purchase request");
+        if(message.isInsertPurchaseRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getPurchaseDAO().insertPurchase(message.getPurchase())
+            );
+        } else if (message.isSelectSinglePurchaseRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getPurchaseDAO().selectPurchase(message.getId())
+            );
+        } else if (message.isSelectPurchasesByClientRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getPurchaseDAO().selectPurchaseByClient(message.getUser())
+            );
+        } else if(message.isDeletePurchaseRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getPurchaseDAO().deletePurchase(message.getId())
+            );
+        }
+
+
+    }
 }
+

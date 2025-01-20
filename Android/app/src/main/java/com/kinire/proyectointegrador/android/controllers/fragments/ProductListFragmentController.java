@@ -54,6 +54,9 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // If image not loaded, it won't open the product
+        if(((ImageView) view.findViewById(R.id.image_field)).getDrawable() == null)
+            return;
         Intent intent = new Intent(fragment.requireActivity(), AddProductActivity.class);
         intent.putExtra(PRODUCT_PARCELABLE_KEY, new ParcelableProduct(viewModel.getProductsData().get(position)));
         intent.putExtra(IMAGE_PARCELABLE_KEY, ImageCompression.compressImage(((ImageView) view.findViewById(R.id.image_field)).getDrawable()));;

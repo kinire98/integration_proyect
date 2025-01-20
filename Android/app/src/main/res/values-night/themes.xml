@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="android:padding">0dp</item>
         <item name="actionBarStyle">@style/CustomActionBarStyle</item>
     </style>
     <style name="CustomActionBarStyle" parent="Widget.MaterialComponents.Toolbar">

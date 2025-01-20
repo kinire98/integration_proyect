@@ -1,11 +1,16 @@
 package com.kinire.proyectointegrador.android.ui.activities;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,17 +20,30 @@ import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.UserActivityController;
 import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
+
 public class UserActivity extends AppCompatActivity {
 
     private EditText userField;
     private Button button;
+    private TextView incorrectPasswordField;
 
     private UserActivityController controller;
+
 
     private String invalidUserName;
     private String incorrectAdminPassword;
 
     private String connectivityError;
+
+    private String PASSWORD_FIELD_SET_TITLE;
+    private String PASSWORD_FIELD_QUERY_TITLE;
+
+    private String PASSWORD_FIELD_SET_BUTTON;
+    private String PASSWORD_FIELD_QUERY_BUTTON;
+
+    private String INCORRECT_PASSWORD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +66,12 @@ public class UserActivity extends AppCompatActivity {
         this.incorrectAdminPassword = getString(R.string.incorrect_admin_password);
         this.invalidUserName = getString(R.string.invalid_user_name);
         this.connectivityError = getString(R.string.connectivity_error);
+        this.PASSWORD_FIELD_SET_TITLE = getString(R.string.create_password);
+        this.PASSWORD_FIELD_QUERY_TITLE = getString(R.string.write_password);
+        this.PASSWORD_FIELD_SET_BUTTON = getString(R.string.create_password_button);
+        this.PASSWORD_FIELD_QUERY_BUTTON = getString(R.string.write_password_button);
+        this.INCORRECT_PASSWORD = getString(R.string.incorrect_password);
+        this.incorrectPasswordField = findViewById(R.id.incorrect_password);
         this.controller = new UserActivityController(this);
     }
 
@@ -72,15 +96,69 @@ public class UserActivity extends AppCompatActivity {
     }
 
     public String askForPassword() {
-        return "";
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.ask_password_layout, null);
+        EditText editText = dialogView.findViewById(R.id.password_field);
+        TextView title = dialogView.findViewById(R.id.title);
+        title.setText(PASSWORD_FIELD_QUERY_TITLE);
+        Button button = dialogView.findViewById(R.id.login);
+        button.setText(PASSWORD_FIELD_QUERY_BUTTON);
+        final CountDownLatch latch = new CountDownLatch(1);
+        final String[] key = {""};
+        AtomicReference<Dialog> dialog = new AtomicReference<>();
+        button.setOnClickListener(v -> {
+            key[0] = editText.getText().toString();
+            latch.countDown();
+            dialog.get().dismiss();
+        });
+        runOnUiThread(() -> {
+            dialog.set(new AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .create());
+            dialog.get().show();
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {}
+        return key[0];
     }
 
     public String askForNewPassword() {
-        return "";
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.ask_password_layout, null);
+        EditText editText = dialogView.findViewById(R.id.password_field);
+        TextView title = dialogView.findViewById(R.id.title);
+        title.setText(PASSWORD_FIELD_SET_TITLE);
+        Button button = dialogView.findViewById(R.id.login);
+        button.setText(PASSWORD_FIELD_SET_BUTTON);
+        final CountDownLatch latch = new CountDownLatch(1);
+        final String[] key = {""};
+        AtomicReference<Dialog> dialog = new AtomicReference<>();
+        button.setOnClickListener(v -> {
+            key[0] = editText.getText().toString();
+            latch.countDown();
+            dialog.get().dismiss();
+        });
+        runOnUiThread(() -> {
+            dialog.set(new AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .create());
+            dialog.get().show();
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {}
+        return key[0];
     }
 
     public void incorrectPassword() {
-
+        this.incorrectPasswordField.setText(INCORRECT_PASSWORD);
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {}
+            this.incorrectPasswordField.setText(null);
+        }).start();
     }
 
 }
