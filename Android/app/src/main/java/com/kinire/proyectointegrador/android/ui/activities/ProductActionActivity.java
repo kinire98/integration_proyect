@@ -12,13 +12,12 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.controllers.activities.AddProductActivityController;
+import com.kinire.proyectointegrador.android.controllers.activities.ProductActionActivityController;
 import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
 import com.kinire.proyectointegrador.components.Category;
@@ -26,7 +25,7 @@ import com.kinire.proyectointegrador.components.Product;
 
 import java.util.Locale;
 
-public class AddProductActivity extends AppCompatActivity {
+public class ProductActionActivity extends AppCompatActivity {
 
 
     private ImageView imageView;
@@ -40,22 +39,29 @@ public class AddProductActivity extends AppCompatActivity {
 
     private Product product;
 
-    private AddProductActivityController controller;
+    private ProductActionActivityController controller;
 
     private String PRODUCT_PARCELABLE_KEY;
 
     private String IMAGE_PARCELABLE_KEY;
 
     private String AMOUNT_PARCELABLE_KEY;
+    private String POSITION_PARCELABLE_KEY;
 
-    private final static String ACTION_BAR_TITLE_PREFIX = "Añadir al carrito: ";
+    private String ACTION_BAR_ADD_TITLE_PREFIX;
+    private String ACTION_BAR_CHANGE_TITLE_PREFIX;
+
+    private String CHANGE_PRODUCT_BUTTON_TEXT;
+    private String ADD_PRODUCT_BUTTON_TEXT;
+
+    private boolean changeProduct;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_add_product);
+        setContentView(R.layout.activity_product_action);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -63,7 +69,6 @@ public class AddProductActivity extends AppCompatActivity {
         });
         this.initializeElements();
         this.setProductInformation();
-        this.setUpToolbar();
         this.setListeners();
         StyleDissonancesCorrection.setStatusBarCorrectColor(this);
     }
@@ -72,6 +77,7 @@ public class AddProductActivity extends AppCompatActivity {
         this.PRODUCT_PARCELABLE_KEY = getString(R.string.product_parcelable_key);
         this.IMAGE_PARCELABLE_KEY = getString(R.string.image_parcelable_key);
         this.AMOUNT_PARCELABLE_KEY = getString(R.string.amount_parcelable_key);
+        this.POSITION_PARCELABLE_KEY = getString(R.string.position_parcelable_key);
         this.imageView = findViewById(R.id.product_image);
         this.productName = findViewById(R.id.product_name);
         this.productCategory = findViewById(R.id.product_category);
@@ -80,7 +86,11 @@ public class AddProductActivity extends AppCompatActivity {
         this.plusButton = findViewById(R.id.plus_button);
         this.productAmount = findViewById(R.id.product_amount);
         this.addProductButton = findViewById(R.id.add_products_button);
-        this.controller = new AddProductActivityController(this);
+        this.ACTION_BAR_ADD_TITLE_PREFIX = getString(R.string.add_to_cart_menu_bar);
+        this.ACTION_BAR_CHANGE_TITLE_PREFIX = getString(R.string.change_product_menu_bar);
+        this.CHANGE_PRODUCT_BUTTON_TEXT = getString(R.string.change_product);
+        this.ADD_PRODUCT_BUTTON_TEXT = getString(R.string.add_to_cart);
+        this.controller = new ProductActionActivityController(this);
     }
 
     private void setProductInformation() {
@@ -95,12 +105,31 @@ public class AddProductActivity extends AppCompatActivity {
                     product.getDate(),
                     new Category(product.getCategoryId(), product.getCategoryName()));
             byte[] imageByteArray = bundle.getByteArray(IMAGE_PARCELABLE_KEY);
+            assert imageByteArray != null;
             this.imageView.setImageDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageByteArray, 0 , imageByteArray.length)));
             this.productName.setText(product.getName());
             this.productCategory.setText(product.getCategoryName());
             this.productPrice.setText(String.format(Locale.getDefault(), "%.2f€", product.getPrice()));
             controller.setPrice(product.getPrice());
-            controller.setAmount(bundle.getInt(AMOUNT_PARCELABLE_KEY));
+
+
+
+
+
+
+
+            int amount = bundle.getInt(AMOUNT_PARCELABLE_KEY);
+            changeProduct = amount >= 1;
+            controller.setChangeProduct(changeProduct);
+            if(changeProduct) {
+                setUpToolbar(ACTION_BAR_CHANGE_TITLE_PREFIX);
+                addProductButton.setText(CHANGE_PRODUCT_BUTTON_TEXT);
+                controller.setPosition(bundle.getInt(POSITION_PARCELABLE_KEY));
+            } else {
+                setUpToolbar(ACTION_BAR_ADD_TITLE_PREFIX);
+                addProductButton.setText(ADD_PRODUCT_BUTTON_TEXT);
+            }
+            controller.setAmount(changeProduct ? amount : 1);
         }
     }
 
@@ -110,9 +139,9 @@ public class AddProductActivity extends AppCompatActivity {
         this.addProductButton.setOnClickListener(controller);
     }
 
-    private void setUpToolbar() {
+    private void setUpToolbar(String prefix) {
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(ACTION_BAR_TITLE_PREFIX + this.productName.getText().toString());
+            getSupportActionBar().setTitle(prefix + " " + this.productName.getText().toString());
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }

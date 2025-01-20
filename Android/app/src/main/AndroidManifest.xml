@@ -23,7 +23,7 @@
             android:exported="false"
             />
         <activity
-            android:name=".ui.activities.AddProductActivity"
+            android:name=".ui.activities.ProductActionActivity"
             android:parentActivityName=".ui.activities.MainActivity"
             android:exported="false"
             />

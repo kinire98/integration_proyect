@@ -19,16 +19,20 @@
     <string name="incorrect_password">Contraseña incorrecta</string>
     <string name="purchase_saved_succesfully">Compra guardada con éxito</string>
     <string name="empty_shopping_cart">El carrito está vacío</string>
+    <string name="change_product">Cambiar producto</string>
+    <string name="change_product_menu_bar">Cambiar producto: </string>
+    <string name="add_to_cart_menu_bar">Añadir al carrito: </string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="add_to_cart">Añadir al carrito</string>
+    <string name="content_description_show_shopping_cart_options">Abrir opciones para el carrito de la compra</string>
+    <string name="content_description_save_purchase">Guardar compra en la base de datos</string>
+    <string name="save_purchase">Guardar compra</string>
+    <string name="empty_purchase">Vaciar compra</string>
     <string name="shared_preferences_key">4b2c3564-f6f7-4837-83da-33a9f1efcfbf</string>
     <string name="user_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
     <string name="product_parcelable_key">c8117227-4702-4f62-bf1e-ba339e6e12e</string>
     <string name="image_parcelable_key">1a29ab5f-e52d-484a-a0e4-d234fc9112d3</string>
     <string name="amount_parcelable_key">331844e4-a47d-4013-84d2-e4a1d8b3a4ad</string>
-    <string name="content_description_show_shopping_cart_options">Abrir opciones para el carrito de la compra</string>
-    <string name="content_description_save_purchase">Guardar compra en la base de datos</string>
-    <string name="save_purchase">Guardar compra</string>
-    <string name="empty_purchase">Vaciar compra</string>
+    <string name="position_parcelable_key">7d4e2a97-95cd-47e5-bd01-2b4107d84def</string>
 </resources>

@@ -1,20 +1,19 @@
 package com.kinire.proyectointegrador.android.controllers.fragments;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
-
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.adapters.ShopingCartAdapter;
+import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
 import com.kinire.proyectointegrador.android.shared_preferences.SharedPreferencesManager;
+import com.kinire.proyectointegrador.android.ui.activities.ProductActionActivity;
 import com.kinire.proyectointegrador.android.ui.activities.MainActivity;
 import com.kinire.proyectointegrador.android.ui.fragments.cart.ShoppingCartFragment;
 import com.kinire.proyectointegrador.android.ui.fragments.cart.ShoppingCartViewModel;
-import com.kinire.proyectointegrador.android.ui.fragments.products.ProductsListFragment;
+import com.kinire.proyectointegrador.android.utils.ImageCompression;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;
@@ -23,14 +22,11 @@ import com.kinire.proyectointegrador.components.User;
 
 import java.time.LocalDate;
 
-import io.shubh.superiortoastlibrary.SuperiorToast;
-import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
-
 public class ShoppingCartFragmentController implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private final ShoppingCartFragment fragment;
 
-    private final ShoppingCartViewModel viewModel;
+    private static ShoppingCartViewModel viewModel;
 
     private static Purchase purchase = new Purchase();
 
@@ -38,6 +34,13 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
 
     private final SharedPreferencesManager sharedPreferencesManager;
 
+    private final String PRODUCT_PARCELABLE_KEY;
+
+    private final String IMAGE_PARCELABLE_KEY;
+
+    private final String AMOUNT_PARCELABLE_KEY;
+
+    private final String POSITION_PARCELABLE_KEY;
 
     public ShoppingCartFragmentController(ShoppingCartFragment fragment, ShoppingCartViewModel viewModel) {
         this.fragment = fragment;
@@ -46,14 +49,28 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         this.viewModel.setEmptyMessage(fragment.getString(R.string.empty_shopping_cart));
         this.showPurchasesButtons = false;
         this.sharedPreferencesManager = new SharedPreferencesManager(fragment.requireContext());
+        this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
+        this.IMAGE_PARCELABLE_KEY = fragment.getString(R.string.image_parcelable_key);
+        this.AMOUNT_PARCELABLE_KEY = fragment.getString(R.string.amount_parcelable_key);
+        this.POSITION_PARCELABLE_KEY = fragment.getString(R.string.position_parcelable_key);
     }
     public static void addProduct(Product product, int amount) {
         purchase.getShoppingCartItems().add(new ShoppingCartItem(product, amount));
     }
+    public static void changeProduct(Product product, int amount, int position) {
+        purchase.getShoppingCartItems().set(position, new ShoppingCartItem(product, amount));
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //Open activity for changing amount
+        if(((ImageView) view.findViewById(R.id.image)).getDrawable() == null)
+            return;
+        Intent intent = new Intent(fragment.requireActivity(), ProductActionActivity.class);
+        intent.putExtra(PRODUCT_PARCELABLE_KEY, new ParcelableProduct(purchase.getShoppingCartItems().get(position).getProduct()));
+        intent.putExtra(IMAGE_PARCELABLE_KEY, ImageCompression.compressImage(((ImageView) view.findViewById(R.id.image)).getDrawable()));;
+        intent.putExtra(AMOUNT_PARCELABLE_KEY, purchase.getShoppingCartItems().get(position).getAmount());
+        intent.putExtra(POSITION_PARCELABLE_KEY, position);
+        fragment.requireActivity().startActivity(intent);
     }
 
     @Override
@@ -64,6 +81,10 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
             emptyPurchase();
         else if(v.getId() == R.id.save_shopping_cart)
             savePurchase();
+    }
+
+    public static void refreshData() {
+        viewModel.setData(purchase);
     }
 
     private void showHideButtons() {

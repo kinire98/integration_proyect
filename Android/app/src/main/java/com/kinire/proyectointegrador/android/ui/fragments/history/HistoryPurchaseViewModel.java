@@ -4,16 +4,22 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.kinire.proyectointegrador.components.Purchase;
+
+import java.util.List;
+
 public class HistoryPurchaseViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private final MutableLiveData<List<Purchase>> mPurchases;
 
     public HistoryPurchaseViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mPurchases = new MutableLiveData<>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void setPurchases(List<Purchase> purchases) {
+        mPurchases.setValue(purchases);
+    }
+    public LiveData<List<Purchase>> getPurchases() {
+        return mPurchases;
     }
 }

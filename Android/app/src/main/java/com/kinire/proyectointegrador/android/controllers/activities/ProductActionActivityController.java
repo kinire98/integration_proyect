@@ -6,11 +6,11 @@ import androidx.annotation.IdRes;
 
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.fragments.ShoppingCartFragmentController;
-import com.kinire.proyectointegrador.android.ui.activities.AddProductActivity;
+import com.kinire.proyectointegrador.android.ui.activities.ProductActionActivity;
 
-public class AddProductActivityController implements View.OnClickListener {
+public class ProductActionActivityController implements View.OnClickListener {
 
-    private AddProductActivity activity;
+    private ProductActionActivity activity;
 
     private final @IdRes int plusButtonId;
     private final @IdRes int minusButtonId;
@@ -20,20 +20,32 @@ public class AddProductActivityController implements View.OnClickListener {
 
     private float price;
 
-    public AddProductActivityController(AddProductActivity activity) {
+    private boolean changeProduct;
+
+    private int position;
+
+    public ProductActionActivityController(ProductActionActivity activity) {
         this.activity = activity;
         this.plusButtonId = R.id.plus_button;
         this.minusButtonId = R.id.minus_button;
         this.addProductButtonId = R.id.add_products_button;
     }
 
+    public void setAmount(int amount) {
+        this.amount = amount;
+        activity.setAmount(amount);
+    }
+
     public void setPrice(float price) {
         this.price = price;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-        activity.setAmount(amount);
+    public void setChangeProduct(boolean changeProduct) {
+        this.changeProduct = changeProduct;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     private void addOne() {
@@ -47,9 +59,15 @@ public class AddProductActivityController implements View.OnClickListener {
             amount--;
         activity.setAmount(amount);
     }
-    private void addProduct() {
-        ShoppingCartFragmentController.addProduct(activity.getProduct(), activity.getAmount());
-        activity.finish();
+    private void productAction() {
+        if(changeProduct) {
+            ShoppingCartFragmentController.changeProduct(activity.getProduct(), amount, position);
+            activity.finish();
+            ShoppingCartFragmentController.refreshData();
+        } else {
+            ShoppingCartFragmentController.addProduct(activity.getProduct(), amount);
+            activity.finish();
+        }
     }
 
 
@@ -60,7 +78,7 @@ public class AddProductActivityController implements View.OnClickListener {
         else if(v.getId() == minusButtonId)
             substractOne();
         else if(v.getId() == addProductButtonId)
-            addProduct();
+            productAction();
 
     }
 }
