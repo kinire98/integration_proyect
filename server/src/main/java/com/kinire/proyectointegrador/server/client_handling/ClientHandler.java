@@ -107,18 +107,22 @@ public class ClientHandler extends Thread {
     private void handleUserMessage(UserMessage message) throws IOException {
         logger.log(Level.INFO, "Processing user request");
         if(message.isUserDataCorrectRequest()) {
+            logger.log(Level.INFO, "Processing User data request");
             outputStream.writeObject(
                     DAOInstances.getUserDAO().selectUser(message.getUsername())
             );
         } else if(message.isInsertUserRequest()) {
+            logger.log(Level.INFO, "Processing insert User data request");
             outputStream.writeObject(
                     DAOInstances.getUserDAO().insertUser(message.getUser())
             );
         } else if(message.isUserDataCorrectRequest()) {
+            logger.log(Level.INFO, "Processing check User data request");
             outputStream.writeObject(
                     DAOInstances.getUserDAO().correctUserData(message.getUser())
             );
         }
+        logger.log(Level.INFO, "User request processed");
 
     }
 }
