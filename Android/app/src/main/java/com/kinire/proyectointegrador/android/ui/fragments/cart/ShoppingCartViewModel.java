@@ -10,8 +10,11 @@ public class ShoppingCartViewModel extends ViewModel {
 
     private final MutableLiveData<Purchase> mPurchase;
 
+    private final MutableLiveData<String> mEmptyMessage;
+
     public ShoppingCartViewModel() {
         mPurchase = new MutableLiveData<>();
+        mEmptyMessage = new MutableLiveData<>();
     }
 
     public MutableLiveData<Purchase> getData() {
@@ -19,6 +22,13 @@ public class ShoppingCartViewModel extends ViewModel {
     }
     public void setData(Purchase purchase) {
         mPurchase.setValue(purchase);
+    }
+
+    public MutableLiveData<String> getmEmptyMessage() {
+        return mEmptyMessage;
+    }
+    public void setEmptyMessage(String message) {
+        mEmptyMessage.setValue(message);
     }
 
     public void forceRefresh() {

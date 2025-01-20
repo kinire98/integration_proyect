@@ -35,6 +35,8 @@ public class ShoppingCartFragment extends Fragment {
     private TextView savePurchaseText;
     private TextView emptyPurchaseText;
 
+    private TextView noProductsText;
+
     private ShoppingCartViewModel viewModel;
 
     private ShoppingCartFragmentController controller;
@@ -54,7 +56,6 @@ public class ShoppingCartFragment extends Fragment {
         View root = binding.getRoot();
         this.initalizeElements();
         this.setListeners();
-        this.setVisibilities();
         this.setAdapter();
         return root;
     }
@@ -66,12 +67,14 @@ public class ShoppingCartFragment extends Fragment {
         this.emptyPurchaseButton = binding.deleteShoppingCart;
         this.savePurchaseText = binding.saveShoppingCartDescriptor;
         this.emptyPurchaseText = binding.deleteShoppingCartDescriptor;
+        this.noProductsText = binding.shoppingCartListEmpty;
         this.shoppingList = binding.shoppingCartList;
         this.SUCCESS_SAVED_PURCHASE_MESSAGE = getString(R.string.purchase_saved_succesfully);
         this.controller = new ShoppingCartFragmentController(this, viewModel);
     }
 
     private void setListeners() {
+        this.shoppingList.setEmptyView(noProductsText);
         this.hideShowButton.setOnClickListener(controller);
         this.savePurchaseButton.setOnClickListener(controller);
         this.emptyPurchaseButton.setOnClickListener(controller);
@@ -87,18 +90,13 @@ public class ShoppingCartFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-    }
-    private void setVisibilities() {
-        this.savePurchaseButton.setVisibility(View.GONE);
-        this.savePurchaseText.setVisibility(View.GONE);
-        this.emptyPurchaseButton.setVisibility(View.GONE);
-        this.emptyPurchaseText.setVisibility(View.GONE);
+        viewModel.getmEmptyMessage().observe(getViewLifecycleOwner(), noProductsText::setText);
     }
     public void hidePurchasesButton() {
         this.savePurchaseButton.hide();
-        this.savePurchaseText.setVisibility(View.GONE);
+        this.savePurchaseText.setVisibility(View.INVISIBLE);
         this.emptyPurchaseButton.hide();
-        this.emptyPurchaseText.setVisibility(View.GONE);
+        this.emptyPurchaseText.setVisibility(View.INVISIBLE);
         this.hideShowButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.sort_up_solid));
     }
 
@@ -115,17 +113,21 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     public void successSavingPurchase() {
-        SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
-                        ,SuperiorToastWithHeadersPreDesigned.SUCCESS_TOAST)
-                .setToastHeaderText(SUCCESS_SAVED_PURCHASE_MESSAGE)
-                .show();
+        requireActivity().runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
+                            ,SuperiorToastWithHeadersPreDesigned.SUCCESS_TOAST)
+                    .setToastHeaderText(SUCCESS_SAVED_PURCHASE_MESSAGE)
+                    .show();
+        });
     }
 
     public void errorSavingPurchase() {
-        SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
-                        ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
-                .setToastHeaderText(ERROR_SAVED_PURCHASE_MESSAGE)
-                .show();
+        requireActivity().runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
+                            ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(ERROR_SAVED_PURCHASE_MESSAGE)
+                    .show();
+        });
     }
 
     @Override

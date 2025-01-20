@@ -43,6 +43,7 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         this.fragment = fragment;
         this.viewModel = viewModel;
         this.viewModel.setData(purchase);
+        this.viewModel.setEmptyMessage(fragment.getString(R.string.empty_shopping_cart));
         this.showPurchasesButtons = false;
         this.sharedPreferencesManager = new SharedPreferencesManager(fragment.requireContext());
     }
@@ -93,6 +94,9 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         user.setUser(sharedPreferencesManager.getUser());
         purchase.setUser(user);
         purchase.setPurchaseDate(LocalDate.now());
-        Connection.getInstance().uploadPurchase(purchase, fragment::successSavingPurchase, e -> fragment.errorSavingPurchase());
+        Connection.getInstance().uploadPurchase(purchase, () -> {
+            fragment.successSavingPurchase();
+            fragment.requireActivity().runOnUiThread(this::emptyPurchase);
+        }, e -> fragment.errorSavingPurchase());
     }
 }

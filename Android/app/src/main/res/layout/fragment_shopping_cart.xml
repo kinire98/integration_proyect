@@ -21,6 +21,16 @@
         app:layout_constraintBottom_toBottomOf="@id/bottom"
         android:numColumns="auto_fit"
         />
+    <TextView
+        android:id="@+id/shopping_cart_list_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/show_shopping_cart_actions"
         android:layout_width="wrap_content"
@@ -43,6 +53,7 @@
         android:layout_marginHorizontal="15dp"
         android:layout_marginVertical="17dp"
         app:srcCompat="@drawable/plus_solid"
+        android:visibility="invisible"
         />
     <TextView
         android:id="@+id/save_shopping_cart_descriptor"
@@ -55,7 +66,8 @@
         android:layout_marginVertical="17dp"
         android:text="@string/save_purchase"
         android:textSize="17sp"
-        android:textColor="?attr/colorOnSecondary"
+        android:textColor="@color/black"
+        android:visibility="invisible"
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/delete_shopping_cart"
@@ -67,6 +79,7 @@
         android:layout_marginHorizontal="15dp"
         android:layout_marginVertical="17dp"
         app:srcCompat="@drawable/trash_solid"
+        android:visibility="invisible"
         />
     <TextView
         android:id="@+id/delete_shopping_cart_descriptor"
@@ -79,7 +92,8 @@
         android:layout_marginVertical="17dp"
         android:text="@string/empty_purchase"
         android:textSize="17sp"
-        android:textColor="?attr/colorOnSecondary"
+        android:textColor="@color/black"
+        android:visibility="invisible"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
