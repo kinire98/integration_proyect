@@ -106,7 +106,7 @@ public class ClientHandler extends Thread {
     }
     private void handleUserMessage(UserMessage message) throws IOException {
         logger.log(Level.INFO, "Processing user request");
-        if(message.isUserDataCorrectRequest()) {
+        if(message.isSelectUserRequest()) {
             logger.log(Level.INFO, "Processing User data request");
             outputStream.writeObject(
                     DAOInstances.getUserDAO().selectUser(message.getUsername()) != null
@@ -122,7 +122,6 @@ public class ClientHandler extends Thread {
                     DAOInstances.getUserDAO().correctUserData(message.getUser())
             );
         }
-        outputStream.flush();
         logger.log(Level.INFO, "User request processed");
     }
 }
