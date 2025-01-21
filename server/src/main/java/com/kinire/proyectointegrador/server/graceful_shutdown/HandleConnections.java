@@ -20,6 +20,7 @@ public class HandleConnections extends Thread {
     public void run() {
         int attempt = 0;
         while (true) {
+            System.out.println(attempt);
             try {
                 while (attempt < handlers.size()) {
                     handlers.get(attempt).close();
