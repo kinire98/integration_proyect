@@ -10,6 +10,7 @@ import com.kinire.proyectointegrador.purchases.PurchaseMessageBuilder;
 import com.kinire.proyectointegrador.users.UserMessageBuilder;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -40,15 +41,18 @@ public class Connection {
 
     private static final byte[] ADDRESS = new byte[] {(byte) 147, 93, 53, 48};
 
+    private final EmptyFunction productsUpdatedPromise;
+    private final EmptyFunction connectionLostPromise;
+
     public static boolean isInstanceStarted() {
         return self != null;
     }
-    public static void startInstance(EmptyFunction promise) {
+    public static void startInstance(EmptyFunction promise, EmptyFunction productsUpdatedPromise, EmptyFunction connectionLostPromise) {
         if(self == null) {
             try {
                 new Thread(() -> {
                     try {
-                        self = new Connection();
+                        self = new Connection(productsUpdatedPromise, connectionLostPromise);
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -67,7 +71,9 @@ public class Connection {
         System.out.println(socket.isConnected());
         System.out.println(inputStream.available());
     }
-    Connection() throws IOException, ClassNotFoundException {
+    private Connection(EmptyFunction productsUpdatedPromise, EmptyFunction connectionLostPromise) throws IOException, ClassNotFoundException {
+        this.productsUpdatedPromise = productsUpdatedPromise;
+        this.connectionLostPromise = connectionLostPromise;
         InetAddress inetAddress = InetAddress.getByAddress(ADDRESS);
         this.socket = new Socket(inetAddress, CommonValues.tcpListeningPort);
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -78,7 +84,7 @@ public class Connection {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        this.udpConnection = new UDPConnection(inetAddress, port);
+        this.udpConnection = new UDPConnection(inetAddress, port, this);
         logger.log(Level.INFO, String.valueOf(port));
         udpConnection.start();
     }
@@ -119,6 +125,27 @@ public class Connection {
     }
     public void getImage(String path, InputStreamFunction successPromise, ErrorFunction errorPromise) {
         udpConnection.askForImage(path, successPromise, errorPromise);
+    }
+    public void updateProduct(Product product, EmptyFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new ProductMessageBuilder()
+                                .insertProductRequest(product)
+                                .build()
+                );
+                Boolean success = (Boolean) inputStream.readObject();
+                if(success)
+                    successPromise.apply();
+                else
+                    failurePromise.apply(null);
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
+    }
+    public void uploadImage(String imageName, InputStream imageStream, EmptyFunction successPromise, ErrorFunction errorPromise) {
+        udpConnection.askForSendingImage(imageName, imageStream, successPromise, errorPromise);
     }
     public void userExists(String username, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
         new Thread(() -> {
@@ -316,5 +343,11 @@ public class Connection {
                     missingProducts.stream().map(o -> (Product) o).collect(Collectors.toList())
             );
         }).start();
+    }
+    void productsUpdated() {
+        new Thread(productsUpdatedPromise::apply).start();
+    }
+    void connectionLost() {
+        new Thread(connectionLostPromise::apply).start();
     }
 }

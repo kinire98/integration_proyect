@@ -65,7 +65,9 @@ public class ClientHandler extends Thread {
         return socket.isConnected();
     }
 
-    public void notifyProductUpdate() {}
+    public void notifyProductUpdate() {
+        udpClientHandler.queueNotificationOfProductUpdate();
+    }
 
 
     @Override
@@ -118,6 +120,7 @@ public class ClientHandler extends Thread {
                     DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts())
             );
         } else if(message.isInsertProductRequest()) {
+            DAOInstances.getCategoryDAO().insertCategory(message.getProduct().getCategory());
             outputStream.writeObject(
                     DAOInstances.getProductDAO().insertProduct(message.getProduct())
             );

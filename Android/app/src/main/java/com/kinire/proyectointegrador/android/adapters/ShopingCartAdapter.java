@@ -80,7 +80,7 @@ public class ShopingCartAdapter extends BaseAdapter {
     private void askForImage(int position, ViewHolder holder) {
         if(holder.image != null)
             return;
-        Image.getImage(data.getShoppingCartItems().get(position).getProduct().getImagePath(), (drawable) -> {
+        Image.getImage(context, data.getShoppingCartItems().get(position).getProduct().getImagePath(), (drawable) -> {
             holder.image = drawable;
             ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
         }, (e) -> {

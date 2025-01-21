@@ -39,7 +39,8 @@ public class ProductMessageBuilder {
                         this.requestByCategory ||
                         this.requestOfMissingProducts ||
                         this.requestOfUpdatedProducts ||
-                        this.requestByIds
+                        this.requestByIds ||
+                        this.insertProductRequest
         )
             throw new IllegalStateException("Only one request at the same time");
         this.allProductsRequest = true;
@@ -52,9 +53,11 @@ public class ProductMessageBuilder {
                         this.requestByCategory ||
                         this.requestOfMissingProducts ||
                         this.requestOfUpdatedProducts ||
-                        this.requestByIds
+                        this.requestByIds ||
+                        this.insertProductRequest
         )
             throw new IllegalStateException("Only one request at the same time");
+
         this.singleProductRequest = true;
         this.id = id;
         return this;
@@ -66,7 +69,8 @@ public class ProductMessageBuilder {
                         this.singleProductRequest ||
                         this.requestOfMissingProducts ||
                         this.requestOfUpdatedProducts ||
-                        this.requestByIds
+                        this.requestByIds ||
+                        this.insertProductRequest
         )
             throw new IllegalStateException("Only one request at the same time");
         this.requestByCategory = true;
@@ -80,9 +84,11 @@ public class ProductMessageBuilder {
                         this.singleProductRequest ||
                         this.requestByCategory ||
                         this.requestOfUpdatedProducts ||
-                        this.requestByIds
+                        this.requestByIds ||
+                        this.insertProductRequest
         )
             throw new IllegalStateException("Only one request at the same time");
+
         this.requestOfMissingProducts = true;
         this.products = products;
         return this;
@@ -94,7 +100,8 @@ public class ProductMessageBuilder {
                         this.singleProductRequest ||
                         this.requestByCategory ||
                         this.requestOfMissingProducts ||
-                        this.requestByIds
+                        this.requestByIds ||
+                        this.insertProductRequest
         )
             throw new IllegalStateException("Only one request at the same time");
         this.requestOfUpdatedProducts = true;
@@ -108,11 +115,26 @@ public class ProductMessageBuilder {
                         this.singleProductRequest ||
                         this.requestByCategory ||
                         this.requestOfMissingProducts ||
-                        this.requestOfUpdatedProducts
+                        this.requestOfUpdatedProducts ||
+                        this.insertProductRequest
         )
             throw new IllegalStateException("Only one request at the same time");
         this.requestByIds = true;
         this.ids = ids;
+        return this;
+    }
+    public ProductMessageBuilder insertProductRequest(Product product) {
+        if(
+                this.allProductsRequest ||
+                        this.singleProductRequest ||
+                        this.requestByCategory ||
+                        this.requestOfMissingProducts ||
+                        this.requestOfUpdatedProducts ||
+                        this.requestByIds
+        )
+            throw new IllegalStateException("Only one request at the same time");
+        this.insertProductRequest = true;
+        this.product = product;
         return this;
     }
 

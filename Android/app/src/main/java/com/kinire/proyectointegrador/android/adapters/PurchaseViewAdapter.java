@@ -77,7 +77,7 @@ public class PurchaseViewAdapter extends BaseAdapter {
     private void askForImage(int position, ViewHolder holder) {
         if(holder.image != null)
             return;
-        Image.getImage(data.get(position).getProduct().getImagePath(), (drawable) -> {
+        Image.getImage(context, data.get(position).getProduct().getImagePath(), (drawable) -> {
             holder.image = drawable;
             ((AppCompatActivity) context).runOnUiThread(() -> holder.imageField.setImageDrawable(holder.image));
         }, (e) -> {
