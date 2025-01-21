@@ -9,6 +9,7 @@ import java.util.List;
 public interface PurchaseDAO {
     boolean insertPurchase(Purchase purchase);
     Purchase selectPurchase(long id);
+    List<Purchase> getAllPurchases();
     List<Purchase> selectPurchaseByClient(User user);
     List<Purchase> selectPurchaseByMonth(LocalDate date);
     boolean updatePurchase(long id, Purchase purchase);

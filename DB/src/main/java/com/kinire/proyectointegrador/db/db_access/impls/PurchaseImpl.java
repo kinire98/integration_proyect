@@ -111,6 +111,24 @@ public class PurchaseImpl implements PurchaseDAO {
     }
 
     @Override
+    public List<Purchase> getAllPurchases() {
+        List<Purchase> purchases = new ArrayList<>();
+        String query = "SELECT * FROM purchases INNER JOIN tpv_test.purchased_products pp on purchases.id = pp.purchase_id " +
+                "INNER JOIN tpv_test.products p on p.id = pp.product_id " +
+                "INNER JOIN tpv_test.categories c on c.id = p.category_id " +
+                "INNER JOIN tpv_test.users u on u.username = purchases.username " +
+                "ORDER BY purchases.id";
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            selectPurchases(purchases, statement);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+            purchases = null;
+        }
+        return purchases;
+    }
+
+    @Override
     public List<Purchase> selectPurchaseByClient(User user) {
         List<Purchase> purchases = new ArrayList<>();
         String query = "SELECT * FROM purchases INNER JOIN tpv_test.purchased_products pp on purchases.id = pp.purchase_id " +
