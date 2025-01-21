@@ -48,8 +48,8 @@ public class UDPClientHandler extends Thread {
 
     public void close() {
         this.running = false;
-        socket.disconnect();
         socket.close();
+        this.interrupt();
     }
     public void queueNotificationOfProductUpdate() {}
 
