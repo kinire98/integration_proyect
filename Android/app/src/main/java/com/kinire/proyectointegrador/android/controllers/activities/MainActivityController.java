@@ -40,11 +40,9 @@ public class MainActivityController {
         }
         if(username.isAdmin()) {
             this.activity.showAddProducts();
-            this.activity.hideHistory();
             this.activity.hideCart();
         } else {
             this.activity.hideAddProducts();
-            this.activity.showHistory();
             this.activity.showCart();
         }
     }

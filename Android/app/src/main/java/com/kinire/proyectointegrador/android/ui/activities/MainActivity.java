@@ -73,15 +73,6 @@ public class MainActivity extends AppCompatActivity {
         bottomMenu.getMenu().findItem(R.id.navigation_shopping_cart).setVisible(true);
     }
 
-    public void hideHistory() {
-        bottomMenu.getMenu().findItem(R.id.navigation_history_purchase).setVisible(false);
-    }
-
-    public void showHistory() {
-        bottomMenu.getMenu().findItem(R.id.navigation_history_purchase).setVisible(true);
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

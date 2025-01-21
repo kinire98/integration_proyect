@@ -10,9 +10,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/divider"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/price_field"
         android:gravity="center_vertical"
-        android:layout_marginHorizontal="45dp"
+        android:layout_marginStart="45dp"
+        />
+    <TextView
+        android:id="@+id/price_field"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        app:layout_constraintStart_toEndOf="@id/id_field"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="45dp"
+        android:gravity="center_vertical|end"
         />
     <View
         android:id="@+id/divider"

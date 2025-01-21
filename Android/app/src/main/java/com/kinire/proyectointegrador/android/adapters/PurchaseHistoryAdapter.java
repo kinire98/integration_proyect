@@ -16,6 +16,7 @@ import com.kinire.proyectointegrador.components.Purchase;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 public class PurchaseHistoryAdapter extends BaseAdapter {
 
@@ -58,6 +59,8 @@ public class PurchaseHistoryAdapter extends BaseAdapter {
             holder.idField = v.findViewById(R.id.id_field);
             holder.userNameField = v.findViewById(R.id.user_name);
             holder.purchaseDate = v.findViewById(R.id.purchase_date);
+            holder.priceField = v.findViewById(R.id.price_field);
+            v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
         }
@@ -65,11 +68,13 @@ public class PurchaseHistoryAdapter extends BaseAdapter {
         holder.idField.setText(String.format(ID_FIELD_PREFIX, purchase.getId()));
         holder.userNameField.setText(purchase.getUser().getUser());
         holder.purchaseDate.setText(purchase.getPurchaseDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        holder.priceField.setText(String.format(Locale.getDefault(), "%.2f€", purchase.getTotalPrice()));
         return v;
     }
     private static class ViewHolder {
         private TextView idField;
         private TextView userNameField;
         private TextView purchaseDate;
+        private TextView priceField;
     }
 }

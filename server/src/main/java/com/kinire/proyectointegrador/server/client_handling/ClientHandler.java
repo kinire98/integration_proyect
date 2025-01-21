@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
 import java.net.Socket;
 import java.util.List;
 import java.util.logging.Level;
@@ -160,6 +161,10 @@ public class ClientHandler extends Thread {
         } else if(message.isDeletePurchaseRequest()) {
             outputStream.writeObject(
                     DAOInstances.getPurchaseDAO().deletePurchase(message.getId())
+            );
+        } else if(message.isSelectAllPurchases()) {
+            outputStream.writeObject(
+                    DAOInstances.getPurchaseDAO().getAllPurchases()
             );
         }
         logger.log(Level.INFO, "Purchase request processed");
