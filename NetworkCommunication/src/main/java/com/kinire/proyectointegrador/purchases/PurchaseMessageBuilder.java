@@ -7,6 +7,8 @@ public class PurchaseMessageBuilder {
 
     private boolean insertPurchaseRequest;
 
+    private boolean selectAllPurchases;
+
     private boolean selectSinglePurchaseRequest;
 
     private boolean selectPurchasesByClientRequest;
@@ -24,6 +26,7 @@ public class PurchaseMessageBuilder {
     public PurchaseMessageBuilder insertPurchaseRequest(Purchase purchase) {
         if(
                 this.selectSinglePurchaseRequest ||
+                        this.selectAllPurchases ||
                         this.selectPurchasesByClientRequest ||
                         this.deletePurchaseRequest
         )
@@ -33,9 +36,22 @@ public class PurchaseMessageBuilder {
         return this;
     }
 
+    public PurchaseMessageBuilder selectAllPurchases() {
+        if(
+                this.selectSinglePurchaseRequest ||
+                        this.insertPurchaseRequest ||
+                        this.selectPurchasesByClientRequest ||
+                        this.deletePurchaseRequest
+        )
+            throw new IllegalStateException("Only one request at a time");
+        this.selectAllPurchases = true;
+        return this;
+    }
+
     public PurchaseMessageBuilder selectSinglePurchaseRequest(long id) {
         if(
                 this.insertPurchaseRequest ||
+                        this.selectAllPurchases ||
                         this.selectPurchasesByClientRequest ||
                         this.deletePurchaseRequest
         )
@@ -48,6 +64,7 @@ public class PurchaseMessageBuilder {
     public PurchaseMessageBuilder selectPurchasesByClientRequest(User user) {
         if(
                 this.insertPurchaseRequest ||
+                        this.selectAllPurchases ||
                         this.selectSinglePurchaseRequest ||
                         this.deletePurchaseRequest
         )
@@ -60,6 +77,7 @@ public class PurchaseMessageBuilder {
     public PurchaseMessageBuilder deletePurchaseRequest(long id) {
         if(
                 this.insertPurchaseRequest ||
+                        this.selectAllPurchases ||
                         this.selectSinglePurchaseRequest ||
                         this.selectPurchasesByClientRequest
         )
@@ -73,6 +91,7 @@ public class PurchaseMessageBuilder {
         return new PurchaseMessage(
                 insertPurchaseRequest,
                 selectSinglePurchaseRequest,
+                selectAllPurchases,
                 selectPurchasesByClientRequest,
                 deletePurchaseRequest,
                 id,

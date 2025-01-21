@@ -15,6 +15,8 @@ public class PurchaseMessage implements Serializable {
 
     private final boolean insertPurchaseRequest;
 
+    private final boolean selectAllPurchases;
+
     private final boolean selectSinglePurchaseRequest;
 
     private final boolean selectPurchasesByClientRequest;
@@ -28,9 +30,11 @@ public class PurchaseMessage implements Serializable {
     private final Purchase purchase;
 
     public PurchaseMessage(boolean insertPurchaseRequest, boolean selectSinglePurchaseRequest,
+                           boolean selectAllPurchases,
                            boolean selectPurchasesByClientRequest, boolean deletePurchaseRequest,
                            long id, User user, Purchase purchase) {
         this.insertPurchaseRequest = insertPurchaseRequest;
+        this.selectAllPurchases = selectAllPurchases;
         this.selectSinglePurchaseRequest = selectSinglePurchaseRequest;
         this.selectPurchasesByClientRequest = selectPurchasesByClientRequest;
         this.deletePurchaseRequest = deletePurchaseRequest;
@@ -41,6 +45,10 @@ public class PurchaseMessage implements Serializable {
 
     public boolean isInsertPurchaseRequest() {
         return insertPurchaseRequest;
+    }
+
+    public boolean isSelectAllPurchases() {
+        return selectAllPurchases;
     }
 
     public boolean isSelectSinglePurchaseRequest() {
