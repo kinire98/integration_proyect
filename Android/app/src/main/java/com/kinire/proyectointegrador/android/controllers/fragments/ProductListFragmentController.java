@@ -38,11 +38,11 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
             if(!Connection.isInstanceStarted()) {
                 Connection.startInstance(() -> {
                     logger.log(Level.INFO, "Connection started");
-                    Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.errorFetchingProducts();});
+                    Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.error();});
                     logger.log(Level.INFO, "Products request sent");
                 });
             } else {
-                Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.errorFetchingProducts();});
+                Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.error();});
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -23,9 +23,9 @@ public class SharedPreferencesManager {
         return sharedPreferences.getString(USER_SHARED_PREFERENCES_KEY, "");
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(USER_SHARED_PREFERENCES_KEY, user.getUser());
+        editor.putString(USER_SHARED_PREFERENCES_KEY, user);
         editor.apply();
     }
 

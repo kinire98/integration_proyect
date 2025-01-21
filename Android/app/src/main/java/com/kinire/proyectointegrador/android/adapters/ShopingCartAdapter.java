@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.android.images.Image;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;
@@ -79,14 +80,8 @@ public class ShopingCartAdapter extends BaseAdapter {
     private void askForImage(int position, ViewHolder holder) {
         if(holder.image != null)
             return;
-        Connection.getInstance().getImage(data.getShoppingCartItems().get(position).getProduct().getImagePath(), (stream) -> {
-            try {
-                holder.image = Drawable.createFromStream(stream, "remote");
-            } catch (Exception e) {
-                holder.image = AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid);
-            }
-            if(holder.image == null)
-                askForImage(position, holder);
+        Image.getImage(data.getShoppingCartItems().get(position).getProduct().getImagePath(), (drawable) -> {
+            holder.image = drawable;
             ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
         }, (e) -> {
             logger.log(Level.SEVERE, "Error while loading image");

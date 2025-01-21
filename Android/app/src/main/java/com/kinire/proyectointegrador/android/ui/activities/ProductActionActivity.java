@@ -97,7 +97,6 @@ public class ProductActionActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             ParcelableProduct product = bundle.getParcelable(PRODUCT_PARCELABLE_KEY);
-
             this.product = new Product(product.getId(),
                     product.getName(),
                     product.getPrice(),
@@ -111,13 +110,6 @@ public class ProductActionActivity extends AppCompatActivity {
             this.productCategory.setText(product.getCategoryName());
             this.productPrice.setText(String.format(Locale.getDefault(), "%.2f€", product.getPrice()));
             controller.setPrice(product.getPrice());
-
-
-
-
-
-
-
             int amount = bundle.getInt(AMOUNT_PARCELABLE_KEY);
             changeProduct = amount >= 1;
             controller.setChangeProduct(changeProduct);

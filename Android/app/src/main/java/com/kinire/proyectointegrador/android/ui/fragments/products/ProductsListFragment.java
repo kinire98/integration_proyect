@@ -24,7 +24,6 @@ import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
 public class ProductsListFragment extends Fragment {
 
-    private final static String CANT_GET_PRODUCTS_ERROR_MESSAGE = "No se pudo obtener la lista de productos";
 
     private FragmentProductsListBinding binding;
 
@@ -55,7 +54,7 @@ public class ProductsListFragment extends Fragment {
     }
 
     private void initalizeElements() {
-        this.ERROR_SAVED_PURCHASE_MESSAGE = getString(R.string.connectivity_error);
+        this.ERROR_SAVED_PURCHASE_MESSAGE = getString(R.string.error_occured);
         this.productList = binding.productsList;
         this.controller = new
                 ProductListFragmentController(this, viewModel);
@@ -72,7 +71,7 @@ public class ProductsListFragment extends Fragment {
         this.productList.setOnItemClickListener(controller);
     }
 
-    public void errorFetchingProducts() {
+    public void error() {
         requireActivity().runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
                             ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)

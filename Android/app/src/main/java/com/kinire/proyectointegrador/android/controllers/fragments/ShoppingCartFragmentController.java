@@ -9,11 +9,11 @@ import android.widget.ImageView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
-import com.kinire.proyectointegrador.android.shared_preferences.SharedPreferencesManager;
 import com.kinire.proyectointegrador.android.ui.activities.ProductActionActivity;
 import com.kinire.proyectointegrador.android.ui.activities.MainActivity;
 import com.kinire.proyectointegrador.android.ui.fragments.cart.ShoppingCartFragment;
 import com.kinire.proyectointegrador.android.ui.fragments.cart.ShoppingCartViewModel;
+import com.kinire.proyectointegrador.android.user_admin.UserAdmin;
 import com.kinire.proyectointegrador.android.utils.ImageCompression;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
@@ -34,7 +34,7 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
 
     private boolean showPurchasesButtons;
 
-    private final SharedPreferencesManager sharedPreferencesManager;
+    private final UserAdmin userAdmin;
 
     private final String PRODUCT_PARCELABLE_KEY;
 
@@ -50,7 +50,7 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         ShoppingCartFragmentController.viewModel.setData(purchase);
         ShoppingCartFragmentController.viewModel.setEmptyMessage(fragment.getString(R.string.empty_shopping_cart));
         this.showPurchasesButtons = false;
-        this.sharedPreferencesManager = new SharedPreferencesManager(fragment.requireContext());
+        this.userAdmin = new UserAdmin(fragment.requireContext());
         this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
         this.IMAGE_PARCELABLE_KEY = fragment.getString(R.string.image_parcelable_key);
         this.AMOUNT_PARCELABLE_KEY = fragment.getString(R.string.amount_parcelable_key);
@@ -70,6 +70,9 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
     public static void updatePrice() {
         if(fragment != null)
             fragment.setTotalPriceText(purchase.getTotalPrice());
+    }
+    public static void emptyCart() {
+        purchase = new Purchase();
     }
 
     @Override
@@ -108,6 +111,7 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         }
     }
     private void emptyPurchase() {
+        changeSelectedMenuItem();
         if(purchase.getShoppingCartItems().isEmpty())
             return;
         showPurchasesButtons = false;
@@ -116,7 +120,6 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         fragment.getAdapter().notifyDataSetChanged();
         fragment.hidePurchasesButton();
         viewModel.forceRefresh();
-        changeSelectedMenuItem();
     }
 
     private void changeSelectedMenuItem() {
@@ -124,10 +127,11 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         navigationView.setSelectedItemId(R.id.navigation_products_list);
     }
     private void savePurchase() {
-        if(purchase.getShoppingCartItems().isEmpty())
+        if(purchase.getShoppingCartItems().isEmpty()) {
+            changeSelectedMenuItem();
             return;
-        User user = new User();
-        user.setUser(sharedPreferencesManager.getUser());
+        }
+        User user = userAdmin.getUser();
         purchase.setUser(user);
         purchase.setPurchaseDate(LocalDate.now());
         Connection.getInstance().uploadPurchase(purchase, () -> {

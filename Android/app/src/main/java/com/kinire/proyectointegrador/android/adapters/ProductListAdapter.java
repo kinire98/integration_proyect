@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.android.images.Image;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 
@@ -88,14 +89,8 @@ public class ProductListAdapter extends BaseAdapter {
     private void askForImage(int position, ViewHolder holder) {
         if(holder.image != null)
             return;
-        Connection.getInstance().getImage(data.get(position).getImagePath(), (stream) -> {
-            try {
-                holder.image = Drawable.createFromStream(stream, "remote");
-            } catch (Exception e) {
-                ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid)));
-            }
-            if(holder.image == null)
-                askForImage(position, holder);
+        Image.getImage(data.get(position).getImagePath(), (drawable) -> {
+            holder.image = drawable;
             ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
         }, (e) -> {
             logger.log(Level.SEVERE, "Error while loading image");
