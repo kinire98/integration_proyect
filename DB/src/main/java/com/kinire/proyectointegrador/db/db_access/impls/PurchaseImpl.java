@@ -2,6 +2,7 @@ package com.kinire.proyectointegrador.db.db_access.impls;
 
 import com.kinire.proyectointegrador.components.*;
 import com.kinire.proyectointegrador.db.db_access.DAOs.PurchaseDAO;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.util.logging.Logger;
 public class PurchaseImpl implements PurchaseDAO {
 
 
-
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(PurchaseImpl.class);
     private final Logger logger;
 
     public PurchaseImpl() {
@@ -136,7 +137,9 @@ public class PurchaseImpl implements PurchaseDAO {
         Purchase currentPurchase = null;
         while(set.next()) {
             long currentPurchaseId = set.getLong("purchases.id");
+
             if(previousPurchaseId != currentPurchaseId) {
+                logger.log(Level.INFO, "New purchase");
                 currentPurchase = new Purchase();
                 currentPurchase.setPurchaseDate(set.getDate("purchase_date").toLocalDate());
                 currentPurchase.setId(currentPurchaseId);
@@ -151,7 +154,9 @@ public class PurchaseImpl implements PurchaseDAO {
                 }
                 previousPurchaseId = currentPurchaseId;
             }
+
             assert currentPurchase != null;
+            logger.log(Level.INFO, "New product");
             currentPurchase.getShoppingCartItems().add(
                     new ShoppingCartItem(
                             new Product(
@@ -170,6 +175,7 @@ public class PurchaseImpl implements PurchaseDAO {
             );
         }
         purchases.add(currentPurchase);
+        set.close();
     }
 
     @Override
