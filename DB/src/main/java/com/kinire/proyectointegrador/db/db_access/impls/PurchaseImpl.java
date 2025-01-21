@@ -195,7 +195,7 @@ public class PurchaseImpl implements PurchaseDAO {
                     )
             );
         }
-        if(purchases.size() > 1)
+        if(!purchases.contains(currentPurchase))
             purchases.add(currentPurchase);
         set.close();
     }
