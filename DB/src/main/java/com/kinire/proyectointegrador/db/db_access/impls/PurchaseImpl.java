@@ -170,9 +170,7 @@ public class PurchaseImpl implements PurchaseDAO {
                                 set.getString("password")
                         )
                 );
-                if(previousPurchaseId == -1L) {
-                    purchases.add(currentPurchase);
-                }
+                purchases.add(currentPurchase);
                 previousPurchaseId = currentPurchaseId;
             }
 
