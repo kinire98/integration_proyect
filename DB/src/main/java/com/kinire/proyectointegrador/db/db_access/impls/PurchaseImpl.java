@@ -127,6 +127,17 @@ public class PurchaseImpl implements PurchaseDAO {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
             purchases = null;
         }
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
+        logger.log(Level.INFO, String.valueOf(purchases.size()));
         return purchases;
     }
 
