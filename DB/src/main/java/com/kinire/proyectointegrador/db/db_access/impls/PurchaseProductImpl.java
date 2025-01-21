@@ -37,6 +37,27 @@ public class PurchaseProductImpl implements PurchasedProductDAO {
     }
 
     @Override
+    public int bulkInsertPurchasedProduct(List<ShoppingCartItem> shoppingCartItems, long purchaseId) {
+        int insertedProducts = 0;
+        String query = "INSERT INTO purchased_products (purchase_id, product_id, amount) VALUES (?, ?, ?)";
+        if(shoppingCartItems.size() > 1) {
+            query += ", (?, ?, ?)".repeat(shoppingCartItems.size() - 1);
+        }
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            for (int i = 0; i < shoppingCartItems.size(); i++) {
+                statement.setLong(i * 3 + 1, purchaseId);
+                statement.setLong(i * 3 + 2, shoppingCartItems.get(i).getProduct().getId());
+                statement.setInt(i * 3 + 3, shoppingCartItems.get(i).getAmount());
+            }
+            insertedProducts = statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return insertedProducts;
+    }
+
+    @Override
     public ShoppingCartItem selectPurchasedProduct(long purchaseId, long productId) {
         ShoppingCartItem shoppingCartItem = null;
         String query = "SELECT amount FROM purchased_products INNER JOIN tpv_test.products p INNER JOIN tpv_test.categories c ON p.category_id = c.id AND purchased_products.product_id = p.id  WHERE product_id = ? AND purchase_id = ?";

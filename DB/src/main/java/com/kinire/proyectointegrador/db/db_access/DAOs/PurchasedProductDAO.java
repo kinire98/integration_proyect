@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface PurchasedProductDAO {
     boolean insertPurchasedProduct(ShoppingCartItem shoppingCartItem, long purchaseId);
+    int bulkInsertPurchasedProduct(List<ShoppingCartItem> shoppingCartItems, long purchaseId);
     ShoppingCartItem selectPurchasedProduct(long purchaseId, long productId);
     List<ShoppingCartItem> selectByPurchase(long purchaseId);
     List<ShoppingCartItem> selectByProduct(long productId);

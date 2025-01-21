@@ -2,6 +2,7 @@ package com.kinire.proyectointegrador.db.db_access.impls;
 
 import com.kinire.proyectointegrador.components.*;
 import com.kinire.proyectointegrador.db.db_access.DAOs.PurchaseDAO;
+import com.kinire.proyectointegrador.db.db_access.DAOs.PurchasedProductDAO;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
@@ -17,24 +18,44 @@ public class PurchaseImpl implements PurchaseDAO {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(PurchaseImpl.class);
     private final Logger logger;
 
+    private final PurchasedProductDAO purchasedProductDAO;
+
     public PurchaseImpl() {
         this.logger = Logger.getLogger(CategoryImpl.class.getName());
+        this.purchasedProductDAO = new PurchaseProductImpl();
     }
 
 
     @Override
     public boolean insertPurchase(Purchase purchase) {
-        boolean success = false;
+        int insertedRows = 0;
         String query = "INSERT INTO purchases (username, purchase_date) VALUES (?, ?)";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, purchase.getUser().getUser());
             statement.setDate(2, Date.valueOf(purchase.getPurchaseDate()));
-            success = statement.executeUpdate() == 1;
+            insertedRows += statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
         }
-        return success;
+        insertedRows += purchasedProductDAO.bulkInsertPurchasedProduct(purchase.getShoppingCartItems(), getPurchaseId(purchase));
+        return insertedRows == purchase.getShoppingCartItems().size() + 1;
+    }
+    private int getPurchaseId(Purchase purchase) {
+        int id = 0;
+        String query = "SELECT id FROM purchases WHERE username = ? AND purchase_date = ? ORDER BY id DESC LIMIT 1;";
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, purchase.getUser().getUser());
+            statement.setDate(2, Date.valueOf(purchase.getPurchaseDate()));
+            ResultSet set = statement.executeQuery();
+            set.next();
+            id = set.getInt("id");
+            set.close();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return id;
     }
 
     @Override
