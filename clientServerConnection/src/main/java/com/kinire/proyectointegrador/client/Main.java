@@ -24,7 +24,7 @@ public class Main {
                     throw new RuntimeException(e);
                 }
             }, e -> e.printStackTrace());*/
-        }, () -> {}, () -> {});
+        });
 
     }
 }

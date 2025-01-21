@@ -41,18 +41,18 @@ public class Connection {
 
     private static final byte[] ADDRESS = new byte[] {(byte) 147, 93, 53, 48};
 
-    private final EmptyFunction productsUpdatedPromise;
-    private final EmptyFunction connectionLostPromise;
+    private EmptyFunction productsUpdatedPromise;
+    private EmptyFunction connectionLostPromise;
 
     public static boolean isInstanceStarted() {
         return self != null;
     }
-    public static void startInstance(EmptyFunction promise, EmptyFunction productsUpdatedPromise, EmptyFunction connectionLostPromise) {
+    public static void startInstance(EmptyFunction promise) {
         if(self == null) {
             try {
                 new Thread(() -> {
                     try {
-                        self = new Connection(productsUpdatedPromise, connectionLostPromise);
+                        self = new Connection();
                     } catch (IOException | ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -71,9 +71,7 @@ public class Connection {
         System.out.println(socket.isConnected());
         System.out.println(inputStream.available());
     }
-    private Connection(EmptyFunction productsUpdatedPromise, EmptyFunction connectionLostPromise) throws IOException, ClassNotFoundException {
-        this.productsUpdatedPromise = productsUpdatedPromise;
-        this.connectionLostPromise = connectionLostPromise;
+    private Connection() throws IOException, ClassNotFoundException {
         InetAddress inetAddress = InetAddress.getByAddress(ADDRESS);
         this.socket = new Socket(inetAddress, CommonValues.tcpListeningPort);
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -88,6 +86,15 @@ public class Connection {
         logger.log(Level.INFO, String.valueOf(port));
         udpConnection.start();
     }
+
+    public void setProductsUpdatedPromise(EmptyFunction productsUpdatedPromise) {
+        this.productsUpdatedPromise = productsUpdatedPromise;
+    }
+
+    public void setConnectionLostPromise(EmptyFunction connectionLostPromise) {
+        this.connectionLostPromise = connectionLostPromise;
+    }
+
     public void close() throws IOException {
         this.udpConnection.close();
         this.inputStream.close();

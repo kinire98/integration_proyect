@@ -10,7 +10,7 @@
     <string name="register_user">Iniciar sesión</string>
     <string name="invalid_user_name">El nombre de usuario que introdujiste no es válido</string>
     <string name="incorrect_admin_password">La contraseña de administrador que introdujiste es incorrecta</string>
-    <string name="connectivity_error">El servidor no está activo. Ponte en contacto con el desarrollador</string>
+    <string name="connectivity_error">Error de conexión</string>
     <string name="write_password">Escribe tu contraseña:</string>
     <string name="create_password">Crea una contraseña:</string>
     <string name="password_hint">Escribe aquí tu contraseña</string>
@@ -35,6 +35,10 @@
     <string name="purchase_num">Compra Nª: %d</string>
     <string name="purchase_date">Fecha de la compra:</string>
     <string name="error_occured">Ocurrió un error</string>
+    <string name="name">Nombre:</string>
+    <string name="image">Imagen:</string>
+    <string name="price">Precio:</string>
+    <string name="category">Categoría:</string>
     <string name="shared_preferences_key">4b2c3564-f6f7-4837-83da-33a9f1efcfbf</string>
     <string name="user_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
     <string name="product_parcelable_key">c8117227-4702-4f62-bf1e-ba339e6e12e</string>

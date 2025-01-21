@@ -35,6 +35,7 @@ public class ProductsListFragment extends Fragment {
 
 
     private String ERROR_SAVED_PURCHASE_MESSAGE;
+    private String CONNECTIVITY_LOST;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class ProductsListFragment extends Fragment {
 
     private void initalizeElements() {
         this.ERROR_SAVED_PURCHASE_MESSAGE = getString(R.string.error_occured);
+        this.CONNECTIVITY_LOST = getString(R.string.connectivity_error);
         this.productList = binding.productsList;
         this.controller = new
                 ProductListFragmentController(this, viewModel);
@@ -76,6 +78,14 @@ public class ProductsListFragment extends Fragment {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
                             ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
                     .setToastHeaderText(ERROR_SAVED_PURCHASE_MESSAGE)
+                    .show();
+        });
+    }
+    public void errorConnectionLost() {
+        requireActivity().runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
+                            ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(CONNECTIVITY_LOST)
                     .show();
         });
     }
