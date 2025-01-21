@@ -154,8 +154,25 @@ public class ClientHandler extends Thread {
                     DAOInstances.getPurchaseDAO().selectPurchase(message.getId())
             );
         } else if (message.isSelectPurchasesByClientRequest()) {
+            List<Purchase> purchases = DAOInstances.getPurchaseDAO().selectPurchaseByClient(message.getUser());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
+            System.out.println(purchases.size());
             outputStream.writeObject(
-                    DAOInstances.getPurchaseDAO().selectPurchaseByClient(message.getUser())
+                    purchases
             );
         } else if(message.isDeletePurchaseRequest()) {
             outputStream.writeObject(
