@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,11 +24,12 @@ import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDiss
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
+import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
+
 public class UserActivity extends AppCompatActivity {
 
     private EditText userField;
     private Button button;
-    private TextView incorrectPasswordField;
 
     private UserActivityController controller;
 
@@ -71,7 +73,6 @@ public class UserActivity extends AppCompatActivity {
         this.PASSWORD_FIELD_SET_BUTTON = getString(R.string.create_password_button);
         this.PASSWORD_FIELD_QUERY_BUTTON = getString(R.string.write_password_button);
         this.INCORRECT_PASSWORD = getString(R.string.incorrect_password);
-        this.incorrectPasswordField = findViewById(R.id.incorrect_password);
         this.controller = new UserActivityController(this);
     }
 
@@ -130,8 +131,14 @@ public class UserActivity extends AppCompatActivity {
         title.setText(PASSWORD_FIELD_SET_TITLE);
         Button button = dialogView.findViewById(R.id.login);
         button.setText(PASSWORD_FIELD_SET_BUTTON);
+
+
+
+
+
         final CountDownLatch latch = new CountDownLatch(1);
         final String[] key = {""};
+
         AtomicReference<Dialog> dialog = new AtomicReference<>();
         button.setOnClickListener(v -> {
             key[0] = editText.getText().toString();
@@ -152,13 +159,12 @@ public class UserActivity extends AppCompatActivity {
     }
 
     public void incorrectPassword() {
-        this.incorrectPasswordField.setText(INCORRECT_PASSWORD);
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {}
-            this.incorrectPasswordField.setText(null);
-        }).start();
+        runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(this,
+                            SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(INCORRECT_PASSWORD)
+                    .show();
+        });
     }
 
 }

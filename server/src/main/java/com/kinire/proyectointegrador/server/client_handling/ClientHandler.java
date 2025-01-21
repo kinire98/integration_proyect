@@ -1,5 +1,6 @@
 package com.kinire.proyectointegrador.server.client_handling;
 
+import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.purchases.PurchaseMessage;
 import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
 import com.kinire.proyectointegrador.server.free_ports.UDPPorts;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -152,8 +154,15 @@ public class ClientHandler extends Thread {
                     DAOInstances.getPurchaseDAO().selectPurchase(message.getId())
             );
         } else if (message.isSelectPurchasesByClientRequest()) {
+            List<Purchase> purchases = DAOInstances.getPurchaseDAO().selectPurchaseByClient(message.getUser());
+            System.out.println(purchases);
+            System.out.println(purchases);
+            System.out.println(purchases);
+            System.out.println(purchases);
+            System.out.println(purchases);
+            System.out.println(purchases);
             outputStream.writeObject(
-                    DAOInstances.getPurchaseDAO().selectPurchaseByClient(message.getUser())
+                    purchases
             );
         } else if(message.isDeletePurchaseRequest()) {
             outputStream.writeObject(

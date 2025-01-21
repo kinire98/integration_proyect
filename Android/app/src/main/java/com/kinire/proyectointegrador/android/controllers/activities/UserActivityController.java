@@ -41,7 +41,6 @@ public class UserActivityController implements View.OnClickListener {
     }
 
     private void userExists() {
-        System.out.println("Aqui");
         this.user = new User(username, activity.askForPassword());
         Connection.getInstance().isUserDataCorrect(user, () -> {
            sharedPreferencesManager.setUser(user);

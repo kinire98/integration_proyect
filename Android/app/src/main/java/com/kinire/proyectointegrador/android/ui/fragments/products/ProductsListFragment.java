@@ -73,10 +73,12 @@ public class ProductsListFragment extends Fragment {
     }
 
     public void errorFetchingProducts() {
-        SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
-                        ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
-                .setToastHeaderText(ERROR_SAVED_PURCHASE_MESSAGE)
-                .show();
+        requireActivity().runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
+                            ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(ERROR_SAVED_PURCHASE_MESSAGE)
+                    .show();
+        });
     }
 
     @Override

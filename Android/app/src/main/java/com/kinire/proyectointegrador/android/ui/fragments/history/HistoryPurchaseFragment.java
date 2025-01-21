@@ -11,8 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.android.adapters.PurchaseHistoryAdapter;
 import com.kinire.proyectointegrador.android.controllers.fragments.HistoryPurchaseFragmentController;
 import com.kinire.proyectointegrador.android.databinding.FragmentHistoryPurchaseBinding;
+
+import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
 public class HistoryPurchaseFragment extends Fragment {
 
@@ -26,6 +30,8 @@ public class HistoryPurchaseFragment extends Fragment {
 
     private HistoryPurchaseFragmentController controller;
 
+    private String SERVER_NOT_CONNECTED;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         viewModel =
@@ -35,6 +41,7 @@ public class HistoryPurchaseFragment extends Fragment {
         View root = binding.getRoot();
         this.initalizeElements();
         this.setObservers();
+        this.setListeners();
         return root;
     }
 
@@ -42,12 +49,29 @@ public class HistoryPurchaseFragment extends Fragment {
         this.purchasesHistoryList = binding.historyPurchaseList;
         this.noPurchaseHistoryText = binding.historyPurchaseListEmpty;
         this.purchasesHistoryList.setEmptyView(noPurchaseHistoryText);
+        this.SERVER_NOT_CONNECTED = getString(R.string.connectivity_error);
         this.controller = new HistoryPurchaseFragmentController(this, viewModel);
     }
 
     private void setObservers() {
         viewModel.getNoPurchasesMessage().observe(getViewLifecycleOwner(), noPurchaseHistoryText::setText);
-        viewModel.getPurchases().observe(getViewLifecycleOwner(), purchases -> {});
+        viewModel.getPurchases().observe(getViewLifecycleOwner(), purchases -> {
+            PurchaseHistoryAdapter adapter = new PurchaseHistoryAdapter(this.requireContext(), R.layout.purchase_history_list_item, purchases);
+            this.purchasesHistoryList.setAdapter(adapter);
+        });
+    }
+
+    private void setListeners() {
+        this.purchasesHistoryList.setOnItemClickListener(controller);
+    }
+
+    public void errorConnectionToServer() {
+        requireActivity().runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext(),
+                            SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(SERVER_NOT_CONNECTED)
+                    .show();
+        });
     }
 
     @Override

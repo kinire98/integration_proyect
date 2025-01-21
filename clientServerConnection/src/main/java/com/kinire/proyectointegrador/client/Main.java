@@ -13,10 +13,8 @@ public class Main {
         Connection.startInstance(() -> {
 
             User user = new User("Iker", "1234");
-            Connection.getInstance().userExists(user.getUser(), () -> {
-                System.out.println("True");
-            }, () -> {
-                System.out.println("False");
+            Connection.getInstance().getClientPurchases(user, purchases -> {
+                System.out.println(purchases);
             }, e -> e.printStackTrace());
             /*Connection.getInstance().getProducts((products) -> {
                 System.out.println(products);

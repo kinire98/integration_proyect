@@ -25,8 +25,12 @@ public class HistoryPurchaseFragmentController implements AdapterView.OnItemClic
         user.setUser(sharedPreferencesManager.getUser());
         this.viewModel.setNoPurchasesMessage(fragment.getString(R.string.no_purchase_history));
         Connection.getInstance().getClientPurchases(user, purchases -> {
-
-        }, e -> {});
+            fragment.requireActivity().runOnUiThread(() -> {
+                this.viewModel.setPurchases(purchases);
+            });
+        }, e -> {
+            fragment.errorConnectionToServer();
+        });
     }
 
     @Override

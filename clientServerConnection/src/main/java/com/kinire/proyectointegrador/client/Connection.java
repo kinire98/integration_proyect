@@ -232,4 +232,60 @@ public class Connection {
             );
         }).start();
     }
+    public void getNotStoredProducts(List<Product> products, ProductArrayFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            List<Object> missingProducts = null;
+            try {
+                outputStream.writeObject(
+                        new ProductMessageBuilder()
+                                .requestOfMissingProducts((ArrayList<Product>) products)
+                                .build()
+                );
+                Object obj = inputStream.readObject();
+                if(obj.getClass().isArray()) {
+                    missingProducts = Arrays.asList((Object[]) obj);
+                } else if(obj instanceof Collection){
+                    missingProducts = new ArrayList<>((Collection<?>) obj);
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+                return;
+            }
+            if(missingProducts == null || missingProducts.isEmpty()) {
+                failurePromise.apply(null);
+                return;
+            }
+            successPromise.apply(
+                    missingProducts.stream().map(o -> (Product) o).collect(Collectors.toList())
+            );
+        }).start();
+    }
+    public void getUpdatedProducts(List<Product> products, ProductArrayFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            List<Object> missingProducts = null;
+            try {
+                outputStream.writeObject(
+                        new ProductMessageBuilder()
+                                .requestOfUpdatedProducts((ArrayList<Product>) products)
+                                .build()
+                );
+                Object obj = inputStream.readObject();
+                if(obj.getClass().isArray()) {
+                    missingProducts = Arrays.asList((Object[]) obj);
+                } else if(obj instanceof Collection){
+                    missingProducts = new ArrayList<>((Collection<?>) obj);
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+                return;
+            }
+            if(missingProducts == null || missingProducts.isEmpty()) {
+                failurePromise.apply(null);
+                return;
+            }
+            successPromise.apply(
+                    missingProducts.stream().map(o -> (Product) o).collect(Collectors.toList())
+            );
+        }).start();
+    }
 }

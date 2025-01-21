@@ -1,5 +1,6 @@
 package com.kinire.proyectointegrador.android.controllers.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +25,7 @@ import java.time.LocalDate;
 
 public class ShoppingCartFragmentController implements AdapterView.OnItemClickListener, View.OnClickListener {
 
+    @SuppressLint("StaticFieldLeak")
     private static ShoppingCartFragment fragment;
 
     private static ShoppingCartViewModel viewModel;
@@ -43,7 +45,7 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
     private final String POSITION_PARCELABLE_KEY;
 
     public ShoppingCartFragmentController(ShoppingCartFragment fragment, ShoppingCartViewModel viewModel) {
-        this.fragment = fragment;
+        ShoppingCartFragmentController.fragment = fragment;
         ShoppingCartFragmentController.viewModel = viewModel;
         ShoppingCartFragmentController.viewModel.setData(purchase);
         ShoppingCartFragmentController.viewModel.setEmptyMessage(fragment.getString(R.string.empty_shopping_cart));
@@ -66,7 +68,8 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
      * Se tiene que haber asegurado que se haya abierto el fragmento del carrito por lo menos una vez
      */
     public static void updatePrice() {
-        fragment.setTotalPriceText(purchase.getTotalPrice());
+        if(fragment != null)
+            fragment.setTotalPriceText(purchase.getTotalPrice());
     }
 
     @Override
@@ -105,6 +108,8 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         }
     }
     private void emptyPurchase() {
+        if(purchase.getShoppingCartItems().isEmpty())
+            return;
         showPurchasesButtons = false;
         purchase = new Purchase();
         viewModel.setData(purchase);
@@ -119,6 +124,8 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         navigationView.setSelectedItemId(R.id.navigation_products_list);
     }
     private void savePurchase() {
+        if(purchase.getShoppingCartItems().isEmpty())
+            return;
         User user = new User();
         user.setUser(sharedPreferencesManager.getUser());
         purchase.setUser(user);
