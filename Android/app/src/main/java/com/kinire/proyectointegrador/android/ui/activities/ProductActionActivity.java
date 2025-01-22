@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.ProductActionActivityController;
 import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
+import com.kinire.proyectointegrador.android.image_cache.ImageCache;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
 import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;
@@ -42,8 +43,6 @@ public class ProductActionActivity extends AppCompatActivity {
     private ProductActionActivityController controller;
 
     private String PRODUCT_PARCELABLE_KEY;
-
-    private String IMAGE_PARCELABLE_KEY;
 
     private String AMOUNT_PARCELABLE_KEY;
     private String POSITION_PARCELABLE_KEY;
@@ -75,7 +74,6 @@ public class ProductActionActivity extends AppCompatActivity {
 
     private void initializeElements() {
         this.PRODUCT_PARCELABLE_KEY = getString(R.string.product_parcelable_key);
-        this.IMAGE_PARCELABLE_KEY = getString(R.string.image_parcelable_key);
         this.AMOUNT_PARCELABLE_KEY = getString(R.string.amount_parcelable_key);
         this.POSITION_PARCELABLE_KEY = getString(R.string.position_parcelable_key);
         this.imageView = findViewById(R.id.product_image);
@@ -102,10 +100,9 @@ public class ProductActionActivity extends AppCompatActivity {
                     product.getPrice(),
                     product.getImagePath(),
                     product.getDate(),
-                    new Category(product.getCategoryId(), product.getCategoryName()));
-            byte[] imageByteArray = bundle.getByteArray(IMAGE_PARCELABLE_KEY);
-            assert imageByteArray != null;
-            this.imageView.setImageDrawable(new BitmapDrawable(getResources(), BitmapFactory.decodeByteArray(imageByteArray, 0 , imageByteArray.length)));
+                    new Category(product.getCategoryId(), product.getCategoryName()),
+                    null);
+            this.imageView.setImageDrawable(ImageCache.getImage(product.getImagePath()));
             this.productName.setText(product.getName());
             this.productCategory.setText(product.getCategoryName());
             this.productPrice.setText(String.format(Locale.getDefault(), "%.2f€", product.getPrice()));

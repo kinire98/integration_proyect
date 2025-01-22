@@ -15,20 +15,6 @@ public class Main {
 
             User user = new User("Iker", "1234");
             Connection.getInstance().getProducts((products) -> {
-                System.out.println("Aqui");
-                for (int i = 0; i < products.size(); i++) {
-                    Product product = products.get(i);
-                    try {
-                        FileOutputStream outputStream = new FileOutputStream(new File(product.getImagePath()));
-                        ByteArrayInputStream inputStream = new ByteArrayInputStream(product.getImage());
-                        byte[] buffer = new byte[1048576];
-                        int bytesRead;
-                        while((bytesRead = inputStream.read(buffer)) != -1)
-                            outputStream.write(buffer, 0, bytesRead);
-                        outputStream.close();
-                        System.out.println("Aqui");
-                    } catch (IOException e) {}
-                }
             }, e -> e.printStackTrace());
         });
 

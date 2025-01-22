@@ -48,7 +48,8 @@ public class ParcelablePurchase implements Parcelable {
                             new Category(
                                     in.readLong(),
                                     in.readString()
-                            )
+                            ),
+                            null
                     )
             );
         }

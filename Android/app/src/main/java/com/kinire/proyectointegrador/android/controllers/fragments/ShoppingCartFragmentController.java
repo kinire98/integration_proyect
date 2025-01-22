@@ -38,7 +38,6 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
 
     private final String PRODUCT_PARCELABLE_KEY;
 
-    private final String IMAGE_PARCELABLE_KEY;
 
     private final String AMOUNT_PARCELABLE_KEY;
 
@@ -52,7 +51,6 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         this.showPurchasesButtons = false;
         this.userAdmin = new UserAdmin(fragment.requireContext());
         this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
-        this.IMAGE_PARCELABLE_KEY = fragment.getString(R.string.image_parcelable_key);
         this.AMOUNT_PARCELABLE_KEY = fragment.getString(R.string.amount_parcelable_key);
         this.POSITION_PARCELABLE_KEY = fragment.getString(R.string.position_parcelable_key);
     }
@@ -81,7 +79,6 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
             return;
         Intent intent = new Intent(fragment.requireActivity(), ProductActionActivity.class);
         intent.putExtra(PRODUCT_PARCELABLE_KEY, new ParcelableProduct(purchase.getShoppingCartItems().get(position).getProduct()));
-        intent.putExtra(IMAGE_PARCELABLE_KEY, ImageCompression.compressImage(((ImageView) view.findViewById(R.id.image)).getDrawable()));;
         intent.putExtra(AMOUNT_PARCELABLE_KEY, purchase.getShoppingCartItems().get(position).getAmount());
         intent.putExtra(POSITION_PARCELABLE_KEY, position);
         fragment.requireActivity().startActivity(intent);

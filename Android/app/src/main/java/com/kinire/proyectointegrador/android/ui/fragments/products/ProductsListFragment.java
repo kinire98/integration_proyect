@@ -16,8 +16,6 @@ import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.adapters.ProductListAdapter;
 import com.kinire.proyectointegrador.android.controllers.fragments.ProductListFragmentController;
 import com.kinire.proyectointegrador.android.databinding.FragmentProductsListBinding;
-import com.kinire.proyectointegrador.android.image_model.ImageProduct;
-import com.kinire.proyectointegrador.android.images.Image;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 

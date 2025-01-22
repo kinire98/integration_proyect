@@ -14,11 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.images.Image;
+import com.kinire.proyectointegrador.android.image_cache.ImageCache;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;
 
+import java.io.ByteArrayInputStream;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,7 +73,7 @@ public class ShopingCartAdapter extends BaseAdapter {
         holder.productName.setText(data.getShoppingCartItems().get(position).getProduct().getName());
         holder.productAmount.setText(String.valueOf(data.getShoppingCartItems().get(position).getAmount()));
         holder.productPrice.setText(String.format(Locale.getDefault(), "%.2f€", data.getShoppingCartItems().get(position).getPrice()));
-        //Image.getImage(context, data.getShoppingCartItems().get(position).getProduct().getImagePath(), holder.imageView);
+        holder.imageView.setImageDrawable(ImageCache.getImage(data.getShoppingCartItems().get(position).getProduct().getImagePath()));
         return v;
     }
 
@@ -81,6 +82,6 @@ public class ShopingCartAdapter extends BaseAdapter {
         private TextView productName;
         private TextView productPrice;
         private TextView productAmount;
-
+        private Drawable image;
     }
 }

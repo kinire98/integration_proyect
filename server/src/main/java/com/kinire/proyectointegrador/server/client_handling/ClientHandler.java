@@ -95,9 +95,13 @@ public class ClientHandler extends Thread {
     private void handleProductMessage(ProductMessage message) throws IOException {
         logger.log(Level.INFO, "Processing product request");
         if(message.isAllProductsRequest()) {
-            outputStream.writeObject(
-                    setImages(DAOInstances.getProductDAO().selectAllProducts())
-            );
+            List<Product> products = setImages(DAOInstances.getProductDAO().selectAllProducts());
+            outputStream.writeObject(products.size());
+            for(Product product : products) {
+                outputStream.writeObject(
+                        product
+                );
+            }
         } else if(message.isSingleProductRequest()) {
             Product product = DAOInstances.getProductDAO().selectProductById(message.getId());
             product.setImage(readImage(product.getImagePath()));
@@ -105,21 +109,37 @@ public class ClientHandler extends Thread {
                     product
             );
         } else if(message.isRequestByCategory()) {
-            outputStream.writeObject(
-                    setImages(DAOInstances.getProductDAO().selectProductByCategory(message.getId()))
-            );
+            List<Product> products = setImages(DAOInstances.getProductDAO().selectProductByCategory(message.getId()));
+            outputStream.writeObject(products.size());
+            for(Product product : products) {
+                outputStream.writeObject(
+                        product
+                );
+            }
         } else if(message.isRequestByIds()) {
-            outputStream.writeObject(
-                    setImages(DAOInstances.getProductDAO().selectProductsByIds(message.getIds()))
-            );
+            List<Product> products = setImages(DAOInstances.getProductDAO().selectProductsByIds(message.getIds()));
+            outputStream.writeObject(products.size());
+            for(Product product : products) {
+                outputStream.writeObject(
+                        product
+                );
+            }
         } else if(message.isRequestOfMissingProducts()) {
-            outputStream.writeObject(
-                    setImages(DAOInstances.getProductDAO().selectMissingProducts(message.getProducts()))
-            );
+            List<Product> products = setImages(DAOInstances.getProductDAO().selectMissingProducts(message.getProducts()));
+            outputStream.writeObject(products.size());
+            for(Product product : products) {
+                outputStream.writeObject(
+                        product
+                );
+            }
         } else if(message.isRequestOfUpdatedProducts()) {
-            outputStream.writeObject(
-                    setImages(DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts()))
-            );
+            List<Product> products = setImages(DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts()));
+            outputStream.writeObject(products.size());
+            for(Product product : products) {
+                outputStream.writeObject(
+                    product
+                );
+            }
         } else if(message.isInsertProductRequest()) {
             message.getProduct().setImagePath("/root/pictures/" + message.getProduct().getImagePath() + ".png");
             DAOInstances.getCategoryDAO().insertCategory(message.getProduct().getCategory());
@@ -190,7 +210,6 @@ public class ClientHandler extends Thread {
 
     private List<Product> setImages(List<Product> products) throws IOException {
         for (Product product : products) {
-            logger.log(Level.SEVERE, "HEREEEE");
             product.setImage(readImage(product.getImagePath()));
         }
         return products;

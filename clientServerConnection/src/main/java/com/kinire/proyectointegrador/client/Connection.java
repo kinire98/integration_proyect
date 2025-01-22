@@ -93,9 +93,8 @@ public class Connection {
         this.socket.close();
     }
 
-    public void getProducts(ProductArrayFunction successPromise, ErrorFunction failurePromise) {
+    public void getProducts(ProductFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
-            List<Object> products = null;
             try {
                 logger.log(Level.INFO, "Sending products request");
                 outputStream.writeObject(
@@ -103,22 +102,16 @@ public class Connection {
                                 .allProductsRequest()
                                 .build()
                 );
-                Object obj = inputStream.readObject();
-                if (obj.getClass().isArray()) {
-                    products = Arrays.asList((Object[])obj);
-                } else if (obj instanceof Collection) {
-                    products= new ArrayList<>((Collection<?>)obj);
+                Integer numOfProducts = (Integer) inputStream.readObject();
+                for (int i = 0; i < numOfProducts; i++) {
+                    Product product = (Product) inputStream.readObject();
+                    successPromise.apply(product);
                 }
 
             } catch (IOException | ClassNotFoundException e) {
                 failurePromise.apply(e);
                 return;
             }
-            if(products == null || products.isEmpty()) {
-                failurePromise.apply(null);
-                return;
-            }
-            successPromise.apply(products.stream().map((product) -> (Product) product).collect(Collectors.toList()));
         }).start();
     }
     public void updateProduct(Product product, InputStream imageStream, EmptyFunction successPromise, ErrorFunction failurePromise) {
@@ -280,60 +273,43 @@ public class Connection {
             );
         }).start();
     }
-    public void getNotStoredProducts(List<Product> products, ProductArrayFunction successPromise, ErrorFunction failurePromise) {
+    public void getNotStoredProducts(List<Product> products, ProductFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
-            List<Object> missingProducts = null;
             try {
                 outputStream.writeObject(
                         new ProductMessageBuilder()
                                 .requestOfMissingProducts((ArrayList<Product>) products)
                                 .build()
                 );
-                Object obj = inputStream.readObject();
-                if(obj.getClass().isArray()) {
-                    missingProducts = Arrays.asList((Object[]) obj);
-                } else if(obj instanceof Collection){
-                    missingProducts = new ArrayList<>((Collection<?>) obj);
+                Integer numOfProducts = (Integer) inputStream.readObject();
+                for (int i = 0; i < numOfProducts; i++) {
+                    Product product = (Product) inputStream.readObject();
+                    successPromise.apply(product);
                 }
             } catch (IOException | ClassNotFoundException e) {
                 failurePromise.apply(e);
                 return;
             }
-            if(missingProducts == null || missingProducts.isEmpty()) {
-                failurePromise.apply(null);
-                return;
-            }
-            successPromise.apply(
-                    missingProducts.stream().map(o -> (Product) o).collect(Collectors.toList())
-            );
         }).start();
     }
-    public void getUpdatedProducts(List<Product> products, ProductArrayFunction successPromise, ErrorFunction failurePromise) {
+    public void getUpdatedProducts(List<Product> products, ProductFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
-            List<Object> missingProducts = null;
             try {
                 outputStream.writeObject(
                         new ProductMessageBuilder()
                                 .requestOfUpdatedProducts((ArrayList<Product>) products)
                                 .build()
                 );
-                Object obj = inputStream.readObject();
-                if(obj.getClass().isArray()) {
-                    missingProducts = Arrays.asList((Object[]) obj);
-                } else if(obj instanceof Collection){
-                    missingProducts = new ArrayList<>((Collection<?>) obj);
+
+                Integer numOfProducts = (Integer) inputStream.readObject();
+                for (int i = 0; i < numOfProducts; i++) {
+                    Product product = (Product) inputStream.readObject();
+                    successPromise.apply(product);
                 }
             } catch (IOException | ClassNotFoundException e) {
                 failurePromise.apply(e);
                 return;
             }
-            if(missingProducts == null || missingProducts.isEmpty()) {
-                failurePromise.apply(null);
-                return;
-            }
-            successPromise.apply(
-                    missingProducts.stream().map(o -> (Product) o).collect(Collectors.toList())
-            );
         }).start();
     }
     void productsUpdated() {

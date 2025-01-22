@@ -10,7 +10,7 @@ public class ImageCompression {
     public static byte[] compressImage(Drawable drawable) {
         Bitmap largeIcon = ((BitmapDrawable) drawable).getBitmap();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        largeIcon.compress(Bitmap.CompressFormat.PNG, 100, out);
+        largeIcon.compress(Bitmap.CompressFormat.PNG, 50, out);
         return out.toByteArray();
     }
 

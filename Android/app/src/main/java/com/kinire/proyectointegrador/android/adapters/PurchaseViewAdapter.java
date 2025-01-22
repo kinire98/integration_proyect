@@ -14,11 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.images.Image;
+import com.kinire.proyectointegrador.android.image_cache.ImageCache;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.ShoppingCartItem;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,7 +70,7 @@ public class PurchaseViewAdapter extends BaseAdapter {
         holder.unitPriceField.setText(String.format(Locale.getDefault(), "%.2f€", product.getPrice()));
         holder.amountField.setText(String.valueOf(item.getAmount()));
         holder.totalPriceField.setText(String.format(Locale.getDefault(), "%.2f€", item.getPrice()));
-        //Image.getImage(context, product.getImagePath(), holder.imageField);
+        holder.imageField.setImageDrawable(ImageCache.getImage(product.getImagePath()));
         return v;
     }
     private static class ViewHolder {

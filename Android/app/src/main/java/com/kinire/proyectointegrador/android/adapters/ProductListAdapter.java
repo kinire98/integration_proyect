@@ -15,20 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.image_model.ImageProduct;
-import com.kinire.proyectointegrador.android.images.Image;
+import com.kinire.proyectointegrador.android.image_cache.ImageCache;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 
 public class ProductListAdapter extends BaseAdapter {
@@ -37,12 +32,12 @@ public class ProductListAdapter extends BaseAdapter {
 
     private @LayoutRes int layout;
 
-    private List<ImageProduct> data;
+    private List<Product> data;
 
     private Logger logger = Logger.getLogger(ProductListAdapter.class.getName());
 
 
-    public ProductListAdapter(Context context, @LayoutRes int layout, List<ImageProduct> data) {
+    public ProductListAdapter(Context context, @LayoutRes int layout, List<Product> data) {
         this.context = context;
         this.layout = layout;
         this.data = data;
@@ -78,10 +73,10 @@ public class ProductListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.productField.setText(data.get(position).getProduct().getName());
-        holder.categoryField.setText(data.get(position).getProduct().getCategory().getName());
-        holder.priceField.setText(String.format(Locale.getDefault(),"%.2f€", data.get(position).getProduct().getPrice()));
-        holder.imageView.setImageDrawable(data.get(position).getDrawable());
+        holder.productField.setText(data.get(position).getName());
+        holder.categoryField.setText(data.get(position).getCategory().getName());
+        holder.priceField.setText(String.format(Locale.getDefault(),"%.2f€", data.get(position).getPrice()));
+        holder.imageView.setImageDrawable(ImageCache.getImage(data.get(position).getImagePath()));
         return view;
     }
     private static class ViewHolder {
