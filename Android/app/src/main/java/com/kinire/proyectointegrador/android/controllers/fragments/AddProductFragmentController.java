@@ -17,6 +17,7 @@ import com.kinire.proyectointegrador.components.Product;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -38,17 +39,21 @@ public class AddProductFragmentController implements View.OnClickListener {
         this.launcher = fragment.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if(result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        if(data != null && data.getData() != null) {
-                            Uri selectedImage = data.getData();
-                            try {
-                                InputStream stream = fragment.requireActivity().getContentResolver().openInputStream(selectedImage);
-                                imageStream = stream;
-                            } catch (FileNotFoundException e) {
-                                fragment.error();
-                            }
-                        }
+                    System.out.println("Aqui1");
+                    if(result.getResultCode() != Activity.RESULT_OK)
+                        return;
+                    System.out.println("Aqui2");
+                    Intent data = result.getData();
+                    if(data == null || data.getData() == null)
+                        return;
+                    System.out.println("Aqui3");
+                    Uri selectedImage = data.getData();
+                    try {
+                        System.out.println("Aqui4");
+                        imageStream = fragment.requireActivity().getContentResolver().openInputStream(selectedImage);
+                    } catch (FileNotFoundException e) {
+                        System.out.println("Aqui5");
+                        fragment.error();
                     }
                 }
         );
@@ -65,7 +70,7 @@ public class AddProductFragmentController implements View.OnClickListener {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        fragment.requireActivity().startActivity(intent);
+        launcher.launch(intent);
     }
     public void uploadProduct() {
         String name = fragment.getNameField();
@@ -85,6 +90,7 @@ public class AddProductFragmentController implements View.OnClickListener {
         product.getCategory().setName(category);
         product.setPrice(price);
         product.setImagePath(imageName);
+        product.setLastModified(LocalDate.now());
         Connection.getInstance().updateProduct(
                 product,
                 () -> {

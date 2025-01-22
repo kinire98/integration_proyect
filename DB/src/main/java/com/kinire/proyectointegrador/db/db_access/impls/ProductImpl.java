@@ -28,13 +28,14 @@ public class ProductImpl implements ProductDAO {
     @Override
     public boolean insertProduct(Product product) {
         boolean success = false;
-        String query = "INSERT INTO products (name, price, image_path, category_id) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO products (name, price, image_path, category_id, last_modification) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, product.getName());
             statement.setFloat(2, product.getPrice());
             statement.setString(3, product.getImagePath());
             statement.setLong(4, product.getCategory().getId());
+            statement.setDate(5, Date.valueOf(product.getLastModified() == null ? LocalDate.now() : product.getLastModified()));
             success = statement.executeUpdate() == 1;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());

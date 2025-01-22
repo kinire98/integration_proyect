@@ -145,7 +145,8 @@ public class ProductMessageBuilder {
                        !this.requestByCategory &&
                        !this.requestOfMissingProducts &&
                        !this.requestOfUpdatedProducts &&
-                       !this.requestByIds
+                       !this.requestByIds &&
+                               !this.insertProductRequest
         )
             throw new IllegalStateException("You have to make at least one request");
         return new ProductMessage(
