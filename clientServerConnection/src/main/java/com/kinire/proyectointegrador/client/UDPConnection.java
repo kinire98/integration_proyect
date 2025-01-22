@@ -168,7 +168,7 @@ class UDPConnection extends Thread {
             fileNameBuffer[0] = CommonValues.udpSendImagePath;
             System.arraycopy(fileName, 0, fileNameBuffer, 1, fileName.length);
             DatagramPacket fileNamePacket = new DatagramPacket(fileNameBuffer, fileName.length, address, port);
-            socket.send(fileNamePacket);
+            socket.send(fileNamePacket)
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] fileBuffer = new byte[65000];
             int bytesRead;
