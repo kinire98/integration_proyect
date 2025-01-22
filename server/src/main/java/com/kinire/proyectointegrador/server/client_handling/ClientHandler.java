@@ -9,9 +9,7 @@ import com.kinire.proyectointegrador.server.updates_signaling.UpdateSignaler;
 import com.kinire.proyectointegrador.users.UserMessage;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.Socket;
 import java.util.List;
@@ -125,6 +123,7 @@ public class ClientHandler extends Thread {
             outputStream.writeObject(
                     DAOInstances.getProductDAO().insertProduct(message.getProduct())
             );
+            createImage(message.getProduct().getImagePath(), message.getImageStream());
             signaler.signalProductUpdate();
         }
     }
@@ -173,6 +172,16 @@ public class ClientHandler extends Thread {
         }
         logger.log(Level.INFO, "Purchase request processed");
 
+    }
+    private void createImage(String imagePath, InputStream imageStream) throws IOException {
+        File file = new File(imagePath);
+        file.createNewFile();
+        OutputStream outputStream = new FileOutputStream(file);
+        byte[] buffer = new byte[1048576];
+        while(imageStream.read(buffer) != -1) {
+            outputStream.write(buffer);
+        }
+        outputStream.close();
     }
 }
 

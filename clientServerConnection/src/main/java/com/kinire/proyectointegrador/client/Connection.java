@@ -133,12 +133,12 @@ public class Connection {
     public void getImage(String path, InputStreamFunction successPromise, ErrorFunction errorPromise) {
         udpConnection.askForImage(path, successPromise, errorPromise);
     }
-    public void updateProduct(Product product, EmptyFunction successPromise, ErrorFunction failurePromise) {
+    public void updateProduct(Product product, InputStream imageStream, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
                 outputStream.writeObject(
                         new ProductMessageBuilder()
-                                .insertProductRequest(product)
+                                .insertProductRequest(product, imageStream)
                                 .build()
                 );
                 Boolean success = (Boolean) inputStream.readObject();
@@ -150,9 +150,6 @@ public class Connection {
                 failurePromise.apply(e);
             }
         }).start();
-    }
-    public void uploadImage(String imageName, InputStream imageStream, EmptyFunction successPromise, ErrorFunction errorPromise) {
-        udpConnection.askForSendingImage(imageName, imageStream, successPromise, errorPromise);
     }
     public void userExists(String username, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
         new Thread(() -> {

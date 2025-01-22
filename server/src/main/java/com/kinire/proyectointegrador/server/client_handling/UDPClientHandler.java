@@ -67,8 +67,6 @@ public class UDPClientHandler extends Thread {
                 socket.receive(receivePacket);
                 if(receiveBuffer[0] == CommonValues.udpImageRequest) {
                     imageRequest(receiveBuffer);
-                } else if(receiveBuffer[0] == CommonValues.updSendImageToServer) {
-                    receiveImage(receiveBuffer);
                 } else if(receiveBuffer[0] == CommonValues.udpAskForConnectionStatus) {
                     connectionStatus();
                 }
@@ -137,27 +135,6 @@ public class UDPClientHandler extends Thread {
         return byteArrayInputStream;
     }
 
-    private void receiveImage(byte[] buffer) throws IOException {
-        String imagePath = "./img/" + new String(Arrays.copyOfRange(buffer, 1, buffer.length), StandardCharsets.UTF_8);
-        File file = new File(imagePath);
-        if(!file.exists()) {
-            file.mkdirs();
-            file.createNewFile();
-        }
-        byte[] receiveBuffer = new byte[65001];
-        DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
-        socket.receive(receivePacket);
-        OutputStream outputStream = new FileOutputStream(file);
-        while(receiveBuffer[0] == CommonValues.udpImageRequestSucceded) {
-            outputStream.write(Arrays.copyOfRange(receiveBuffer, 0, receiveBuffer.length));
-            socket.receive(receivePacket);
-        }
-        if(receiveBuffer[0] == CommonValues.udpImageRequestEnded) {
-            byte[] confirmBuffer = new byte[]{CommonValues.udpImageRequestEnded};
-            DatagramPacket packet = new DatagramPacket(confirmBuffer, confirmBuffer.length, address, port);
-            socket.send(packet);
-        }
-    }
 
     private void connectionStatus() throws IOException {
         byte[] buffer = new byte[1024];

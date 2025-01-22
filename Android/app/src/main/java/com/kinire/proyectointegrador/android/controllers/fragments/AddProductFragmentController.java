@@ -93,6 +93,7 @@ public class AddProductFragmentController implements View.OnClickListener {
         product.setLastModified(LocalDate.now());
         Connection.getInstance().updateProduct(
                 product,
+                imageStream,
                 () -> {
                     fragment.productSavedSuccesfully();
                 },
@@ -100,13 +101,6 @@ public class AddProductFragmentController implements View.OnClickListener {
                     fragment.productNotSaved();
                 }
         );
-        Connection.getInstance().uploadImage(imageName, imageStream,
-                () -> {
-                    fragment.imageSavedSuccesfully();
-                },
-                e -> {
-                    fragment.imageNotSaved();
-                });
     }
 
 }
