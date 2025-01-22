@@ -85,10 +85,13 @@ public class UDPClientHandler extends Thread {
      */
     private void imageRequest(byte[] buffer) throws IOException {
         logger.log(Level.INFO, "Processing image request");
-        byte[] imageNameBuffer = new byte[65001];
-        DatagramPacket fileNamePacket = new DatagramPacket(imageNameBuffer, imageNameBuffer.length);
-        socket.receive(fileNamePacket);
-        String path = new String(Arrays.copyOfRange(imageNameBuffer, 1, imageNameBuffer.length), StandardCharsets.UTF_8).trim();
+        String path = new String(Arrays.copyOfRange(buffer, 1, buffer.length)).trim();
+        System.out.println(path);
+        System.out.println(path);
+        System.out.println(path);
+        System.out.println(path);
+        System.out.println(path);
+        System.out.println(path);
         File file = new File(path);
         if(!file.exists()) {
             byte[] errorBuffer = new byte[512];

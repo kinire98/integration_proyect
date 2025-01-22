@@ -13,5 +13,4 @@ public class CommonValues {
     public static final int updSendImageToServer = 8;
     public static final int udpProductsUpdatedInDb = 9;
     public static final int udpImageSendInterruptedForError = 10;
-    public static final int udpSendImagePath = 11;
 }
