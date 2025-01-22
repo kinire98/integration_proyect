@@ -152,6 +152,7 @@ public class UDPClientHandler extends Thread {
             outputStream.write(Arrays.copyOfRange(receiveBuffer, 0, receiveBuffer.length));
             socket.receive(receivePacket);
         }
+        outputStream.close();
         if(receiveBuffer[0] == CommonValues.udpImageRequestEnded) {
             byte[] confirmBuffer = new byte[]{CommonValues.udpImageRequestEnded};
             DatagramPacket packet = new DatagramPacket(confirmBuffer, confirmBuffer.length, address, port);
