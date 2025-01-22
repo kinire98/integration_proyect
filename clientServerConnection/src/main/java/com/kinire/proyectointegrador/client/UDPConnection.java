@@ -158,18 +158,17 @@ class UDPConnection extends Thread {
     private void updateImageToServer() {
         ImageUpdateSolicitude solicitude = imageUpdateSolicitudes.remove(0);
         logger.log(Level.INFO, "Uploading image to the server");
-        updateAttempt(solicitude, 0);
-    }
-    private void updateAttempt(ImageUpdateSolicitude solicitude, int attempt) {
-        if(attempt == 5)
-            return;
         try {
-            byte[] buffer = new byte[solicitude.imageName.length() * 2];
+            byte[] buffer = new byte[4096];
             buffer[0] = CommonValues.updSendImageToServer;
             byte[] fileName = solicitude.imageName.getBytes(StandardCharsets.UTF_8);
-            System.arraycopy(fileName, 0, buffer, 1, fileName.length);
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, port);
             socket.send(packet);
+            byte[] fileNameBuffer = new byte[650001];
+            fileNameBuffer[0] = CommonValues.udpSendImagePath;
+            System.arraycopy(fileName, 0, fileNameBuffer, 1, fileName.length);
+            DatagramPacket fileNamePacket = new DatagramPacket(fileNameBuffer, fileName.length, address, port);
+            socket.send(fileNamePacket)
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] fileBuffer = new byte[65000];
             int bytesRead;
@@ -186,11 +185,6 @@ class UDPConnection extends Thread {
             logger.log(Level.INFO, "Image request fulfilled");
             solicitude.successPromise.apply();
         } catch (IOException e) {
-            if(attempt < 10) {
-                attempt++;
-                updateAttempt(solicitude, attempt);
-                return;
-            }
             try {
                 byte[] buffer = new byte[1024];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, port);
@@ -201,7 +195,6 @@ class UDPConnection extends Thread {
             }
             solicitude.failurePromise.apply(e);
         }
-
     }
 
     private void status() {
