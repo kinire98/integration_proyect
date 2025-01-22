@@ -39,6 +39,14 @@
     <string name="image">Imagen:</string>
     <string name="price">Precio:</string>
     <string name="category">Categoría:</string>
+    <string name="select_image">Seleccionar imagen</string>
+    <string name="upload_product">Subir producto</string>
+    <string name="product_save">Producto guardado</string>
+    <string name="image_saved">Imagen guardada</string>
+    <string name="product_not_save">Producto no guardado</string>
+    <string name="image_not_saved">Imagen no guardada</string>
+    <string name="empty_fields">Campos vacíos</string>
+    <string name="error">Error</string>
     <string name="shared_preferences_key">4b2c3564-f6f7-4837-83da-33a9f1efcfbf</string>
     <string name="user_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
     <string name="product_parcelable_key">c8117227-4702-4f62-bf1e-ba339e6e12e</string>

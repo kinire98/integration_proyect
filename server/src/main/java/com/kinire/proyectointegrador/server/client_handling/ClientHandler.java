@@ -121,6 +121,7 @@ public class ClientHandler extends Thread {
             );
         } else if(message.isInsertProductRequest()) {
             DAOInstances.getCategoryDAO().insertCategory(message.getProduct().getCategory());
+            message.getProduct().setCategory(DAOInstances.getCategoryDAO().selectByName(message.getProduct().getCategory().getName()));
             outputStream.writeObject(
                     DAOInstances.getProductDAO().insertProduct(message.getProduct())
             );

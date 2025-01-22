@@ -52,6 +52,26 @@ public class CategoryImpl implements CategoryDAO {
     }
 
     @Override
+    public Category selectByName(String name) {
+        String query = "SELECT * FROM categories WHERE name = ?";
+        Category category = null;
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, name);
+            ResultSet set = statement.executeQuery();
+            set.next();
+            category = new Category(
+                    set.getLong("id"),
+                    set.getString("name")
+            );
+            set.close();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return category;
+    }
+
+    @Override
     public boolean updateCategory(long id, Category category) {
         boolean success = false;
         String query = "UPDATE categories SET name = ? WHERE id = ?";
