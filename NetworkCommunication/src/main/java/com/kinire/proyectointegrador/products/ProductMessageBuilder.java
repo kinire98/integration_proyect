@@ -4,7 +4,6 @@ import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.User;
 import com.kinire.proyectointegrador.purchases.PurchaseMessage;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class ProductMessageBuilder {
@@ -30,8 +29,6 @@ public class ProductMessageBuilder {
     private ArrayList<Product> products;
 
     private Product product;
-
-    private InputStream imageStream;
 
 
     public ProductMessageBuilder() {}
@@ -126,7 +123,7 @@ public class ProductMessageBuilder {
         this.ids = ids;
         return this;
     }
-    public ProductMessageBuilder insertProductRequest(Product product, InputStream imageStream) {
+    public ProductMessageBuilder insertProductRequest(Product product) {
         if(
                 this.allProductsRequest ||
                         this.singleProductRequest ||
@@ -138,7 +135,6 @@ public class ProductMessageBuilder {
             throw new IllegalStateException("Only one request at the same time");
         this.insertProductRequest = true;
         this.product = product;
-        this.imageStream = imageStream;
         return this;
     }
 
@@ -164,8 +160,7 @@ public class ProductMessageBuilder {
                 ids,
                 id,
                 products,
-                product,
-                imageStream
+                product
         );
     }
 }
