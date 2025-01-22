@@ -92,7 +92,7 @@ public class UDPClientHandler extends Thread {
             return;
         }
 
-        try (InputStream inputStream = getImageCompressed(file)) {
+        try (InputStream inputStream = new FileInputStream(file)) {
                byte[] fileBuffer = new byte[65000];
                int bytesRead;
                while((bytesRead = inputStream.read(fileBuffer)) != -1) {
@@ -115,7 +115,7 @@ public class UDPClientHandler extends Thread {
             socket.send(errorPacket);
         }
     }
-    private InputStream getImageCompressed(File file) throws IOException {
+    /*private InputStream getImageCompressed(File file) throws IOException {
         BufferedImage img = ImageIO.read(file);
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
         ImageWriter writer = writers.next();
@@ -133,7 +133,7 @@ public class UDPClientHandler extends Thread {
         outputStream.close();
         byteArrayInputStream.close();
         return byteArrayInputStream;
-    }
+    }*/
 
 
     private void connectionStatus() throws IOException {
