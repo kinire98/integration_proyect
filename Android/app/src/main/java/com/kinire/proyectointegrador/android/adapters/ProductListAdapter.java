@@ -63,7 +63,6 @@ public class ProductListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         ViewHolder holder;
-        logger.log(Level.SEVERE, data.get(position).getImagePath());
         if(view == null) {
             LayoutInflater inflater = LayoutInflater.from(this.context);
             view = inflater.inflate(layout, null);
