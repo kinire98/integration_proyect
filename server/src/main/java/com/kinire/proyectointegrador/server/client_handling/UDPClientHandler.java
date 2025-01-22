@@ -86,6 +86,7 @@ public class UDPClientHandler extends Thread {
     private void imageRequest(byte[] buffer) throws IOException {
         logger.log(Level.INFO, "Processing image request");
         String path = new String(Arrays.copyOfRange(buffer, 1, buffer.length)).trim();
+        logger.log(Level.SEVERE, path);
         File file = new File(path);
         if(!file.exists()) {
             byte[] errorBuffer = new byte[512];
