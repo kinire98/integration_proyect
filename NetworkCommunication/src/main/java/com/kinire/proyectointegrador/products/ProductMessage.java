@@ -2,6 +2,7 @@ package com.kinire.proyectointegrador.products;
 
 import com.kinire.proyectointegrador.components.Product;
 
+import java.io.InputStream;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,11 +35,14 @@ public class ProductMessage implements Serializable {
 
     private final Product product;
 
+    private final InputStream imageStream;
+
 
 
     ProductMessage(boolean allProductsRequest, boolean singleProductRequest, boolean insertProductRequest,
                     boolean requestByCategory, boolean requestOfMissingProducts, boolean requestOfUpdatedProducts,
-                    boolean requestByIds, long[] ids, long id, ArrayList<Product> products, Product product) {
+                    boolean requestByIds, long[] ids, long id, ArrayList<Product> products, Product product,
+                   InputStream imageStream) {
         this.allProductsRequest = allProductsRequest;
         this.singleProductRequest = singleProductRequest;
         this.insertProductRequest = insertProductRequest;
@@ -50,6 +54,7 @@ public class ProductMessage implements Serializable {
         this.id = id;
         this.products = products;
         this.product = product;
+        this.imageStream = imageStream;
     }
 
     public ArrayList<Product> getProducts() {
