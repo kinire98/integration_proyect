@@ -38,7 +38,9 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
             if(!Connection.isInstanceStarted()) {
                 Connection.startInstance(() -> {
                     Connection.getInstance().setProductsUpdatedPromise(() -> {
-                        Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.error();});
+                        Connection.getInstance().getProducts((products) -> {
+                            fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products));
+                        }, (e) -> {fragment.error();});
                     });
                     Connection.getInstance().setConnectionLostPromise(() -> {
                         fragment.errorConnectionLost();
@@ -48,7 +50,9 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
                     logger.log(Level.INFO, "Products request sent");
                 });
             } else {
-                Connection.getInstance().getProducts((products) -> fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products)), (e) -> {fragment.error();});
+                Connection.getInstance().getProducts((products) -> {
+                    fragment.getActivity().runOnUiThread(() -> viewModel.setProducts(products));
+                }, (e) -> {fragment.error();});
             }
         } catch (Exception e) {
             e.printStackTrace();
