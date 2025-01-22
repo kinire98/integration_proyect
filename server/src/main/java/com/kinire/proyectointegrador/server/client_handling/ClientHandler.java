@@ -99,7 +99,7 @@ public class ClientHandler extends Thread {
         if(message.isAllProductsRequest()) {
             List<Product> products =
                     DAOInstances.getProductDAO().selectAllProducts();
-            products.forEach(product -> System.out.println(product.getImagePath()));
+            products.forEach(product -> System.out.println(product));
             outputStream.writeObject(
                     products
             );
