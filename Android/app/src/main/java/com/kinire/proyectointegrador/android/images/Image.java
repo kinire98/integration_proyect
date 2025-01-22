@@ -35,7 +35,6 @@ public class Image {
         }, e -> {
             if(e instanceof FileDoesNotExistException)
                 imagePromise.apply(AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid));
-            logger.log(Level.SEVERE, "HERE");
         });
     }
 }
