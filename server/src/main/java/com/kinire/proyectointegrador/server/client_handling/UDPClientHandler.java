@@ -138,7 +138,7 @@ public class UDPClientHandler extends Thread {
     }
 
     private void receiveImage(byte[] buffer) throws IOException {
-        String imagePath = "./img/" + new String(Arrays.copyOfRange(buffer, 1, buffer.length), StandardCharsets.UTF_8) + ".png";
+        String imagePath = "./img/" + new String(Arrays.copyOfRange(buffer, 1, buffer.length), StandardCharsets.UTF_8);
         File file = new File(imagePath);
         if(!file.exists()) {
             file.mkdirs();
