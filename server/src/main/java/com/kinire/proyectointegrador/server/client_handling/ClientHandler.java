@@ -1,6 +1,5 @@
 package com.kinire.proyectointegrador.server.client_handling;
 
-import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.purchases.PurchaseMessage;
 import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
@@ -97,11 +96,8 @@ public class ClientHandler extends Thread {
     private void handleProductMessage(ProductMessage message) throws IOException {
         logger.log(Level.INFO, "Processing product request");
         if(message.isAllProductsRequest()) {
-            List<Product> products =
-                    DAOInstances.getProductDAO().selectAllProducts();
-            products.forEach(product -> System.out.println(product));
             outputStream.writeObject(
-                    products
+                    DAOInstances.getProductDAO().selectAllProducts()
             );
         } else if(message.isSingleProductRequest()) {
             outputStream.writeObject(
