@@ -118,6 +118,7 @@ public class ClientHandler extends Thread {
                     DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts())
             );
         } else if(message.isInsertProductRequest()) {
+            message.getProduct().setImagePath("/root/pictures/" + message.getProduct().getImagePath() + ".png");
             DAOInstances.getCategoryDAO().insertCategory(message.getProduct().getCategory());
             message.getProduct().setCategory(DAOInstances.getCategoryDAO().selectByName(message.getProduct().getCategory().getName()));
             outputStream.writeObject(
