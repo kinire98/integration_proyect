@@ -48,7 +48,7 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
             if(!Connection.isInstanceStarted()) {
                 Connection.startInstance(() -> {
                     Connection.getInstance().setProductsUpdatedPromise(() -> {
-                        Connection.getInstance().getProducts(this::productGot, (e) -> {fragment.error();});
+                        Connection.getInstance().getUpdatedProducts(viewModel.getProductsData(), this::productGot, (e) -> fragment.error());
                     });
                     Connection.getInstance().setConnectionLostPromise(fragment::errorConnectionLost);
                     logger.log(Level.INFO, "Connection started");
@@ -63,7 +63,6 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
         }
     }
     private void productGot(Product product) {
-        logger.log(Level.SEVERE, "a;ldj;lkadsklfj");
         ImageCache.setImage(product.getImagePath(), Drawable.createFromStream(new ByteArrayInputStream(product.getImage()), "remote"));
         List<Product> products = viewModel.getProductsData();
         products.add(product);

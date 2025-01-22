@@ -75,8 +75,10 @@ public class UDPClientHandler extends Thread {
 
     private void connectionStatus() throws IOException {
         byte[] buffer = new byte[1024];
-        if(productUpdateSignaled)
+        if(productUpdateSignaled) {
             buffer[0] = CommonValues.udpProductsUpdatedInDb;
+            productUpdateSignaled = false;
+        }
         else
             buffer[0] = CommonValues.udpConnectionStatusSucceded;
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, port);
