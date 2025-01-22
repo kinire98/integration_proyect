@@ -60,33 +60,20 @@ public class PurchaseViewAdapter extends BaseAdapter {
             holder.unitPriceField = v.findViewById(R.id.unit_price_field);
             holder.amountField = v.findViewById(R.id.amount_field);
             holder.totalPriceField = v.findViewById(R.id.total_price_field);
-            askForImage(position, holder);
         } else {
             holder = (ViewHolder) v.getTag();
-            askForImage(position, holder);
         }
         ShoppingCartItem item = data.get(position);
         Product product = item.getProduct();
-        holder.imageField.setImageDrawable(holder.image);
         holder.nameField.setText(product.getName());
         holder.unitPriceField.setText(String.format(Locale.getDefault(), "%.2f€", product.getPrice()));
         holder.amountField.setText(String.valueOf(item.getAmount()));
         holder.totalPriceField.setText(String.format(Locale.getDefault(), "%.2f€", item.getPrice()));
+        //Image.getImage(context, product.getImagePath(), holder.imageField);
         return v;
-    }
-    private void askForImage(int position, ViewHolder holder) {
-        if(holder.image != null)
-            return;
-        Image.getImage(context, data.get(position).getProduct().getImagePath(), (drawable) -> {
-            holder.image = drawable;
-            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageField.setImageDrawable(holder.image));
-        }, (e) -> {
-            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageField.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.square_xmark_solid)));
-        });
     }
     private static class ViewHolder {
         private ImageView imageField;
-        private Drawable image;
         private TextView nameField;
         private TextView unitPriceField;
         private TextView amountField;

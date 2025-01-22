@@ -1,5 +1,6 @@
 package com.kinire.proyectointegrador.client;
 
+import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.User;
 
 import java.io.*;
@@ -13,17 +14,20 @@ public class Main {
         Connection.startInstance(() -> {
 
             User user = new User("Iker", "1234");
-            Connection.getInstance().getClientPurchases(user, purchases -> {
-                System.out.println(purchases);
-            }, e -> e.printStackTrace());
-            /*Connection.getInstance().getProducts((products) -> {
-                System.out.println(products);
-                try {
-                    Connection.getInstance().close();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+            Connection.getInstance().getProducts((products) -> {
+                for (int i = 0; i < products.size(); i++) {
+                    Product product = products.get(i);
+                    try {
+                        FileOutputStream outputStream = new FileOutputStream(new File(product.getImagePath()));
+                        ByteArrayInputStream inputStream = new ByteArrayInputStream(product.getImage());
+                        byte[] buffer = new byte[1048576];
+                        int bytesRead;
+                        while((bytesRead = inputStream.read(buffer)) != -1)
+                            outputStream.write(buffer, 0, bytesRead);
+                        outputStream.close();
+                    } catch (IOException e) {}
                 }
-            }, e -> e.printStackTrace());*/
+            }, e -> e.printStackTrace());
         });
 
     }

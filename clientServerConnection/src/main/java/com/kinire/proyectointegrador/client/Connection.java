@@ -67,21 +67,12 @@ public class Connection {
     public static Connection getInstance() {
         return self;
     }
-    public void print() throws IOException {
-        System.out.println(socket.isConnected());
-        System.out.println(inputStream.available());
-    }
     private Connection() throws IOException, ClassNotFoundException {
         InetAddress inetAddress = InetAddress.getByAddress(ADDRESS);
         this.socket = new Socket(inetAddress, CommonValues.tcpListeningPort);
         this.outputStream = new ObjectOutputStream(socket.getOutputStream());
         this.inputStream = new ObjectInputStream(socket.getInputStream());
         Integer port = (Integer) inputStream.readObject();
-        try {
-            Thread.sleep(100);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         this.udpConnection = new UDPConnection(inetAddress, port, this);
         logger.log(Level.INFO, String.valueOf(port));
         udpConnection.start();
@@ -129,9 +120,6 @@ public class Connection {
             }
             successPromise.apply(products.stream().map((product) -> (Product) product).collect(Collectors.toList()));
         }).start();
-    }
-    public void getImage(String path, InputStreamFunction successPromise, ErrorFunction errorPromise) {
-        udpConnection.askForImage(path, successPromise, errorPromise);
     }
     public void updateProduct(Product product, InputStream imageStream, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {

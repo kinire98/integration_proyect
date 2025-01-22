@@ -16,6 +16,9 @@ import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.adapters.ProductListAdapter;
 import com.kinire.proyectointegrador.android.controllers.fragments.ProductListFragmentController;
 import com.kinire.proyectointegrador.android.databinding.FragmentProductsListBinding;
+import com.kinire.proyectointegrador.android.image_model.ImageProduct;
+import com.kinire.proyectointegrador.android.images.Image;
+import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 
 import java.util.List;
@@ -64,7 +67,7 @@ public class ProductsListFragment extends Fragment {
 
     private void setAdapter() {
         viewModel.getProducts().observe(getViewLifecycleOwner(), products -> {
-            ProductListAdapter adapter = new ProductListAdapter(ProductsListFragment.this.getActivity(), R.layout.product_list_layout, products);
+            ProductListAdapter adapter = new ProductListAdapter(requireContext(), R.layout.product_list_layout, products);
             productList.invalidate();
             productList.setAdapter(adapter);
         });

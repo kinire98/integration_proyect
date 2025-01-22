@@ -39,20 +39,15 @@ public class AddProductFragmentController implements View.OnClickListener {
         this.launcher = fragment.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    System.out.println("Aqui1");
                     if(result.getResultCode() != Activity.RESULT_OK)
                         return;
-                    System.out.println("Aqui2");
                     Intent data = result.getData();
                     if(data == null || data.getData() == null)
                         return;
-                    System.out.println("Aqui3");
                     Uri selectedImage = data.getData();
                     try {
-                        System.out.println("Aqui4");
                         imageStream = fragment.requireActivity().getContentResolver().openInputStream(selectedImage);
                     } catch (FileNotFoundException e) {
-                        System.out.println("Aqui5");
                         fragment.error();
                     }
                 }

@@ -65,33 +65,19 @@ public class ShopingCartAdapter extends BaseAdapter {
             holder.productAmount = v.findViewById(R.id.product_amount);
             holder.productName = v.findViewById(R.id.product_name);
             holder.productPrice = v.findViewById(R.id.product_price);
-            askForImage(position, holder);
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
-            askForImage(position, holder);
         }
-        holder.imageView.setImageDrawable(holder.image);
         holder.productName.setText(data.getShoppingCartItems().get(position).getProduct().getName());
         holder.productAmount.setText(String.valueOf(data.getShoppingCartItems().get(position).getAmount()));
         holder.productPrice.setText(String.format(Locale.getDefault(), "%.2f€", data.getShoppingCartItems().get(position).getPrice()));
+        //Image.getImage(context, data.getShoppingCartItems().get(position).getProduct().getImagePath(), holder.imageView);
         return v;
-    }
-    private void askForImage(int position, ViewHolder holder) {
-        if(holder.image != null)
-            return;
-        Image.getImage(context, data.getShoppingCartItems().get(position).getProduct().getImagePath(), (drawable) -> {
-            holder.image = drawable;
-            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
-        }, (e) -> {
-            logger.log(Level.SEVERE, "Error while loading image");
-            ((AppCompatActivity) context).runOnUiThread(() -> holder.imageView.setImageDrawable(holder.image));
-        });
     }
 
     private static class ViewHolder {
         private ImageView imageView;
-        private Drawable image;
         private TextView productName;
         private TextView productPrice;
         private TextView productAmount;

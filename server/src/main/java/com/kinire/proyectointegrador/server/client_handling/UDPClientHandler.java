@@ -60,80 +60,17 @@ public class UDPClientHandler extends Thread {
     public void run() {
         while (running) {
             try {
-
                 byte[] receiveBuffer = new byte[4096];
                 DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
-                logger.log(Level.INFO, "Awaiting UPD request");
                 socket.receive(receivePacket);
-                if(receiveBuffer[0] == CommonValues.udpImageRequest) {
-                    imageRequest(receiveBuffer);
-                } else if(receiveBuffer[0] == CommonValues.udpAskForConnectionStatus) {
-                    connectionStatus();
-                }
+                connectionStatus();
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getLocalizedMessage());
             }
         }
     }
 
-    /**
-     *
-     * @param buffer
-     * @throws IOException
-     */
-    private void imageRequest(byte[] buffer) throws IOException {
-        logger.log(Level.INFO, "Processing image request");
-        String path = new String(Arrays.copyOfRange(buffer, 1, buffer.length)).trim();
-        File file = new File(path);
-        if(!file.exists()) {
-            byte[] errorBuffer = new byte[512];
-            DatagramPacket packet = new DatagramPacket(errorBuffer, errorBuffer.length, address, port);
-            socket.send(packet);
-            return;
-        }
 
-        try (InputStream inputStream = new FileInputStream(file)) {
-               byte[] fileBuffer = new byte[65000];
-               int bytesRead;
-               while((bytesRead = inputStream.read(fileBuffer)) != -1) {
-                   byte[] sendBuffer = new byte[65001];
-                   sendBuffer[0] = CommonValues.udpImageRequestSucceded;
-                   System.arraycopy(fileBuffer, 0, sendBuffer, 1, bytesRead);
-                   DatagramPacket packet =  new DatagramPacket(sendBuffer, sendBuffer.length, address, port);
-                   socket.send(packet);
-               }
-               byte[] lastImageBuffer = new byte[]{CommonValues.udpImageRequestEnded};
-               DatagramPacket lastImagePacket = new DatagramPacket(lastImageBuffer, lastImageBuffer.length, address, port);
-               socket.send(lastImagePacket);
-               logger.log(Level.INFO, "Image request fulfilled");
-        } catch (IOException e) {
-
-            e.printStackTrace();
-            byte[] errorBuffer = new byte[512];
-            errorBuffer[0] = CommonValues.udpImageRequestFailureInternalServerError;
-            DatagramPacket errorPacket = new DatagramPacket(errorBuffer, errorBuffer.length, address, port);
-            socket.send(errorPacket);
-        }
-    }
-    /*private InputStream getImageCompressed(File file) throws IOException {
-        BufferedImage img = ImageIO.read(file);
-        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
-        ImageWriter writer = writers.next();
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        ImageOutputStream outputStream = ImageIO.createImageOutputStream(byteArrayOutputStream);
-
-        writer.setOutput(outputStream);
-        ImageWriteParam params = writer.getDefaultWriteParam();
-        params.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-        params.setCompressionQuality(.75f);
-        writer.write(null, new IIOImage(img, null, null), params);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-
-        outputStream.close();
-        byteArrayInputStream.close();
-        return byteArrayInputStream;
-    }*/
 
 
     private void connectionStatus() throws IOException {

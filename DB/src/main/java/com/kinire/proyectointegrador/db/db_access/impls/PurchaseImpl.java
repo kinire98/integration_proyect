@@ -96,7 +96,8 @@ public class PurchaseImpl implements PurchaseDAO {
                                         new Category(
                                                 set.getLong("c.id"),
                                                 set.getString("c.name")
-                                        )
+                                        ),
+                                        null
                                 ),
                                 set.getInt("amount")
                         )
@@ -205,7 +206,8 @@ public class PurchaseImpl implements PurchaseDAO {
                                     new Category(
                                             set.getLong("c.id"),
                                             set.getString("c.name")
-                                    )
+                                    ),
+                                    null
                             ),
                             set.getInt("amount")
                     )

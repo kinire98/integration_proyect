@@ -61,7 +61,8 @@ public class ProductImpl implements ProductDAO {
                     new Category(
                             set.getLong("c.id"),
                             set.getString("c.name")
-                    )
+                    ),
+                    null
             );
             set.close();
         } catch (SQLException e) {
@@ -212,7 +213,8 @@ public class ProductImpl implements ProductDAO {
                             new Category(
                                     set.getLong("c.id"),
                                     set.getString("c.name")
-                            )
+                            ),
+                            null
                     )
             );
         }

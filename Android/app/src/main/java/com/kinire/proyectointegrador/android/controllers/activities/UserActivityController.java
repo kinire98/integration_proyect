@@ -55,7 +55,6 @@ public class UserActivityController implements View.OnClickListener {
     }
 
     private void userDoesntExist() {
-        System.out.println("Aqui no existe");
         this.user = new User(username, activity.askForNewPassword());
         Connection.getInstance().insertUserData(user, () -> {
             userAdmin.setUser(user);

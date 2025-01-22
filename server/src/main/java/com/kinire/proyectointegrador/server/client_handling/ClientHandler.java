@@ -1,5 +1,6 @@
 package com.kinire.proyectointegrador.server.client_handling;
 
+import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.purchases.PurchaseMessage;
 import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
@@ -95,27 +96,29 @@ public class ClientHandler extends Thread {
         logger.log(Level.INFO, "Processing product request");
         if(message.isAllProductsRequest()) {
             outputStream.writeObject(
-                    DAOInstances.getProductDAO().selectAllProducts()
+                    setImages(DAOInstances.getProductDAO().selectAllProducts())
             );
         } else if(message.isSingleProductRequest()) {
+            Product product = DAOInstances.getProductDAO().selectProductById(message.getId());
+            product.setImage(readImage(product.getImagePath()));
             outputStream.writeObject(
-                    DAOInstances.getProductDAO().selectProductById(message.getId())
+                    product
             );
         } else if(message.isRequestByCategory()) {
             outputStream.writeObject(
-                    DAOInstances.getProductDAO().selectProductByCategory(message.getId())
+                    setImages(DAOInstances.getProductDAO().selectProductByCategory(message.getId()))
             );
         } else if(message.isRequestByIds()) {
             outputStream.writeObject(
-                    DAOInstances.getProductDAO().selectProductsByIds(message.getIds())
+                    setImages(DAOInstances.getProductDAO().selectProductsByIds(message.getIds()))
             );
         } else if(message.isRequestOfMissingProducts()) {
             outputStream.writeObject(
-                    DAOInstances.getProductDAO().selectMissingProducts(message.getProducts())
+                    setImages(DAOInstances.getProductDAO().selectMissingProducts(message.getProducts()))
             );
         } else if(message.isRequestOfUpdatedProducts()) {
             outputStream.writeObject(
-                    DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts())
+                    setImages(DAOInstances.getProductDAO().selectUpdatedProducts(message.getProducts()))
             );
         } else if(message.isInsertProductRequest()) {
             message.getProduct().setImagePath("/root/pictures/" + message.getProduct().getImagePath() + ".png");
@@ -177,22 +180,6 @@ public class ClientHandler extends Thread {
     private void createImage(String imagePath, InputStream imageStream) throws IOException {
         File file = new File(imagePath);
         boolean success = file.createNewFile();
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
-        System.out.println(success);
         OutputStream outputStream = new FileOutputStream(file);
         byte[] buffer = new byte[1048576];
         while(imageStream.read(buffer) != -1) {
@@ -200,5 +187,23 @@ public class ClientHandler extends Thread {
         }
         outputStream.close();
     }
+
+    private List<Product> setImages(List<Product> products) throws IOException {
+        for (Product product : products) {
+            product.setImage(readImage(product.getImagePath()));
+        }
+        return products;
+    }
+    private byte[] readImage(String imagePath) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        InputStream inputStream = new FileInputStream(new File(imagePath));
+        byte[] buffer =  new byte[1048576];
+        int bytesRead;
+        while((bytesRead = inputStream.read(buffer)) != -1)
+            outputStream.write(buffer, 0, bytesRead);
+        inputStream.close();
+        return outputStream.toByteArray();
+    }
+
 }
 

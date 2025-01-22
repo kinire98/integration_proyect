@@ -21,13 +21,16 @@ public class Product implements Serializable {
 
     private Category category;
 
-    public Product(long id, String name, float price, String imagePath,  LocalDate lastModified, Category category) {
+    private byte[] image;
+
+    public Product(long id, String name, float price, String imagePath,  LocalDate lastModified, Category category, byte[] image) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imagePath = imagePath;
         this.lastModified = lastModified;
         this.category = category;
+        this.image = image;
     }
 
     public Product() {
@@ -63,6 +66,10 @@ public class Product implements Serializable {
         return category;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -87,4 +94,7 @@ public class Product implements Serializable {
         this.category = category;
     }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 }
