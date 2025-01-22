@@ -175,7 +175,23 @@ public class ClientHandler extends Thread {
     }
     private void createImage(String imagePath, InputStream imageStream) throws IOException {
         File file = new File(imagePath);
-        file.createNewFile();
+        boolean success = file.createNewFile();
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
+        System.out.println(success);
         OutputStream outputStream = new FileOutputStream(file);
         byte[] buffer = new byte[1048576];
         while(imageStream.read(buffer) != -1) {
