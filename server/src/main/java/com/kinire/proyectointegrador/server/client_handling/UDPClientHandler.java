@@ -146,9 +146,7 @@ public class UDPClientHandler extends Thread {
     private void receiveImage(byte[] buffer) throws IOException {
         String imagePath = "./img/" + new String(Arrays.copyOfRange(buffer, 1, buffer.length), StandardCharsets.UTF_8) + ".png";
         File file = new File(imagePath);
-        if(!file.exists()) {
-            file.mkdirs();
-            boolean result = file.createNewFile();
+        boolean result = file.createNewFile();
             System.out.println(result);
             System.out.println(result);
             System.out.println(result);
@@ -200,7 +198,6 @@ public class UDPClientHandler extends Thread {
             System.out.println(result);
             System.out.println(result);
             System.out.println(result);
-        }
         byte[] receiveBuffer = new byte[65001];
         DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
         socket.receive(receivePacket);
