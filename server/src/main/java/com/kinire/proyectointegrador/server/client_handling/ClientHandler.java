@@ -190,6 +190,7 @@ public class ClientHandler extends Thread {
 
     private List<Product> setImages(List<Product> products) throws IOException {
         for (Product product : products) {
+            logger.log(Level.SEVERE, "HEREEEE");
             product.setImage(readImage(product.getImagePath()));
         }
         return products;
