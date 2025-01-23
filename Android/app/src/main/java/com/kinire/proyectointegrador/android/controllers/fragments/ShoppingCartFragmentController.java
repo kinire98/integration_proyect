@@ -21,6 +21,8 @@ import com.kinire.proyectointegrador.components.ShoppingCartItem;
 import com.kinire.proyectointegrador.components.User;
 
 import java.time.LocalDate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ShoppingCartFragmentController implements AdapterView.OnItemClickListener, View.OnClickListener {
 
@@ -37,10 +39,11 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
 
     private final String PRODUCT_PARCELABLE_KEY;
 
-
     private final String AMOUNT_PARCELABLE_KEY;
 
     private final String POSITION_PARCELABLE_KEY;
+
+    private final static Logger logger = Logger.getLogger(ShoppingCartFragmentController.class.getName());
 
     public ShoppingCartFragmentController(ShoppingCartFragment fragment, ShoppingCartViewModel viewModel) {
         ShoppingCartFragmentController.fragment = fragment;
@@ -127,6 +130,7 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
             changeSelectedMenuItem();
             return;
         }
+        logger.log(Level.SEVERE, "Saving purchase");
         User user = userAdmin.getUser();
         purchase.setUser(user);
         purchase.setPurchaseDate(LocalDate.now());

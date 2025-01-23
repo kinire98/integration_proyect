@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.android.sqlite.ProductDAO;
 import com.kinire.proyectointegrador.android.utils.ImageCache;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
 import com.kinire.proyectointegrador.android.ui.activities.ProductActionActivity;
@@ -31,38 +32,56 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
 
     private final Logger logger = Logger.getLogger(ProductListFragmentController.class.getName());
 
+    private final ProductDAO productDAO;
+
+    private boolean productsInDB = false;
 
     public ProductListFragmentController(ProductsListFragment fragment, ProductsListViewModel viewModel) {
         this.fragment = fragment;
         this.viewModel = viewModel;
         this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
+        this.productDAO = new ProductDAO(fragment.requireContext());
         fragment.requireActivity().runOnUiThread(() -> {
             viewModel.setProducts(new ArrayList<>());
         });
+        initProducts();
+    }
+    private void initProducts() {
+        if(productDAO.areThereProducts()) {
+            List<Product> products = productDAO.getProducts();
+            products.forEach(product -> productGot(product, true));
+            this.productsInDB = true;
+        }
         initConnection();
+
     }
     private void initConnection() {
-        try {
-            if(!Connection.isInstanceStarted()) {
-                Connection.startInstance(() -> {
-                    Connection.getInstance().setProductsUpdatedPromise(() -> {
-                        Connection.getInstance().getUpdatedProducts(viewModel.getProductsData(), this::productGot, (e) -> fragment.error());
-                    });
-                    Connection.getInstance().setConnectionLostPromise(fragment::errorConnectionLost);
-                    logger.log(Level.INFO, "Connection started");
-                    Connection.getInstance().getProducts(this::productGot, (e) -> {fragment.error();});
-                    logger.log(Level.INFO, "Products request sent");
+        if(!Connection.isInstanceStarted()) {
+            Connection.startInstance(() -> {
+                Connection.getInstance().setProductsUpdatedPromise(() -> {
+                    Connection.getInstance().getNotStoredProducts(viewModel.getProductsData(), product -> productGot(product, false), (e) -> fragment.error());
                 });
-            } else {
-                Connection.getInstance().getProducts(this::productGot, (e) -> {fragment.error();});
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+                Connection.getInstance().setConnectionLostPromise(fragment::errorConnectionLost);
+                if(!productsInDB) {
+                    logger.log(Level.INFO, "Connection started");
+                    Connection.getInstance().getProducts(product -> productGot(product, false), (e) -> {fragment.error();});
+                    logger.log(Level.INFO, "Products request sent");
+                } else {// If there are products in the database ask for the new ones
+                    Connection.getInstance().getNotStoredProducts(viewModel.getProductsData(), product -> productGot(product, false), (e) -> fragment.error());
+                }
+            });
+        } else {
+            if(!this.productsInDB)
+                Connection.getInstance().getProducts(product -> productGot(product, false), (e) -> {fragment.error();});
         }
     }
-    private void productGot(Product product) {
+
+    private void productGot(Product product, boolean fromLocal) {
         ImageCache.setImage(product.getImagePath(), Drawable.createFromStream(new ByteArrayInputStream(product.getImage()), "remote"));
-        List<Product> products = viewModel.getProductsData();
+        if(!fromLocal) {
+            productDAO.insertProduct(product);
+        }
+        List<Product> products = new ArrayList<>(viewModel.getProductsData());
         products.add(product);
         fragment.requireActivity().runOnUiThread(() -> {
             viewModel.setProducts(products);

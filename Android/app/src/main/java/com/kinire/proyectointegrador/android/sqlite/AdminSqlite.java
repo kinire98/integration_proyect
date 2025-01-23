@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 class AdminSqlite extends SQLiteOpenHelper {
 
-    private static int VERSION = 1;
+    private static final int VERSION = 4;
 
     static final String DATABASE_NAME = "tpv_products";
     static final String USER_TABLE_NAME = "user";
@@ -24,14 +24,13 @@ class AdminSqlite extends SQLiteOpenHelper {
 
     static final String ID_COLUMN_NAME = "id";
     static final String NAME_COLUMN_NAME = "name";
-    static final String CREATE_CATEGORIES_TABLE = "CREATE TABLE " + CATEGORIES_TABLE_NAME + " (" +
-            ID_COLUMN_NAME + " INTEGER PRIMARY KEY, " +
-            NAME_COLUMN_NAME + " TEXT)";
 
 
     static final String PRICE_COLUMN_NAME = "price";
     static final String DATE_COLUMN_NAME = "date";
     static final String CATEGORY_ID_COLUMN_NAME = "category_id";
+    static final String CATEGORY_NAME_COLUMN_NAME = "category_name";
+    static final String IMAGE_PATH_COLUMN_NAME = "image_path";
     static final String IMAGE_COLUMN_NAME = "image";
 
     static final String CREATE_PRODUCTS_TABLE = "CREATE TABLE " + PRODUCTS_TABLE_NAME + " (" +
@@ -39,10 +38,10 @@ class AdminSqlite extends SQLiteOpenHelper {
             NAME_COLUMN_NAME + " TEXT, " +
             PRICE_COLUMN_NAME + " REAL, " +
             DATE_COLUMN_NAME + " TEXT, " +
-            CATEGORY_ID_COLUMN_NAME + " NUMBER " +
-            IMAGE_COLUMN_NAME + " BLOB, " +
-            "FOREING KEY (" + CATEGORY_ID_COLUMN_NAME + ") REFERENCES " + CATEGORIES_TABLE_NAME +"("
-            + ID_COLUMN_NAME +"));";
+            CATEGORY_ID_COLUMN_NAME + " NUMBER, " +
+            CATEGORY_NAME_COLUMN_NAME + " TEXT, " +
+            IMAGE_PATH_COLUMN_NAME + " TEXT, " +
+            IMAGE_COLUMN_NAME + " BLOB);";
 
 
 
@@ -53,7 +52,6 @@ class AdminSqlite extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
-        db.execSQL(CREATE_CATEGORIES_TABLE);
         db.execSQL(CREATE_PRODUCTS_TABLE);
     }
 

@@ -2,19 +2,18 @@ package com.kinire.proyectointegrador.android.utils;
 
 import android.content.Context;
 
+import com.kinire.proyectointegrador.android.sqlite.UserDAO;
 import com.kinire.proyectointegrador.components.User;
 
 public class UserAdmin {
-    private final SharedPreferencesManager sharedPreferencesManager;
+    private final UserDAO userDAO;
     public UserAdmin(Context context) {
-        this.sharedPreferencesManager = new SharedPreferencesManager(context);
+        this.userDAO = new UserDAO(context);
     }
     public User getUser() {
-        User user = new User();
-        user.setUser(sharedPreferencesManager.getUser());
-        return user;
+        return userDAO.getUser();
     }
     public void setUser(User user) {
-        sharedPreferencesManager.setUser(user.getUser());
+        userDAO.setUser(user);
     }
 }
