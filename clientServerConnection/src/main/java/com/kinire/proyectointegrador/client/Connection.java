@@ -312,13 +312,17 @@ public class Connection {
     }
     public void getNotStoredProducts(List<Product> products, ProductFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
+            products.forEach(product -> product.setImage(null));
             try {
+                logger.log(Level.SEVERE, "before request");
                 outputStream.writeObject(
                         new ProductMessageBuilder()
                                 .requestOfMissingProducts((ArrayList<Product>) products)
                                 .build()
                 );
+                logger.log(Level.SEVERE, "After request");
                 Integer numOfProducts = (Integer) inputStream.readObject();
+                logger.log(Level.SEVERE,  String.valueOf(numOfProducts));
                 for (int i = 0; i < numOfProducts; i++) {
                     Product product = (Product) inputStream.readObject();
                     successPromise.apply(product);

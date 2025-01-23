@@ -73,12 +73,15 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
         } else {
             if(!this.productsInDB)
                 Connection.getInstance().getProducts(product -> productGot(product, false), (e) -> {fragment.error();});
+            else
+                Connection.getInstance().getNotStoredProducts(viewModel.getProductsData(), product -> productGot(product, false), (e) -> fragment.error());
         }
     }
 
     private void productGot(Product product, boolean fromLocal) {
         ImageCache.setImage(product.getImagePath(), Drawable.createFromStream(new ByteArrayInputStream(product.getImage()), "remote"));
         if(!fromLocal) {
+            logger.log(Level.SEVERE, "HerEEEEEEEE");
             productDAO.insertProduct(product);
         }
         List<Product> products = new ArrayList<>(viewModel.getProductsData());
