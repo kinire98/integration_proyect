@@ -236,6 +236,7 @@ public class PurchaseImpl implements PurchaseDAO {
     @Override
     public boolean deletePurchase(long id) {
         boolean success = false;
+        purchasedProductDAO.deleteByPurchaseId(id);
         String query = "DELETE FROM purchases WHERE id = ?";
         try (Connection connection = DataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

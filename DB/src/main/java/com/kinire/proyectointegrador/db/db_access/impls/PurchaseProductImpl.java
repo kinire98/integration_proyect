@@ -162,4 +162,32 @@ public class PurchaseProductImpl implements PurchasedProductDAO {
         }
         return success;
     }
+
+    @Override
+    public boolean deleteByProductId(long productId) {
+        boolean success = false;
+        String query = "DELETE FROM purchased_products WHERE product_id = ?";
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, productId);
+            success = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return success;
+    }
+
+    @Override
+    public boolean deleteByPurchaseId(long purchaseId) {
+        boolean success = false;
+        String query = "DELETE FROM purchased_products WHERE purchase_id = ?";
+        try (Connection connection = DataSource.getConnection();
+                PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setLong(1, purchaseId);
+            success = statement.executeUpdate() == 1;
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return success;
+    }
 }

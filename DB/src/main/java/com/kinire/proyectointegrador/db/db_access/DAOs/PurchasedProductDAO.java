@@ -12,4 +12,6 @@ public interface PurchasedProductDAO {
     List<ShoppingCartItem> selectByProduct(long productId);
     boolean updatePurchasedProduct(long purchaseId, long productId, ShoppingCartItem item);
     boolean deletePurchasedProduct(long purchaseId, long productId);
+    boolean deleteByProductId(long productId);
+    boolean deleteByPurchaseId(long purchaseId);
 }

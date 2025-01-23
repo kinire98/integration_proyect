@@ -4,6 +4,7 @@ import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.db.db_access.DAOs.CategoryDAO;
 import com.kinire.proyectointegrador.db.db_access.DAOs.ProductDAO;
+import com.kinire.proyectointegrador.db.db_access.DAOs.PurchasedProductDAO;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -19,9 +20,12 @@ public class ProductImpl implements ProductDAO {
 
     private final CategoryDAO categoryDAO;
 
+    private final PurchasedProductDAO purchasedProductDAO;
+
     public ProductImpl() {
         this.logger = Logger.getLogger(CategoryImpl.class.getName());
         this.categoryDAO = new CategoryImpl();
+        this.purchasedProductDAO = new PurchaseProductImpl();
     }
 
 
@@ -189,6 +193,7 @@ public class ProductImpl implements ProductDAO {
     @Override
     public boolean deleteProduct(long id) {
         boolean success = false;
+        purchasedProductDAO.deleteByProductId(id);
         String query = "DELETE FROM products WHERE id=?";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
