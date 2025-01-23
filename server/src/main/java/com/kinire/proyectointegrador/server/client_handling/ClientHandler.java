@@ -74,6 +74,7 @@ public class ClientHandler extends Thread {
         try {
             handleConnections();
         } catch (IOException e) {
+            e.printStackTrace();
             logger.log(Level.SEVERE, e.getMessage());
         } catch (ClassNotFoundException e) {
             logger.log(Level.SEVERE, "Sike, that's the wrong class");
