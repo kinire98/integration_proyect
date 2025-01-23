@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
+import com.kinire.proyectointegrador.android.utils.StyleDissonancesCorrection;
 
 public class SettingsActivity extends AppCompatActivity {
 

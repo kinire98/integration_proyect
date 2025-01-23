@@ -34,6 +34,7 @@ public class ProductsListFragment extends Fragment {
 
     private ProductsListViewModel viewModel;
 
+    private ProductListAdapter adapter;
 
     private String ERROR_SAVED_PURCHASE_MESSAGE;
     private String CONNECTIVITY_LOST;
@@ -65,9 +66,12 @@ public class ProductsListFragment extends Fragment {
 
     private void setAdapter() {
         viewModel.getProducts().observe(getViewLifecycleOwner(), products -> {
-            ProductListAdapter adapter = new ProductListAdapter(requireContext(), R.layout.product_list_layout, products);
-            productList.invalidate();
-            productList.setAdapter(adapter);
+            if(adapter == null) {
+                ProductListAdapter adapter = new ProductListAdapter(requireContext(), R.layout.product_list_layout, products);
+                productList.setAdapter(adapter);
+            } else {
+                adapter.notifyDataSetChanged();
+            }
         });
     }
     private void setListeners() {

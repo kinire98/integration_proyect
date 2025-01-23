@@ -1,10 +1,9 @@
-package com.kinire.proyectointegrador.android.shared_preferences;
+package com.kinire.proyectointegrador.android.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.components.User;
 
 public class SharedPreferencesManager {
     private Context context;

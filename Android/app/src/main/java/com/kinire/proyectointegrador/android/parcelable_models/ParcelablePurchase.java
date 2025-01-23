@@ -17,18 +17,21 @@ import java.util.List;
 
 public class ParcelablePurchase implements Parcelable {
 
+    private final long id;
     private final String userName;
     private final LocalDate purchaseDate;
     private final List<ShoppingCartItem> shoppingCartItems;
     private final float totalPrice;
 
     public ParcelablePurchase(Purchase purchase) {
+        this.id = purchase.getId();
         this.userName = purchase.getUser().getUser();
         this.purchaseDate = purchase.getPurchaseDate();
         this.shoppingCartItems = purchase.getShoppingCartItems();
         this.totalPrice = purchase.getTotalPrice();
     }
     protected ParcelablePurchase(Parcel in) {
+        id = in.readLong();
         userName = in.readString();
         purchaseDate = LocalDate.parse(in.readString(), DateTimeFormatter.ISO_DATE);
         totalPrice = in.readFloat();
@@ -62,6 +65,7 @@ public class ParcelablePurchase implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
         dest.writeString(userName);
         dest.writeString(purchaseDate.format(DateTimeFormatter.ISO_DATE));
         dest.writeFloat(totalPrice);
@@ -89,6 +93,10 @@ public class ParcelablePurchase implements Parcelable {
             return new ParcelablePurchase[0];
         }
     };
+
+    public long getId() {
+        return id;
+    }
 
     public float getTotalPrice() {
         return totalPrice;

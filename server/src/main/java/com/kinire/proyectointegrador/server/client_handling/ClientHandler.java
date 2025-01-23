@@ -149,6 +149,10 @@ public class ClientHandler extends Thread {
             );
             createImage(message.getProduct().getImagePath(), message.getImageStream());
             signaler.signalProductUpdate();
+        } else if(message.isDeleteProductRequest()) {
+            outputStream.writeObject(
+                    DAOInstances.getProductDAO().deleteProduct(message.getProduct().getId())
+            );
         }
     }
     private void handleUserMessage(UserMessage message) throws IOException {

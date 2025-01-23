@@ -13,8 +13,7 @@ import com.kinire.proyectointegrador.android.ui.activities.ProductActionActivity
 import com.kinire.proyectointegrador.android.ui.activities.MainActivity;
 import com.kinire.proyectointegrador.android.ui.fragments.cart.ShoppingCartFragment;
 import com.kinire.proyectointegrador.android.ui.fragments.cart.ShoppingCartViewModel;
-import com.kinire.proyectointegrador.android.user_admin.UserAdmin;
-import com.kinire.proyectointegrador.android.utils.ImageCompression;
+import com.kinire.proyectointegrador.android.utils.UserAdmin;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;

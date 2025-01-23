@@ -10,18 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.image_cache.ImageCache;
-import com.kinire.proyectointegrador.client.Connection;
-import com.kinire.proyectointegrador.components.Product;
+import com.kinire.proyectointegrador.android.utils.ImageCache;
 import com.kinire.proyectointegrador.components.Purchase;
 
-import java.io.ByteArrayInputStream;
 import java.util.Locale;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ShopingCartAdapter extends BaseAdapter {

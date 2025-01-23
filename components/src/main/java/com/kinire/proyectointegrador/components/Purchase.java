@@ -18,7 +18,7 @@ public class Purchase implements Serializable {
 
     private ArrayList<ShoppingCartItem> shoppingCartItems;
 
-    public Purchase(long id, User user, ArrayList<ShoppingCartItem> shoppingCartItems) {
+    public Purchase(long id, LocalDate localDate, User user, ArrayList<ShoppingCartItem> shoppingCartItems) {
         this.id = id;
         this.user = user;
         this.shoppingCartItems = shoppingCartItems;

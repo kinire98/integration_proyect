@@ -9,7 +9,7 @@ import com.kinire.proyectointegrador.android.parcelable_models.ParcelablePurchas
 import com.kinire.proyectointegrador.android.ui.activities.PurchaseViewActivity;
 import com.kinire.proyectointegrador.android.ui.fragments.history.HistoryPurchaseFragment;
 import com.kinire.proyectointegrador.android.ui.fragments.history.HistoryPurchaseViewModel;
-import com.kinire.proyectointegrador.android.user_admin.UserAdmin;
+import com.kinire.proyectointegrador.android.utils.UserAdmin;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.components.User;

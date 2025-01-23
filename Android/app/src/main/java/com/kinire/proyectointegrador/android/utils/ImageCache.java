@@ -1,4 +1,4 @@
-package com.kinire.proyectointegrador.android.image_cache;
+package com.kinire.proyectointegrador.android.utils;
 
 import android.graphics.drawable.Drawable;
 

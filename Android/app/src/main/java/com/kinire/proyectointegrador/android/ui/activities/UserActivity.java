@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.UserActivityController;
-import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
+import com.kinire.proyectointegrador.android.utils.StyleDissonancesCorrection;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;

@@ -1,7 +1,6 @@
 package com.kinire.proyectointegrador.android.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.image_cache.ImageCache;
-import com.kinire.proyectointegrador.client.Connection;
+import com.kinire.proyectointegrador.android.utils.ImageCache;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.ShoppingCartItem;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Locale;
 

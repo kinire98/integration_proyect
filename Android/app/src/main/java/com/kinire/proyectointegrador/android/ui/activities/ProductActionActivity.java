@@ -1,7 +1,5 @@
 package com.kinire.proyectointegrador.android.ui.activities;
 
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -18,8 +16,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.ProductActionActivityController;
-import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
-import com.kinire.proyectointegrador.android.image_cache.ImageCache;
+import com.kinire.proyectointegrador.android.utils.StyleDissonancesCorrection;
+import com.kinire.proyectointegrador.android.utils.ImageCache;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
 import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;

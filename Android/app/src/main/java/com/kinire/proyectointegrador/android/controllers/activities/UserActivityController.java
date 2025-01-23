@@ -3,11 +3,10 @@ package com.kinire.proyectointegrador.android.controllers.activities;
 import android.content.Intent;
 import android.view.View;
 
-import com.kinire.proyectointegrador.android.controllers.fragments.HistoryPurchaseFragmentController;
 import com.kinire.proyectointegrador.android.controllers.fragments.ShoppingCartFragmentController;
 import com.kinire.proyectointegrador.android.ui.activities.MainActivity;
 import com.kinire.proyectointegrador.android.ui.activities.UserActivity;
-import com.kinire.proyectointegrador.android.user_admin.UserAdmin;
+import com.kinire.proyectointegrador.android.utils.UserAdmin;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.User;
 

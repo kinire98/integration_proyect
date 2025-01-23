@@ -28,6 +28,8 @@ public class ProductMessage implements Serializable {
 
     private final boolean requestByIds;
 
+    private final boolean deleteProductRequest;
+
     private final long[] ids;
 
     private final long id;
@@ -41,7 +43,7 @@ public class ProductMessage implements Serializable {
 
     ProductMessage(boolean allProductsRequest, boolean singleProductRequest, boolean insertProductRequest,
                     boolean requestByCategory, boolean requestOfMissingProducts, boolean requestOfUpdatedProducts,
-                    boolean requestByIds, long[] ids, long id, ArrayList<Product> products, Product product,
+                    boolean requestByIds, boolean deleteProductRequest, long[] ids, long id, ArrayList<Product> products, Product product,
                    byte[] imageStream) {
         this.allProductsRequest = allProductsRequest;
         this.singleProductRequest = singleProductRequest;
@@ -50,6 +52,7 @@ public class ProductMessage implements Serializable {
         this.requestOfMissingProducts = requestOfMissingProducts;
         this.requestOfUpdatedProducts = requestOfUpdatedProducts;
         this.requestByIds = requestByIds;
+        this.deleteProductRequest = deleteProductRequest;
         this.ids = ids;
         this.id = id;
         this.products = products;
@@ -103,5 +106,9 @@ public class ProductMessage implements Serializable {
 
     public boolean isInsertProductRequest() {
         return insertProductRequest;
+    }
+
+    public boolean isDeleteProductRequest() {
+        return deleteProductRequest;
     }
 }

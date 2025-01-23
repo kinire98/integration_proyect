@@ -114,12 +114,31 @@ public class Connection {
             }
         }).start();
     }
+    //Update as in create
     public void updateProduct(Product product, InputStream imageStream, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
                 outputStream.writeObject(
                         new ProductMessageBuilder()
                                 .insertProductRequest(product, imageStream)
+                                .build()
+                );
+                Boolean success = (Boolean) inputStream.readObject();
+                if(success)
+                    successPromise.apply();
+                else
+                    failurePromise.apply(null);
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
+    }
+    public void deleteProduct(Product product, EmptyFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new ProductMessageBuilder()
+                                .deleteProductRequest(product)
                                 .build()
                 );
                 Boolean success = (Boolean) inputStream.readObject();
@@ -205,6 +224,24 @@ public class Connection {
                                 .build()
                 );
                 logger.log(Level.INFO, "Reading value of uploaded purchase");
+                Boolean result = (Boolean) inputStream.readObject();
+                if(result)
+                    successPromise.apply();
+                else
+                    failurePromise.apply(null);
+            } catch (IOException | ClassNotFoundException e) {
+                failurePromise.apply(e);
+            }
+        }).start();
+    }
+    public void deletePurchase(Purchase purchase, EmptyFunction successPromise, ErrorFunction failurePromise) {
+        new Thread(() -> {
+            try {
+                outputStream.writeObject(
+                        new PurchaseMessageBuilder()
+                                .deletePurchaseRequest(purchase.getId())
+                                .build()
+                );
                 Boolean result = (Boolean) inputStream.readObject();
                 if(result)
                     successPromise.apply();

@@ -7,13 +7,11 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.kinire.proyectointegrador.android.R;
-import com.kinire.proyectointegrador.android.adapters.ProductListAdapter;
-import com.kinire.proyectointegrador.android.image_cache.ImageCache;
+import com.kinire.proyectointegrador.android.utils.ImageCache;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
 import com.kinire.proyectointegrador.android.ui.activities.ProductActionActivity;
 import com.kinire.proyectointegrador.android.ui.fragments.products.ProductsListFragment;
 import com.kinire.proyectointegrador.android.ui.fragments.products.ProductsListViewModel;
-import com.kinire.proyectointegrador.android.utils.ImageCompression;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
 

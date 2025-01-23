@@ -12,9 +12,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.adapters.PurchaseViewAdapter;
-import com.kinire.proyectointegrador.android.correct_style_dissonances.StyleDissonancesCorrection;
+import com.kinire.proyectointegrador.android.controllers.activities.PurchaseViewActivityController;
+import com.kinire.proyectointegrador.android.utils.StyleDissonancesCorrection;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelablePurchase;
 
 import java.time.format.DateTimeFormatter;
@@ -26,7 +28,9 @@ public class PurchaseViewActivity extends AppCompatActivity {
     private ListView list;
     private TextView dateField;
     private TextView priceField;
+    private FloatingActionButton deleteButton;
 
+    private PurchaseViewActivityController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class PurchaseViewActivity extends AppCompatActivity {
         this.setAdapter();
         this.setUpToolbar();
         this.setFieldValues();
+        this.setListeners();
         StyleDissonancesCorrection.setStatusBarCorrectColor(this);
     }
 
@@ -58,6 +63,8 @@ public class PurchaseViewActivity extends AppCompatActivity {
         this.list = findViewById(R.id.list);
         this.dateField = findViewById(R.id.date_field);
         this.priceField = findViewById(R.id.price_field);
+        this.deleteButton = findViewById(R.id.delete_button);
+        this.controller = new PurchaseViewActivityController(this);
     }
 
     private void setAdapter() {
@@ -74,6 +81,14 @@ public class PurchaseViewActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private void setListeners() {
+        this.deleteButton.setOnClickListener(controller);
+    }
+
+    public ParcelablePurchase getPurchase() {
+        return purchase;
     }
 
     @Override

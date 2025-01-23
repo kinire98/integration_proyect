@@ -1,8 +1,7 @@
-package com.kinire.proyectointegrador.android.user_admin;
+package com.kinire.proyectointegrador.android.utils;
 
 import android.content.Context;
 
-import com.kinire.proyectointegrador.android.shared_preferences.SharedPreferencesManager;
 import com.kinire.proyectointegrador.components.User;
 
 public class UserAdmin {

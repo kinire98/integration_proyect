@@ -1,7 +1,6 @@
-package com.kinire.proyectointegrador.android.correct_style_dissonances;
+package com.kinire.proyectointegrador.android.utils;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import com.kinire.proyectointegrador.android.R;
 
