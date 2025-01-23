@@ -127,8 +127,8 @@ public class ProductImpl implements ProductDAO {
         if(productsAlreadyFetched.isEmpty())
             throw new IllegalArgumentException("Product list must have some product");
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products INNER JOIN tpv_test.categories c on products.category_id = c.id" +
-                " WHERE products.id NOT IN (?" + ", ?".repeat(productsAlreadyFetched.size() - 1) + ")";
+        String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on products.category_id = c.id" +
+                " WHERE p.id NOT IN (?" + ", ?".repeat(productsAlreadyFetched.size() - 1) + ")";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             for (int i = 0; i < productsAlreadyFetched.size(); i++) {
