@@ -25,6 +25,7 @@ public class MainActivityController {
 
     private List<Product> productList;
 
+    private boolean startUserActivity = false;
 
     public MainActivityController(MainActivity activity) {
         this.activity = activity;
@@ -37,13 +38,7 @@ public class MainActivityController {
             startUserNameActivity();
             return;
         }
-        if(username.isAdmin()) {
-            this.activity.showAddProducts();
-            this.activity.hideCart();
-        } else {
-            this.activity.hideAddProducts();
-            this.activity.showCart();
-        }
+
     }
 
     /**
@@ -53,9 +48,25 @@ public class MainActivityController {
      */
     public void startUserNameActivity() {
         Intent intent = new Intent(activity, UserActivity.class);
-        if(username.getUser().isEmpty())
+        if(username.getUser().isEmpty()) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startUserActivity = true;
+        }
         activity.startActivity(intent);
+    }
+
+    public boolean isStartUserActivity() {
+        return startUserActivity;
+    }
+
+    public void checkForUserFunctions() {
+        if(username.isAdmin()) {
+            this.activity.showAddProducts();
+            this.activity.hideCart();
+        } else {
+            this.activity.hideAddProducts();
+            this.activity.showCart();
+        }
     }
 
     /**

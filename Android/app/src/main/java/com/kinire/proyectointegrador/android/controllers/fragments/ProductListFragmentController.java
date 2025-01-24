@@ -19,6 +19,7 @@ import com.kinire.proyectointegrador.components.Product;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,6 +76,9 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
     private void initConnection() {
         if(!Connection.isInstanceStarted()) {
             Connection.startInstance(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {}
                 Connection.getInstance().setProductsUpdatedPromise(() -> {
                     Connection.getInstance().getNotStoredProducts(viewModel.getProductsData(), product -> productGot(product, false), (e) -> fragment.error());
                 });
