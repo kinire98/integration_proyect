@@ -6,6 +6,7 @@ package com.kinire.proyectointegrador.desktop.ui.frame;
 
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
+import com.kinire.proyectointegrador.desktop.controller.MainFrameController;
 import com.kinire.proyectointegrador.desktop.ui.list_renderer.CustomRenderer;
 import com.kinire.proyectointegrador.desktop.utils.ImageCache;
 
@@ -13,9 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,42 +26,75 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-    private final static Color mainBlue = new Color(21, 94, 149);
+
+    private final static String TITLE = "Karrefú";
+
+
+    private final static Color MAIN_BLUE = new Color(21, 94, 149);
     private List<Product> products;
+    private final DefaultListModel<Product> listModel = new DefaultListModel<>();
+
+    private int i = 0;// No es una variable local por las lambdas
+
+    private boolean connectionStarted = false;
+
+    private final MainFrameController controller;
+
     public MainFrame() {
-        UIManager.put("MenuBar.background", mainBlue);
         initComponents();
         setLocationRelativeTo(null);
         this.products = new ArrayList<>();
         initList();
+        setTitle(TITLE);
+        System.setProperty("java.awt.application.name", TITLE);
+        this.controller = new MainFrameController(this);
+        productsList.addMouseListener(controller);
     }
-    private int i = 0;// No es una variable local por las lambdas
+
+
     private void initList() {
-        DefaultListModel<Product> listModel = new DefaultListModel<>();
+        i = 0;
         listModel.clear();
-        Connection.startInstance(() -> {
-            Connection.getInstance().setConnectionLostPromise(() -> {
-                // TODO: connection lost promise here
+        if(!connectionStarted) {
+            Connection.startInstance(() -> {
+                Connection.getInstance().setConnectionLostPromise(() -> {
+                    // TODO: connection lost promise here
+                });
+                Connection.getInstance().setProductsUpdatedPromise(() -> {
+                    initList();
+                });
+                Connection.getInstance().getProducts(product -> {
+                    try {
+                        ImageCache.putImage(product.getImagePath(), new ImageIcon(ImageIO.read(new ByteArrayInputStream(product.getImage()))));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    SwingUtilities.invokeLater(() -> {
+                        listModel.add(i, product);
+                        i++;
+                    });
+                }, e -> {
+
+                });
             });
-            Connection.getInstance().setProductsUpdatedPromise(() -> {
-                // TODO: products updated here
-            });
+            connectionStarted = true;
+        } else {
             Connection.getInstance().getProducts(product -> {
                 try {
-                    System.out.println(product.getImage()[0]);
-                    System.out.println(product.getImage()[product.getImage().length / 2]);
-                    System.out.println(product.getName());
                     ImageCache.putImage(product.getImagePath(), new ImageIcon(ImageIO.read(new ByteArrayInputStream(product.getImage()))));
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 listModel.add(i, product);
                 i++;
+                productsList.setModel(listModel);
             }, e -> {
 
             });
-        });
-        productsList.setCellRenderer(new CustomRenderer());
+        }
+
         productsList.setModel(listModel);
+        productsList.setCellRenderer(new CustomRenderer());
     }
 
 
@@ -85,14 +117,16 @@ public class MainFrame extends javax.swing.JFrame {
         productsPanel = new javax.swing.JPanel();
         productsLabel = new javax.swing.JLabel();
         productsScroll = new javax.swing.JScrollPane();
-        productsList = new JList<Product>();
+        productsList = new javax.swing.JList();
         shoppingCartPanel = new javax.swing.JPanel();
         shoppingCartLabel = new javax.swing.JLabel();
         shoppingCartItemsScroll = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        shoppingCartTable = new javax.swing.JTable();
         roundedPanel2 = new com.kinire.proyectointegrador.desktop.ui.modifiedComponents.RoundedPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        notWellSeenLabel1 = new javax.swing.JLabel();
+        notWellSeenLabel2 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         saveTo = new javax.swing.JMenuItem();
@@ -152,6 +186,7 @@ public class MainFrame extends javax.swing.JFrame {
         productsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         productsLabel.setText("Productos");
 
+        productsList.setModel(this.listModel);
         productsScroll.setViewportView(productsList);
 
         javax.swing.GroupLayout productsPanelLayout = new javax.swing.GroupLayout(productsPanel);
@@ -176,22 +211,22 @@ public class MainFrame extends javax.swing.JFrame {
         shoppingCartLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         shoppingCartLabel.setText("Carrito");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        shoppingCartTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Producto", "Precio", "Cantidad"
+                "Producto", "Precio unitario", "Cantidad", "Precio total"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Float.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -202,7 +237,7 @@ public class MainFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        shoppingCartItemsScroll.setViewportView(jTable1);
+        shoppingCartItemsScroll.setViewportView(shoppingCartTable);
 
         javax.swing.GroupLayout shoppingCartPanelLayout = new javax.swing.GroupLayout(shoppingCartPanel);
         shoppingCartPanel.setLayout(shoppingCartPanelLayout);
@@ -212,7 +247,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(shoppingCartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(shoppingCartItemsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(shoppingCartLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
+                    .addComponent(shoppingCartLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 606, Short.MAX_VALUE))
                 .addContainerGap())
         );
         shoppingCartPanelLayout.setVerticalGroup(
@@ -254,6 +289,18 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        notWellSeenLabel1.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        notWellSeenLabel1.setText("Si los productos no se ven bien,");
+
+        notWellSeenLabel2.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
+        notWellSeenLabel2.setForeground(new java.awt.Color(21, 94, 149));
+        notWellSeenLabel2.setText("<html><a>pulsa aquí</a></html>");
+        notWellSeenLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                notWellSeenLabel2MouseReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -275,6 +322,12 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(settingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGap(225, 225, 225)
+                .addComponent(notWellSeenLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(notWellSeenLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -293,7 +346,11 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(roundedPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(shoppingCartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(productsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(30, 30, 30))
+                .addGap(10, 10, 10)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(notWellSeenLabel1)
+                    .addComponent(notWellSeenLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         fileMenu.setText("Archivo");
@@ -432,6 +489,10 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_saveToActionPerformed
 
+    private void notWellSeenLabel2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_notWellSeenLabel2MouseReleased
+        initList();
+    }//GEN-LAST:event_notWellSeenLabel2MouseReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu Products;
@@ -442,15 +503,16 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem emptyPurchaseMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JLabel notWellSeenLabel1;
+    private javax.swing.JLabel notWellSeenLabel2;
     private javax.swing.JMenuItem open;
     private javax.swing.JMenuItem openProductView;
     private javax.swing.JMenuItem previousPurchasesMenu;
     private javax.swing.JLabel productsLabel;
-    private JList<Product> productsList;
+    private javax.swing.JList<Product> productsList;
     private javax.swing.JPanel productsPanel;
     private javax.swing.JScrollPane productsScroll;
     private javax.swing.JButton purchaseHistoryButton;
@@ -463,6 +525,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel shoppingCartLabel;
     private javax.swing.JMenu shoppingCartMenu;
     private javax.swing.JPanel shoppingCartPanel;
+    private javax.swing.JTable shoppingCartTable;
     private com.kinire.proyectointegrador.components.User user;
     // End of variables declaration//GEN-END:variables
 }
