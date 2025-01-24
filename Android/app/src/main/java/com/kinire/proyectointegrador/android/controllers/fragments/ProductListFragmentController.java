@@ -111,13 +111,12 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
      * @param product El producto a mostrar
      * @param fromLocal Indicador para saber si el producto está guardado en local o ha sido recibido en remoto
      */
-    private int test = 0;
     private void productGot(Product product, boolean fromLocal) {
         ImageCache.setImage(product.getImagePath(), Drawable.createFromStream(new ByteArrayInputStream(product.getImage()), "remote"));
         if(!fromLocal) {
             productDAO.insertProduct(product);
         }
-        List<Product> products = new ArrayList<>(viewModel.getProductsData());
+        List<Product> products = viewModel.getProductsData();
         products.add(product);
         fragment.requireActivity().runOnUiThread(() -> {
             viewModel.setProducts(products);
