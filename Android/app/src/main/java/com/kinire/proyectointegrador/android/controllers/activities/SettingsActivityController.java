@@ -51,7 +51,6 @@ public class SettingsActivityController implements AdapterView.OnItemSelectedLis
             this.manager.setTheme(ThemeManager.Options.LIGHT_THEME);
         else if (position == 2)
             this.manager.setTheme(ThemeManager.Options.DARK_THEME);
-        this.activity.getTheme().applyStyle(this.manager.getTheme(), true);
     }
 
     @Override

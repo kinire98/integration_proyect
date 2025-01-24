@@ -42,17 +42,17 @@ public class ThemeManager {
     public @StyleRes int getTheme() {
         int value = sharedPreferences.getInt(THEME_SHARED_PREFERENCES_KEY, -1);
         if(value == Options.LIGHT_THEME.value)
-            return R.style.AppTheme;
+            return R.style.Theme_Android;
         else if (value == Options.DARK_THEME.value)
-            return R.style.AppTheme_Dark;
+            return R.style.Theme_Android;
         return getDefaultTheme();
     }
     private @StyleRes int getDefaultTheme() {
         int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if(currentNightMode == Configuration.UI_MODE_NIGHT_NO)
-            return R.style.AppTheme;
+            return R.style.Theme_Android;
         else
-            return R.style.AppTheme_Dark;
+            return R.style.Theme_Android;
     }
 
     /**

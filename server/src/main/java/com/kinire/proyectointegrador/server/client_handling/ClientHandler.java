@@ -10,6 +10,7 @@ import com.kinire.proyectointegrador.server.updates_signaling.UpdateSignaler;
 import com.kinire.proyectointegrador.users.UserMessage;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.Socket;
@@ -146,6 +147,10 @@ public class ClientHandler extends Thread {
                 outputStream.writeObject(false);
                 return;
             }
+            if(ImageIO.read(message.getImageStream()) == null) {
+                outputStream.writeObject(false);
+                return;
+            }
             message.getProduct().setImagePath("/root/pictures/" + message.getProduct().getImagePath() + ".png");
             DAOInstances.getCategoryDAO().insertCategory(message.getProduct().getCategory());
             message.getProduct().setCategory(DAOInstances.getCategoryDAO().selectByName(message.getProduct().getCategory().getName()));
@@ -211,8 +216,9 @@ public class ClientHandler extends Thread {
         boolean success = file.createNewFile();
         OutputStream outputStream = new FileOutputStream(file);
         byte[] buffer = new byte[1048576];
-        while(imageStream.read(buffer) != -1) {
-            outputStream.write(buffer);
+        int bytesRead;
+        while((bytesRead = imageStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
         }
         outputStream.close();
     }
