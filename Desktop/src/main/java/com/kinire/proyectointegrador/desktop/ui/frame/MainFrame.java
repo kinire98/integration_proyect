@@ -32,6 +32,8 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        user = new com.kinire.proyectointegrador.components.User();
+        currentPurchase = new com.kinire.proyectointegrador.components.Purchase();
         mainPanel = new javax.swing.JPanel();
         settingsButton = new javax.swing.JButton();
         savePurchase = new javax.swing.JButton();
@@ -40,12 +42,11 @@ public class MainFrame extends javax.swing.JFrame {
         productsPanel = new javax.swing.JPanel();
         productsLabel = new javax.swing.JLabel();
         productsScroll = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         shoppingCartPanel = new javax.swing.JPanel();
         shoppingCartLabel = new javax.swing.JLabel();
-        shoppingCartProductLabel = new javax.swing.JLabel();
-        shoppingCartAmountLabel = new javax.swing.JLabel();
-        shoppingCartPriceLabel = new javax.swing.JLabel();
         shoppingCartItemsScroll = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         roundedPanel2 = new com.kinire.proyectointegrador.desktop.ui.modifiedComponents.RoundedPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -75,7 +76,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         savePurchase.setBackground(new java.awt.Color(21, 94, 149));
-        savePurchase.setFont(new java.awt.Font("Dialog", 2, 18)); // NOI18N
+        savePurchase.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         savePurchase.setForeground(new java.awt.Color(255, 255, 255));
         savePurchase.setText("Guardar compra");
         savePurchase.addActionListener(new java.awt.event.ActionListener() {
@@ -108,38 +109,57 @@ public class MainFrame extends javax.swing.JFrame {
         productsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         productsLabel.setText("Productos");
 
+        productsScroll.setViewportView(jList1);
+
         javax.swing.GroupLayout productsPanelLayout = new javax.swing.GroupLayout(productsPanel);
         productsPanel.setLayout(productsPanelLayout);
         productsPanelLayout.setHorizontalGroup(
             productsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(productsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(productsScroll)
-                    .addComponent(productsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE))
+                .addComponent(productsScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(productsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
         );
         productsPanelLayout.setVerticalGroup(
             productsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(productsPanelLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(productsLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                .addGap(33, 33, 33)
-                .addComponent(productsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addComponent(productsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         shoppingCartLabel.setFont(new java.awt.Font("Dialog", 1, 32)); // NOI18N
         shoppingCartLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         shoppingCartLabel.setText("Carrito");
 
-        shoppingCartProductLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        shoppingCartProductLabel.setText("Producto");
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Producto", "Precio", "Cantidad"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
 
-        shoppingCartAmountLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        shoppingCartAmountLabel.setText("Cantidad");
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
-        shoppingCartPriceLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        shoppingCartPriceLabel.setText("Precio");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        shoppingCartItemsScroll.setViewportView(jTable1);
 
         javax.swing.GroupLayout shoppingCartPanelLayout = new javax.swing.GroupLayout(shoppingCartPanel);
         shoppingCartPanel.setLayout(shoppingCartPanelLayout);
@@ -148,15 +168,8 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(shoppingCartPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(shoppingCartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(shoppingCartItemsScroll)
-                    .addComponent(shoppingCartLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(shoppingCartPanelLayout.createSequentialGroup()
-                        .addComponent(shoppingCartProductLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(shoppingCartAmountLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(shoppingCartPriceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(shoppingCartItemsScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(shoppingCartLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
                 .addContainerGap())
         );
         shoppingCartPanelLayout.setVerticalGroup(
@@ -164,11 +177,6 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(shoppingCartPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(shoppingCartLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(shoppingCartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(shoppingCartProductLabel)
-                    .addComponent(shoppingCartAmountLabel)
-                    .addComponent(shoppingCartPriceLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(shoppingCartItemsScroll))
         );
@@ -178,9 +186,9 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Precio");
 
+        jTextField1.setEditable(false);
         jTextField1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("99999.99$");
 
         javax.swing.GroupLayout roundedPanel2Layout = new javax.swing.GroupLayout(roundedPanel2);
         roundedPanel2.setLayout(roundedPanel2Layout);
@@ -188,9 +196,9 @@ public class MainFrame extends javax.swing.JFrame {
             roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roundedPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextField1)
                 .addContainerGap())
         );
         roundedPanel2Layout.setVerticalGroup(
@@ -385,10 +393,13 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu Products;
     private javax.swing.JMenuItem changeUser;
+    private com.kinire.proyectointegrador.components.Purchase currentPurchase;
     private javax.swing.JButton emptyPurchase;
     private javax.swing.JMenuItem emptyPurchaseMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
@@ -404,13 +415,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem saveTo;
     private javax.swing.JButton seePurchases;
     private javax.swing.JButton settingsButton;
-    private javax.swing.JLabel shoppingCartAmountLabel;
     private javax.swing.JScrollPane shoppingCartItemsScroll;
     private javax.swing.JLabel shoppingCartLabel;
     private javax.swing.JMenu shoppingCartMenu;
     private javax.swing.JPanel shoppingCartPanel;
-    private javax.swing.JLabel shoppingCartPriceLabel;
-    private javax.swing.JLabel shoppingCartProductLabel;
+    private com.kinire.proyectointegrador.components.User user;
     private javax.swing.JMenu userMenu;
     // End of variables declaration//GEN-END:variables
 }

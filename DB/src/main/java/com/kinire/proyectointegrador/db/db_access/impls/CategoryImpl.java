@@ -20,11 +20,12 @@ public class CategoryImpl implements CategoryDAO {
     @Override
     public boolean insertCategory(Category category) {
         boolean success = false;
-        String query = "INSERT INTO categories (name) VALUES (?)";
+        String query = "INSERT IGNORE INTO categories (name) VALUES (?)";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, category.getName());
-            success = statement.executeUpdate() == 1;
+            int tmp = statement.executeUpdate();
+            success = tmp == 1 || tmp == 0;
         } catch (SQLException e) {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
         }
