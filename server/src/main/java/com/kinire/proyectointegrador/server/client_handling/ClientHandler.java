@@ -1,7 +1,6 @@
 package com.kinire.proyectointegrador.server.client_handling;
 
 import com.kinire.proyectointegrador.components.Product;
-import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.purchases.PurchaseMessage;
 import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
 import com.kinire.proyectointegrador.server.free_ports.UDPPorts;
@@ -12,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.io.*;
-import java.net.DatagramPacket;
 import java.net.Socket;
 import java.util.List;
 import java.util.logging.Level;
@@ -143,7 +141,7 @@ public class ClientHandler extends Thread {
                 );
             }
         } else if(message.isInsertProductRequest()) {
-            if(message.getImageStream().readAllBytes().length > 1_000_000_000) {
+            if(getBytes(message.getImageStream()).length > 1_000_000_000) {
                 outputStream.writeObject(false);
                 return;
             }
@@ -237,6 +235,14 @@ public class ClientHandler extends Thread {
         while((bytesRead = inputStream.read(buffer)) != -1)
             outputStream.write(buffer, 0, bytesRead);
         inputStream.close();
+        return outputStream.toByteArray();
+    }
+    private byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while((bytesRead = inputStream.read(buffer)) != -1)
+            outputStream.write(buffer, 0, bytesRead);
         return outputStream.toByteArray();
     }
 
