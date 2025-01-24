@@ -4,8 +4,19 @@
  */
 package com.kinire.proyectointegrador.desktop.ui.frame;
 
+import com.kinire.proyectointegrador.client.Connection;
+import com.kinire.proyectointegrador.components.Product;
+import com.kinire.proyectointegrador.desktop.ui.list_renderer.CustomRenderer;
+import com.kinire.proyectointegrador.desktop.utils.ImageCache;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -17,11 +28,43 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     private final static Color mainBlue = new Color(21, 94, 149);
+    private List<Product> products;
     public MainFrame() {
         UIManager.put("MenuBar.background", mainBlue);
         initComponents();
         setLocationRelativeTo(null);
+        this.products = new ArrayList<>();
+        initList();
     }
+    private int i = 0;// No es una variable local por las lambdas
+    private void initList() {
+        DefaultListModel<Product> listModel = new DefaultListModel<>();
+        listModel.clear();
+        Connection.startInstance(() -> {
+            Connection.getInstance().setConnectionLostPromise(() -> {
+                // TODO: connection lost promise here
+            });
+            Connection.getInstance().setProductsUpdatedPromise(() -> {
+                // TODO: products updated here
+            });
+            Connection.getInstance().getProducts(product -> {
+                try {
+                    System.out.println(product.getImage()[0]);
+                    System.out.println(product.getImage()[product.getImage().length / 2]);
+                    System.out.println(product.getName());
+                    ImageCache.putImage(product.getImagePath(), new ImageIcon(ImageIO.read(new ByteArrayInputStream(product.getImage()))));
+                } catch (Exception e) {
+                }
+                listModel.add(i, product);
+                i++;
+            }, e -> {
+
+            });
+        });
+        productsList.setCellRenderer(new CustomRenderer());
+        productsList.setModel(listModel);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,13 +79,13 @@ public class MainFrame extends javax.swing.JFrame {
         currentPurchase = new com.kinire.proyectointegrador.components.Purchase();
         mainPanel = new javax.swing.JPanel();
         settingsButton = new javax.swing.JButton();
-        savePurchase = new javax.swing.JButton();
-        emptyPurchase = new javax.swing.JButton();
-        seePurchases = new javax.swing.JButton();
+        purchaseHistoryButton = new javax.swing.JButton();
+        emptyPurchaseButton = new javax.swing.JButton();
+        savePurchaseButton = new javax.swing.JButton();
         productsPanel = new javax.swing.JPanel();
         productsLabel = new javax.swing.JLabel();
         productsScroll = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        productsList = new JList<Product>();
         shoppingCartPanel = new javax.swing.JPanel();
         shoppingCartLabel = new javax.swing.JLabel();
         shoppingCartItemsScroll = new javax.swing.JScrollPane();
@@ -54,7 +97,7 @@ public class MainFrame extends javax.swing.JFrame {
         fileMenu = new javax.swing.JMenu();
         saveTo = new javax.swing.JMenuItem();
         open = new javax.swing.JMenuItem();
-        userMenu = new javax.swing.JMenu();
+        addProduct = new javax.swing.JMenu();
         changeUser = new javax.swing.JMenuItem();
         Products = new javax.swing.JMenu();
         openProductView = new javax.swing.JMenuItem();
@@ -75,33 +118,33 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        savePurchase.setBackground(new java.awt.Color(21, 94, 149));
-        savePurchase.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        savePurchase.setForeground(new java.awt.Color(255, 255, 255));
-        savePurchase.setText("Guardar compra");
-        savePurchase.addActionListener(new java.awt.event.ActionListener() {
+        purchaseHistoryButton.setBackground(new java.awt.Color(21, 94, 149));
+        purchaseHistoryButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        purchaseHistoryButton.setForeground(new java.awt.Color(255, 255, 255));
+        purchaseHistoryButton.setText("Ver historial");
+        purchaseHistoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                savePurchaseActionPerformed(evt);
+                purchaseHistoryButtonActionPerformed(evt);
             }
         });
 
-        emptyPurchase.setBackground(new java.awt.Color(21, 94, 149));
-        emptyPurchase.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        emptyPurchase.setForeground(new java.awt.Color(255, 255, 255));
-        emptyPurchase.setText("Vaciar compra");
-        emptyPurchase.addActionListener(new java.awt.event.ActionListener() {
+        emptyPurchaseButton.setBackground(new java.awt.Color(21, 94, 149));
+        emptyPurchaseButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        emptyPurchaseButton.setForeground(new java.awt.Color(255, 255, 255));
+        emptyPurchaseButton.setText("Vaciar compra");
+        emptyPurchaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emptyPurchaseActionPerformed(evt);
+                emptyPurchaseButtonActionPerformed(evt);
             }
         });
 
-        seePurchases.setBackground(new java.awt.Color(21, 94, 149));
-        seePurchases.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        seePurchases.setForeground(new java.awt.Color(255, 255, 255));
-        seePurchases.setText("Ver compras");
-        seePurchases.addActionListener(new java.awt.event.ActionListener() {
+        savePurchaseButton.setBackground(new java.awt.Color(21, 94, 149));
+        savePurchaseButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        savePurchaseButton.setForeground(new java.awt.Color(255, 255, 255));
+        savePurchaseButton.setText("Guardar compra");
+        savePurchaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                seePurchasesActionPerformed(evt);
+                savePurchaseButtonActionPerformed(evt);
             }
         });
 
@@ -109,7 +152,7 @@ public class MainFrame extends javax.swing.JFrame {
         productsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         productsLabel.setText("Productos");
 
-        productsScroll.setViewportView(jList1);
+        productsScroll.setViewportView(productsList);
 
         javax.swing.GroupLayout productsPanelLayout = new javax.swing.GroupLayout(productsPanel);
         productsPanel.setLayout(productsPanelLayout);
@@ -224,9 +267,9 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(shoppingCartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(emptyPurchase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(seePurchases, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(savePurchase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(emptyPurchaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(savePurchaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(purchaseHistoryButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(roundedPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(20, 20, 20))
                     .addGroup(mainPanelLayout.createSequentialGroup()
@@ -241,11 +284,11 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(savePurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(purchaseHistoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(emptyPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(emptyPurchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(seePurchases, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(savePurchaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(roundedPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(shoppingCartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -275,7 +318,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        userMenu.setText("Usuario");
+        addProduct.setText("Usuario");
 
         changeUser.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         changeUser.setText("Cambiar usuario");
@@ -284,14 +327,14 @@ public class MainFrame extends javax.swing.JFrame {
                 changeUserActionPerformed(evt);
             }
         });
-        userMenu.add(changeUser);
+        addProduct.add(changeUser);
 
-        menuBar.add(userMenu);
+        menuBar.add(addProduct);
 
         Products.setText("Producto");
 
         openProductView.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        openProductView.setText("Abrir vista de producto");
+        openProductView.setText("Añadir producto");
         openProductView.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openProductViewActionPerformed(evt);
@@ -349,17 +392,17 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_settingsButtonActionPerformed
 
-    private void savePurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePurchaseActionPerformed
+    private void purchaseHistoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseHistoryButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_savePurchaseActionPerformed
+    }//GEN-LAST:event_purchaseHistoryButtonActionPerformed
 
-    private void emptyPurchaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emptyPurchaseActionPerformed
+    private void emptyPurchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emptyPurchaseButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_emptyPurchaseActionPerformed
+    }//GEN-LAST:event_emptyPurchaseButtonActionPerformed
 
-    private void seePurchasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seePurchasesActionPerformed
+    private void savePurchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePurchaseButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_seePurchasesActionPerformed
+    }//GEN-LAST:event_savePurchaseButtonActionPerformed
 
     private void previousPurchasesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousPurchasesMenuActionPerformed
         // TODO add your handling code here:
@@ -392,13 +435,13 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu Products;
+    private javax.swing.JMenu addProduct;
     private javax.swing.JMenuItem changeUser;
     private com.kinire.proyectointegrador.components.Purchase currentPurchase;
-    private javax.swing.JButton emptyPurchase;
+    private javax.swing.JButton emptyPurchaseButton;
     private javax.swing.JMenuItem emptyPurchaseMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel mainPanel;
@@ -407,19 +450,19 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem openProductView;
     private javax.swing.JMenuItem previousPurchasesMenu;
     private javax.swing.JLabel productsLabel;
+    private JList<Product> productsList;
     private javax.swing.JPanel productsPanel;
     private javax.swing.JScrollPane productsScroll;
+    private javax.swing.JButton purchaseHistoryButton;
     private com.kinire.proyectointegrador.desktop.ui.modifiedComponents.RoundedPanel roundedPanel2;
-    private javax.swing.JButton savePurchase;
+    private javax.swing.JButton savePurchaseButton;
     private javax.swing.JMenuItem savePurchaseMenu;
     private javax.swing.JMenuItem saveTo;
-    private javax.swing.JButton seePurchases;
     private javax.swing.JButton settingsButton;
     private javax.swing.JScrollPane shoppingCartItemsScroll;
     private javax.swing.JLabel shoppingCartLabel;
     private javax.swing.JMenu shoppingCartMenu;
     private javax.swing.JPanel shoppingCartPanel;
     private com.kinire.proyectointegrador.components.User user;
-    private javax.swing.JMenu userMenu;
     // End of variables declaration//GEN-END:variables
 }

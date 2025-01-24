@@ -111,6 +111,7 @@ public class AddProductFragmentController implements View.OnClickListener {
                     fragment.productSavedSuccesfully();
                 },
                 e -> {
+                    e.printStackTrace();
                     fragment.productNotSaved();
                 }
         );

@@ -142,6 +142,10 @@ public class ClientHandler extends Thread {
                 );
             }
         } else if(message.isInsertProductRequest()) {
+            if(message.getImageStream().readAllBytes().length > 1_000_000_000) {
+                outputStream.writeObject(false);
+                return;
+            }
             message.getProduct().setImagePath("/root/pictures/" + message.getProduct().getImagePath() + ".png");
             DAOInstances.getCategoryDAO().insertCategory(message.getProduct().getCategory());
             message.getProduct().setCategory(DAOInstances.getCategoryDAO().selectByName(message.getProduct().getCategory().getName()));

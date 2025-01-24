@@ -5,6 +5,8 @@
 package com.kinire.proyectointegrador.desktop.ui.dialogs;
 
 import com.kinire.proyectointegrador.client.Connection;
+import com.kinire.proyectointegrador.components.Product;
+import com.kinire.proyectointegrador.desktop.ui.frame.MainFrame;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -13,6 +15,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -24,14 +29,26 @@ public class AddProductDialog extends javax.swing.JDialog {
      * Creates new form AddProductDialog
      */
     private InputStream image;
-    private String name;
-    private String category;
-    private float price;
+
+    private static final String EMPTY_FIELD = "Campo vacío";
+    private static final String INCORRECT_FIELD = "El campo es incorrecto";
+    private static final String EMPTY_NAME_FIELD = "El campo del nombre está vacío";
+    private static final String EMPTY_CATEGORY_FIELD = "El campo de la categoría está vacío";
+    private static final String EMPTY_PRICE_FIELD = "El campo del precio está vacío";
+    private static final String INCORRECT_PRICE_FIELD = "El campo del precio no es válido";
+    private static final String EMPTY_IMAGE_FIELD = "No has seleccionado ninguna imagen";
+    private static final String ERROR_UPLOADING_PRODUCT = "Error guardando el producto";
+    private static final String ERROR = "Error";
+    private static final String PRODUCT_UPLOADED_SUCCSESFULLY = "El producto se ha guardado con éxito";
+    private static final String SUCCESS = "Éxito";
+    private static final String TITLE = "Añadir producto";
+
 
 
     public AddProductDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setTitle(TITLE);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -65,7 +82,12 @@ public class AddProductDialog extends javax.swing.JDialog {
 
         imageLabel.setText("Imagen:");
 
-        priceField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#,##0.###"))));
+        nameField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(21, 94, 149)));
+
+        categoryField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(21, 94, 149)));
+
+        priceField.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(21, 94, 149)));
+        priceField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("###0.###"))));
 
         imageButon.setBackground(new java.awt.Color(21, 94, 149));
         imageButon.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
@@ -192,29 +214,72 @@ public class AddProductDialog extends javax.swing.JDialog {
                    !priceValid() ||
                    !fileValid()
         ) {
-            JOptionPane.showMessageDialog(this, "Selecciona todos los campos",
-                    "Producto inválido", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Connection.getInstance().updateProduct(null, image, () -> {}, e -> {});
+        Product product = new Product();
+        product.setName(nameField.getText());
+        product.getCategory().setName(categoryField.getText());
+        product.setPrice(
+                Float.parseFloat(priceField.getText())
+        );
+        product.setImagePath(LocalDateTime.now().format(DateTimeFormatter.ofPattern("GyyyyddMMHHmmssAAAAnnnnnnn")));
+        product.setLastModified(LocalDate.now());
+        Connection.startInstance(() -> {
+            Connection.getInstance().updateProduct(product, image, () -> {
+                JOptionPane.showMessageDialog(this, PRODUCT_UPLOADED_SUCCSESFULLY, SUCCESS, JOptionPane.INFORMATION_MESSAGE);
+                this.setVisible(false);
+            }, e -> {
+                JOptionPane.showMessageDialog(this, ERROR_UPLOADING_PRODUCT, ERROR, JOptionPane.ERROR_MESSAGE);
+            });
+        });
 
     }//GEN-LAST:event_addProductButtonActionPerformed
 
     private boolean nameValid() {
-        return false;
+        if(nameField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, EMPTY_NAME_FIELD,
+                        EMPTY_FIELD, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     private boolean categoryValid() {
-        return false;
+        if(categoryField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, EMPTY_CATEGORY_FIELD,
+                    EMPTY_FIELD, JOptionPane.ERROR_MESSAGE);
+           return false;
+        }
+        return true;
     }
 
     private boolean priceValid() {
-        return false;
+        String content = priceField.getText();
+        if(content.isEmpty()) {
+            JOptionPane.showMessageDialog(this, EMPTY_PRICE_FIELD,
+                    EMPTY_FIELD, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            Float.parseFloat(content);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, INCORRECT_PRICE_FIELD,
+                    INCORRECT_FIELD, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     private boolean fileValid() {
-        return false;
+        if(image == null) {
+            JOptionPane.showMessageDialog(this, EMPTY_IMAGE_FIELD,
+                    EMPTY_FIELD, JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addProductButton;

@@ -37,7 +37,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="userMenu">
+        <Menu class="javax.swing.JMenu" name="addProduct">
           <Properties>
             <Property name="text" type="java.lang.String" value="Usuario"/>
           </Properties>
@@ -65,7 +65,7 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+P"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Abrir vista de producto"/>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir producto"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openProductViewActionPerformed"/>
@@ -154,9 +154,9 @@
                           <Component id="shoppingCartPanel" max="32767" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="emptyPurchase" alignment="0" max="32767" attributes="0"/>
-                              <Component id="seePurchases" alignment="0" max="32767" attributes="0"/>
-                              <Component id="savePurchase" alignment="0" max="32767" attributes="0"/>
+                              <Component id="emptyPurchaseButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="savePurchaseButton" alignment="0" max="32767" attributes="0"/>
+                              <Component id="purchaseHistoryButton" alignment="0" max="32767" attributes="0"/>
                               <Component id="roundedPanel2" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
@@ -177,11 +177,11 @@
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="savePurchase" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="purchaseHistoryButton" min="-2" pref="150" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="emptyPurchase" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="emptyPurchaseButton" min="-2" pref="150" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="seePurchases" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="savePurchaseButton" min="-2" pref="150" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="roundedPanel2" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -211,7 +211,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="settingsButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="savePurchase">
+        <Component class="javax.swing.JButton" name="purchaseHistoryButton">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="95" green="5e" red="15" type="rgb"/>
@@ -222,13 +222,13 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Guardar compra"/>
+            <Property name="text" type="java.lang.String" value="Ver historial"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="savePurchaseActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="purchaseHistoryButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="emptyPurchase">
+        <Component class="javax.swing.JButton" name="emptyPurchaseButton">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="95" green="5e" red="15" type="rgb"/>
@@ -242,10 +242,10 @@
             <Property name="text" type="java.lang.String" value="Vaciar compra"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="emptyPurchaseActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="emptyPurchaseButtonActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="seePurchases">
+        <Component class="javax.swing.JButton" name="savePurchaseButton">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="95" green="5e" red="15" type="rgb"/>
@@ -256,10 +256,10 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Ver compras"/>
+            <Property name="text" type="java.lang.String" value="Guardar compra"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="seePurchasesActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="savePurchaseButtonActionPerformed"/>
           </Events>
         </Component>
         <Container class="javax.swing.JPanel" name="productsPanel">
@@ -299,7 +299,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JList" name="jList1">
+                <Component class="javax.swing.JList" name="productsList">
                   <Properties>
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
                       <StringArray count="0"/>
