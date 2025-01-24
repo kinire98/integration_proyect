@@ -17,6 +17,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Modelo de producto que implementa Parcelable para así hacer el intercambio de productos entre
+ * Activities más eficientes
+ */
 public class ParcelableProduct implements Parcelable {
 
     private final long id;

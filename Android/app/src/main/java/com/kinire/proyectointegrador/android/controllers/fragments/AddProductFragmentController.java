@@ -10,7 +10,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.IdRes;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kinire.proyectointegrador.android.R;
+import com.kinire.proyectointegrador.android.ui.activities.MainActivity;
 import com.kinire.proyectointegrador.android.ui.fragments.add.AddProductFragment;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
@@ -21,6 +23,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Clase controlador encargada de manejar el fragmento dónde se añaden nuevos productos
+ */
 public class AddProductFragmentController implements View.OnClickListener {
 
     private AddProductFragment fragment = null;
@@ -61,13 +66,26 @@ public class AddProductFragmentController implements View.OnClickListener {
             uploadProduct();
     }
 
-    public void getImage() {
+    /**
+     * Clase encargada de lanzar el activity para que el usuario seleccione una imagen de su galería.
+     * Una vez seleccionada, en el ActivityResultLauncher se recibe la URI del elemento y se recoge
+     * su flujo de entrada. Al ser algo que el usuario hace voluntaria y conscientemente, no es necesario pedir
+     * ningún tipo de permiso especial
+     */
+    private void getImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         launcher.launch(intent);
     }
-    public void uploadProduct() {
+
+    /**
+     * Sube un producto al servidor con todos los datos necesarios. Nombre, precio, categoría, ruta imagen,
+     * última modificación y la imagen cómo tal. Se crea el componente Purchase necesario y en envía a través de la red
+     * Si la subida es exitosa aparecerá un toast con un mensaje de Producto guardado, sino de error de conexión, en cualquiera
+     * de los casos volverá a la vista de los productos
+     */
+    private void uploadProduct() {
         String name = fragment.getNameField();
         String category = fragment.getCategoryField();
         float price = fragment.getPriceField();
@@ -96,6 +114,11 @@ public class AddProductFragmentController implements View.OnClickListener {
                     fragment.productNotSaved();
                 }
         );
+        returnToProductFragment();
+    }
+    private void returnToProductFragment() {
+        BottomNavigationView navigationView = ((MainActivity) fragment.requireActivity()).findViewById(R.id.nav_view);
+        navigationView.setSelectedItemId(R.id.navigation_products_list);
     }
 
 }

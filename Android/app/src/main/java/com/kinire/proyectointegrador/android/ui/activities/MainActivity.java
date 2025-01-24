@@ -19,9 +19,17 @@ import androidx.navigation.ui.NavigationUI;
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.MainActivityController;
 import com.kinire.proyectointegrador.android.databinding.ActivityMainBinding;
+import com.kinire.proyectointegrador.android.utils.ThemeManager;
 import com.kinire.proyectointegrador.client.Connection;
 
-
+/**
+ * Activity principal de la aplicación.
+ * El código referente a la creación de la estructura para los fragments está generado automáticamente por
+ * Android Studio.
+ * Se quita el título de la ActionBar, se crean métodos para esconder ciertas partes de la aplicación
+ * dependiendo del usuario que las utilice y se crean un menú de opciones y se controlan los eventos
+ * de pulsado de los iconos
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;

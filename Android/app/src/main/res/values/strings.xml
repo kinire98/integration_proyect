@@ -47,8 +47,14 @@
     <string name="image_not_saved">Imagen no guardada</string>
     <string name="empty_fields">Campos vacíos</string>
     <string name="error">Error</string>
+    <string name="theme">Tema:</string>
+    <string-array name="themes">
+        <item>Dispositivo</item>
+        <item>Claro</item>
+        <item>Oscuro</item>
+    </string-array>
     <string name="shared_preferences_key">4b2c3564-f6f7-4837-83da-33a9f1efcfbf</string>
-    <string name="user_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
+    <string name="theme_shared_preferences_key">1674597a-8ec0-48b9-adb2-4420fdbfae6</string>
     <string name="product_parcelable_key">c8117227-4702-4f62-bf1e-ba339e6e12e</string>
     <string name="amount_parcelable_key">331844e4-a47d-4013-84d2-e4a1d8b3a4ad</string>
     <string name="position_parcelable_key">7d4e2a97-95cd-47e5-bd01-2b4107d84def</string>

@@ -20,6 +20,9 @@ import com.kinire.proyectointegrador.client.Connection;
 
 import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
+/**
+ * Fragmento encargado de mostrar el historial de compras
+ */
 public class HistoryPurchaseFragment extends Fragment {
 
     private FragmentHistoryPurchaseBinding binding;
@@ -68,6 +71,9 @@ public class HistoryPurchaseFragment extends Fragment {
         this.purchasesHistoryList.setOnItemClickListener(controller);
     }
 
+    /**
+     * Muestra un Toast de error cuándo haya un error de conexión con el servidor
+     */
     public void errorConnectionToServer() {
         requireActivity().runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext(),

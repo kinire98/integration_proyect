@@ -23,6 +23,9 @@ import java.util.List;
 
 import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
+/**
+ * Fragment encargado de la vista de la lista de productos disponibles
+ */
 public class ProductsListFragment extends Fragment {
 
 
@@ -78,6 +81,9 @@ public class ProductsListFragment extends Fragment {
         this.productList.setOnItemClickListener(controller);
     }
 
+    /**
+     * Muestra un TOAST de error
+     */
     public void error() {
         requireActivity().runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
@@ -86,6 +92,10 @@ public class ProductsListFragment extends Fragment {
                     .show();
         });
     }
+
+    /**
+     * Muestra un Toast de error en caso de que se haya perdido la conexión.
+     */
     public void errorConnectionLost() {
         requireActivity().runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()

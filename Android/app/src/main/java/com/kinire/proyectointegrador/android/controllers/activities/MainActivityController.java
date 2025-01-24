@@ -11,6 +11,11 @@ import com.kinire.proyectointegrador.components.User;
 
 import java.util.List;
 
+/**
+ * Controlador para el MainActivity.
+ * Este se encarga de decidir si es necesario iniciar la vista para que el usuario inicie sesión y
+ * que elementos va a enseñar en la barra inferior de navegación
+ */
 public class MainActivityController {
 
     private final User username;
@@ -28,7 +33,7 @@ public class MainActivityController {
         userNameManagement();
     }
     private void userNameManagement() {
-        if(username.getUser().isEmpty()) {
+        if(username.getUser().isEmpty()) { // Si no hay ningún usuario guardado, se va a la parte de inicio de sesión
             startUserNameActivity();
             return;
         }
@@ -40,11 +45,22 @@ public class MainActivityController {
             this.activity.showCart();
         }
     }
+
+    /**
+     * Método encargado de iniciar el Activity para que el usuario introduzca sus datos de contacto.
+     * En caso de no haber ningún usuario guardado, se eliminará del stack de Activities al MainActivity
+     * para evitar que se pueda interactuar con la aplicación sin haber iniciado sesión
+     */
     public void startUserNameActivity() {
         Intent intent = new Intent(activity, UserActivity.class);
+        if(username.getUser().isEmpty())
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }
 
+    /**
+     * Inicia el Activity para cambiar algunos ajustes de la aplicación
+     */
     public void startSettingsActivity() {
         Intent intent = new Intent(activity, SettingsActivity.class);
         activity.startActivity(intent);

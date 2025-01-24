@@ -10,6 +10,9 @@ import com.kinire.proyectointegrador.android.utils.UserAdmin;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.User;
 
+/**
+ * Controlador del Activity User. Se encarga de la gestión de los usuarios y las llamadas al servidor
+ */
 public class UserActivityController implements View.OnClickListener {
 
     private UserActivity activity;
@@ -25,6 +28,13 @@ public class UserActivityController implements View.OnClickListener {
         this.userAdmin = new UserAdmin(activity);
     }
 
+    /**
+     * Este método se encarga de recoger el nombre de usuario que introdujo el usuario.
+     * Si no está inicializada la conexión, la inicia y sino la utiliza directamente.
+     * En caso de existir el nombre de usuario, se pedirá que introduzca la contraseña de dicho usuario
+     * En caso de no existir, se pedirá al usuario que introduzca una nueva contraseña.
+     * @param v The view that was clicked.
+     */
     @Override
     public void onClick(View v) {
         this.username = activity.getUserNameContent();

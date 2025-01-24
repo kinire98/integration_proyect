@@ -14,6 +14,10 @@ import com.kinire.proyectointegrador.components.User;
 
 import java.util.ArrayList;
 
+/**
+ * Clase encargada de controlar el Activity PurchaseView.
+ * Su única funcionalidad es la de borrar una compra previamente hecha
+ */
 public class PurchaseViewActivityController implements View.OnClickListener {
 
     private final PurchaseViewActivity activity;
@@ -31,12 +35,17 @@ public class PurchaseViewActivityController implements View.OnClickListener {
             deletePurchase();
     }
 
+    /**
+     * Genera la compra de los datos recibidos y le envía la señal de borrado al servidor.
+     * Si se borra con éxito finaliza el Activity, sino muestra un Toast con un mensaje de error
+     */
     private void deletePurchase() {
         ParcelablePurchase parcelablePurchase = activity.getPurchase();
         User user = new User();
         user.setUser(parcelablePurchase.getUserName());
         Purchase purchase = new Purchase(parcelablePurchase.getId(), parcelablePurchase.getPurchaseDate(), user, (ArrayList<ShoppingCartItem>) parcelablePurchase.getShoppingCartItems());
-        Connection.getInstance().deletePurchase(purchase, () -> {}, e -> {});
-        activity.finish();
+        Connection.getInstance().deletePurchase(purchase, activity::finish, e -> {
+            activity.error();
+        });
     }
 }

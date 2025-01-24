@@ -14,6 +14,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO de productos para SQLite.
+ */
 public class ProductDAO {
 
     private final AdminSqlite sqlite;

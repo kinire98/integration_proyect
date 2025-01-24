@@ -1,9 +1,11 @@
 package com.kinire.proyectointegrador.android.ui.fragments.cart;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * Clase Modelo-Vista encargada de la persistencia de los datos, a la hora de cambiar los fragmentos
+ */
 import com.kinire.proyectointegrador.components.Purchase;
 
 public class ShoppingCartViewModel extends ViewModel {

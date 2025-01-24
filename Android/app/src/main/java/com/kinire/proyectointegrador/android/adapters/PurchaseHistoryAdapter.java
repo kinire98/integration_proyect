@@ -18,6 +18,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Adaptador para la lista de historial de compras.
+ */
 public class PurchaseHistoryAdapter extends BaseAdapter {
 
     private final Context context;

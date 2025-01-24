@@ -19,11 +19,16 @@ import com.kinire.proyectointegrador.android.controllers.activities.ProductActio
 import com.kinire.proyectointegrador.android.utils.StyleDissonancesCorrection;
 import com.kinire.proyectointegrador.android.utils.ImageCache;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelableProduct;
+import com.kinire.proyectointegrador.android.utils.ThemeManager;
 import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;
 
 import java.util.Locale;
 
+/**
+ * Activity encargado de añadir productos a la cesta o editar los que ya están introducidos
+ * Recoge el producto parcelado y para mostrar la imagen la coge de la caché
+ */
 public class ProductActionActivity extends AppCompatActivity {
 
 
@@ -142,17 +147,20 @@ public class ProductActionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Cambia la cantidad de producto mostrada
+     * @param amount Cantidad de producto
+     */
     public void setAmount(int amount) {
         this.productAmount.setText(String.valueOf(amount));
     }
 
+    /**
+     * Getter para el producto recogido de la parcela de intercambio entre Activities
+     * @return Producto
+     */
     public Product getProduct() {
         return product;
     }
-    public int getAmount() {
-        if(this.productAmount.getText() == null || this.productAmount.getText().toString().isEmpty())
-            return 0;
-        assert this.productAmount.getText() != null && !this.productAmount.getText().toString().isEmpty();
-        return Integer.parseInt(this.productAmount.getText().toString());
-    }
+
 }

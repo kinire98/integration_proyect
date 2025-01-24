@@ -14,7 +14,11 @@ import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.components.User;
 
-
+/**
+ * Controlador del fragmento del historial de compras.
+ * Este se encargará de recibir todas las compras que ha realizado el usuario anteriormente y mostrarlas.
+ * Si el usuario es administrador le enseñará todas las compras hechas.
+ */
 public class HistoryPurchaseFragmentController implements AdapterView.OnItemClickListener {
 
     private HistoryPurchaseFragment fragment;
@@ -26,10 +30,13 @@ public class HistoryPurchaseFragmentController implements AdapterView.OnItemClic
     public HistoryPurchaseFragmentController(HistoryPurchaseFragment fragment, HistoryPurchaseViewModel viewModel) {
         this.fragment = fragment;
         this.viewModel = viewModel;
-        UserAdmin userAdmin = new UserAdmin(fragment.requireContext());
-        User user = userAdmin.getUser();
         this.viewModel.setNoPurchasesMessage(fragment.getString(R.string.no_purchase_history));
         this.PURCHASE_PARCELABLE_KEY = fragment.getString(R.string.purchase_parcelable_key);
+        initConnection();
+    }
+    private void initConnection() {
+        UserAdmin userAdmin = new UserAdmin(fragment.requireContext());
+        User user = userAdmin.getUser();
         if(user.isAdmin()) {
             Connection.getInstance().getAllPurchases(purchases -> {
                 fragment.requireActivity().runOnUiThread(() -> {

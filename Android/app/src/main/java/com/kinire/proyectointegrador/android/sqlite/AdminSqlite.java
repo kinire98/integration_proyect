@@ -6,6 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+/**
+ * Clase encargada de ser el Ayudador para SQL
+ * Contiene todos los nombres de columnas y tablas para poder acceder a ellos desde los DAOs correspondientes
+ */
 class AdminSqlite extends SQLiteOpenHelper {
 
     private static final int VERSION = 4;

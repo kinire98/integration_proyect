@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.kinire.proyectointegrador.components.User;
 
+/**
+ * DAO de usuarios para SQLite
+ */
 public class UserDAO {
 
     private AdminSqlite sqlite;

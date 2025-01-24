@@ -18,10 +18,17 @@ import com.kinire.proyectointegrador.android.adapters.PurchaseViewAdapter;
 import com.kinire.proyectointegrador.android.controllers.activities.PurchaseViewActivityController;
 import com.kinire.proyectointegrador.android.utils.StyleDissonancesCorrection;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelablePurchase;
+import com.kinire.proyectointegrador.android.utils.ThemeManager;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
+
+/**
+ * Acitivity que muestra compras anteriores del propio usuario o de todos en caso de ser el usuario
+ * administrador
+ */
 public class PurchaseViewActivity extends AppCompatActivity {
 
     private ParcelablePurchase purchase;
@@ -31,6 +38,8 @@ public class PurchaseViewActivity extends AppCompatActivity {
     private FloatingActionButton deleteButton;
 
     private PurchaseViewActivityController controller;
+
+    private String ERROR_MESSAGE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,7 @@ public class PurchaseViewActivity extends AppCompatActivity {
         this.priceField = findViewById(R.id.price_field);
         this.deleteButton = findViewById(R.id.delete_button);
         this.controller = new PurchaseViewActivityController(this);
+        this.ERROR_MESSAGE = getString(R.string.error);
     }
 
     private void setAdapter() {
@@ -87,6 +97,10 @@ public class PurchaseViewActivity extends AppCompatActivity {
         this.deleteButton.setOnClickListener(controller);
     }
 
+    /**
+     * Recibe la compra recibida en la parcela de intercambio
+     * @return Compra parcelada
+     */
     public ParcelablePurchase getPurchase() {
         return purchase;
     }
@@ -98,5 +112,17 @@ public class PurchaseViewActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Muestra un toast en caso de error
+     */
+    public void error() {
+        runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(getApplicationContext()
+                            ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(ERROR_MESSAGE)
+                    .show();
+        });
     }
 }

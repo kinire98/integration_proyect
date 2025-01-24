@@ -18,6 +18,9 @@ import com.kinire.proyectointegrador.components.Purchase;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+/**
+ * Adaptador para la cuadrícula del carrito de la compra
+ */
 public class ShopingCartAdapter extends BaseAdapter {
 
     private @LayoutRes int layout;

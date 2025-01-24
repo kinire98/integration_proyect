@@ -15,6 +15,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Modelo Parcelable de compra para hacer más eficiente el cambio de información entre Activities
+ */
 public class ParcelablePurchase implements Parcelable {
 
     private final long id;

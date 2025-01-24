@@ -23,6 +23,9 @@ import java.util.Objects;
 
 import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
+/**
+ * Fragmento que se encarga de la vista del carrito de la compra
+ */
 public class ShoppingCartFragment extends Fragment {
 
     private FragmentShoppingCartBinding binding;
@@ -87,6 +90,10 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     public void setObservers() {
+        /*
+        Observardor para la clase encargada de la persistencia. En caso de cambiar los datos
+        guardados se ejecuta el siguiente código
+         */
         viewModel.getData().observe(getViewLifecycleOwner(), purchase -> {
             if(adapter == null) {
                 adapter = new ShopingCartAdapter(getContext(), R.layout.shopping_cart_item_layout, purchase);
@@ -97,6 +104,10 @@ public class ShoppingCartFragment extends Fragment {
         });
         viewModel.getmEmptyMessage().observe(getViewLifecycleOwner(), noProductsText::setText);
     }
+
+    /**
+     * Esconde los botones de guardar y vaciar compra y sus correspondientes etiquetas
+     */
     public void hidePurchasesButton() {
         this.savePurchaseButton.hide();
         this.savePurchaseText.setVisibility(View.INVISIBLE);
@@ -105,6 +116,9 @@ public class ShoppingCartFragment extends Fragment {
         this.hideShowButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.sort_up_solid));
     }
 
+    /**
+     * Muestra los botones de guardar y vaciar compra y sus correspondientes etiquetas
+     */
     public void showPurchasesButton() {
         this.savePurchaseButton.show();
         this.savePurchaseText.setVisibility(View.VISIBLE);
@@ -113,10 +127,17 @@ public class ShoppingCartFragment extends Fragment {
         this.hideShowButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.sort_down_solid));
     }
 
+    /**
+     * Devuelve el adaptador del carrito de la compra
+     * @return Adaptador del carrito de la compra
+     */
     public ShopingCartAdapter getAdapter() {
         return adapter;
     }
 
+    /**
+     * Muestra un toast de éxito cuando se guarda una compra con éxito
+     */
     public void successSavingPurchase() {
         requireActivity().runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
@@ -126,6 +147,9 @@ public class ShoppingCartFragment extends Fragment {
         });
     }
 
+    /**
+     * Muestra un toast de error cuando hay un error guardando una compra
+     */
     public void errorSavingPurchase() {
         requireActivity().runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
@@ -135,6 +159,10 @@ public class ShoppingCartFragment extends Fragment {
         });
     }
 
+    /**
+     * Cambia el texto del precio total. En caso de ser 0, no se mostrará nigún texto
+     * @param price El precio a escribir
+     */
     public void setTotalPriceText(float price) {
         if(price == 0.0f) {
             this.totalPriceText.setText(null);

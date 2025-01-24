@@ -8,6 +8,12 @@ import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.fragments.ShoppingCartFragmentController;
 import com.kinire.proyectointegrador.android.ui.activities.ProductActionActivity;
 
+/**
+ * Clase encargada de controlar el Activity para gestionar los productos de la compra.
+ * Se puede iniciar de dos maneras, pinchando en la lista general de productos para añadirlo al carrito
+ * o en la cuadrícula del carrito para cambiar la cantidad de un producto.
+ *
+ */
 public class ProductActionActivityController implements View.OnClickListener {
 
     private ProductActionActivity activity;
@@ -31,19 +37,38 @@ public class ProductActionActivityController implements View.OnClickListener {
         this.addProductButtonId = R.id.add_products_button;
     }
 
+    /**
+     * Utilizado para establecer la cantidad inicial de producto.
+     * Si se recibe desde la lista de productos será 0.
+     * Si se recibe desde el carrito será la cantidad anteriormente seleccionadad por el usuario
+     * @param amount La cantidad de producto con la que se inicia el activity
+     */
     public void setAmount(int amount) {
         this.amount = amount;
         activity.setAmount(amount);
     }
 
+    /**
+     * Setter para el precio del producto
+     * @param price Precio del producto
+     */
     public void setPrice(float price) {
         this.price = price;
     }
 
+    /**
+     * Setter para establecer si el producto es nuevo en el carrito o si se va a editar su cantidad
+     * @param changeProduct True si se va a editar, false si es nuevo
+     */
     public void setChangeProduct(boolean changeProduct) {
         this.changeProduct = changeProduct;
     }
 
+    /**
+     * Setter para la posición que ocupa el producto a editar en el carrito.
+     * Este método solo se llamará en caso de que se esté editando el producto.
+     * @param position La posición que ocupa el producto en el carrito
+     */
     public void setPosition(int position) {
         this.position = position;
     }

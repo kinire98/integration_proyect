@@ -18,6 +18,9 @@ import com.kinire.proyectointegrador.components.ShoppingCartItem;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Adaptador para la lista de productos comprados en una vista anterior
+ */
 public class PurchaseViewAdapter extends BaseAdapter {
 
     private Context context;

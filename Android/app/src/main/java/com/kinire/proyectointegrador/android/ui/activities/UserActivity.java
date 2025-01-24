@@ -19,12 +19,16 @@ import androidx.core.view.WindowInsetsCompat;
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.controllers.activities.UserActivityController;
 import com.kinire.proyectointegrador.android.utils.StyleDissonancesCorrection;
+import com.kinire.proyectointegrador.android.utils.ThemeManager;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
+/**
+ * Activity que se encarga del login de los usuarios
+ */
 public class UserActivity extends AppCompatActivity {
 
     private EditText userField;
@@ -83,18 +87,17 @@ public class UserActivity extends AppCompatActivity {
         return userField.getText().toString();
     }
 
-    public void invalidUserName() {
-        Toast.makeText(this, invalidUserName, Toast.LENGTH_SHORT).show();
-    }
-    
-    public void incorrectAdminPassword() {
-        Toast.makeText(this, incorrectAdminPassword, Toast.LENGTH_SHORT).show();
-    }
-
     public void connectivityError() {
         Toast.makeText(this, connectivityError, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Método para preguntar por la contraseña al usuario.
+     * Al llamarse siempre desde otro hilo que no es el principal, el dialog se tiene que ejecutar
+     * en el hilo de la UI, y el otro hilo debería esperar hasta que el usuario complete la operación.
+     * Se ejecuta cuando el usuario ya existe
+     * @return Contraseña introducida por el usuario
+     */
     public String askForPassword() {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.ask_password_layout, null);
         EditText editText = dialogView.findViewById(R.id.password_field);
@@ -123,6 +126,10 @@ public class UserActivity extends AppCompatActivity {
         return key[0];
     }
 
+    /**
+     * Igual que el método anterior, solo que este se ejecuta si se necesita una contraseña nueva
+     * @return Contraseña introducida por el usuario
+     */
     public String askForNewPassword() {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.ask_password_layout, null);
         EditText editText = dialogView.findViewById(R.id.password_field);
@@ -130,14 +137,8 @@ public class UserActivity extends AppCompatActivity {
         title.setText(PASSWORD_FIELD_SET_TITLE);
         Button button = dialogView.findViewById(R.id.login);
         button.setText(PASSWORD_FIELD_SET_BUTTON);
-
-
-
-
-
         final CountDownLatch latch = new CountDownLatch(1);
         final String[] key = {""};
-
         AtomicReference<Dialog> dialog = new AtomicReference<>();
         button.setOnClickListener(v -> {
             key[0] = editText.getText().toString();
@@ -150,13 +151,15 @@ public class UserActivity extends AppCompatActivity {
                     .create());
             dialog.get().show();
         });
-
         try {
             latch.await();
         } catch (InterruptedException e) {}
         return key[0];
     }
 
+    /**
+     * Toast de error para indicarle al usuario que introdujo la contraseña incorrecta.
+     */
     public void incorrectPassword() {
         runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(this,

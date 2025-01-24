@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-
+/**
+ * Adaptador para la lista de productos. Hereda de BaseAdapter y utiliza el patrón
+ * ViewHolder para optimizar el rendimiento de la aplicación
+ */
 public class ProductListAdapter extends BaseAdapter {
 
     private Context context;

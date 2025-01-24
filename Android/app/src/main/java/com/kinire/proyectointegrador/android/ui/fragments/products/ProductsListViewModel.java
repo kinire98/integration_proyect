@@ -9,6 +9,9 @@ import com.kinire.proyectointegrador.components.Product;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase Vista-Modelo encargada de la persistencia de los datos en la vista de lista de productos
+ */
 public class ProductsListViewModel extends ViewModel {
 
     private final MutableLiveData<List<Product>> mProducts;

@@ -24,6 +24,9 @@ import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Clase encargada de controlar el carrito de la compra
+ */
 public class ShoppingCartFragmentController implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     @SuppressLint("StaticFieldLeak")
@@ -56,25 +59,48 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
         this.AMOUNT_PARCELABLE_KEY = fragment.getString(R.string.amount_parcelable_key);
         this.POSITION_PARCELABLE_KEY = fragment.getString(R.string.position_parcelable_key);
     }
+
+    /**
+     * Permite añadir un producto a la compra desde cualquier punto del programa que sea necesario
+     * @param product El producto que se va a comprar
+     * @param amount La cantidad de producto
+     */
     public static void addProduct(Product product, int amount) {
         purchase.getShoppingCartItems().add(new ShoppingCartItem(product, amount));
     }
+
+    /**
+     * Permite modificar un producto del carrito desde cualquier punto del programa
+     * @param product El producto a cambiar
+     * @param amount La cantidad de producto
+     * @param position La posición que ocupa en la compra
+     */
     public static void changeProduct(Product product, int amount, int position) {
         purchase.getShoppingCartItems().set(position, new ShoppingCartItem(product, amount));
     }
 
     /**
-     * Este metodo debe ser llamado con MUCHO cuidado.
-     * Se tiene que haber asegurado que se haya abierto el fragmento del carrito por lo menos una vez
+     * Método que actualiza el precio total de la compra.
+     * Hay que llamarlo con cuidado ya que sino se ha inicializado ni una sola vez el fragmento del carrito
+     * de la compra, no tendrá el resultado esperado
      */
     public static void updatePrice() {
         if(fragment != null)
             fragment.setTotalPriceText(purchase.getTotalPrice());
     }
+
+    /**
+     * Vacía la compra, creando una nueva.
+     * Este método se llama desde la vista de usuario para evitar que el carrito de un usuario pase
+     * hacia otro
+     */
     public static void emptyCart() {
         purchase = new Purchase();
     }
 
+    /**
+     * Inicia el Activity para editar los productos
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(((ImageView) view.findViewById(R.id.image)).getDrawable() == null)
@@ -96,6 +122,9 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
             savePurchase();
     }
 
+    /**
+     * Este método se encarga de actualizar los productos que se muestran en la vista del carrito
+     */
     public static void refreshData() {
         viewModel.setData(purchase);
     }

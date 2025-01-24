@@ -13,6 +13,9 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
+/**
+ * Clase encargada de generar la encriptación para guardar la contraseña de usuario en la base de datos
+ */
 class EncriptionKeyStore {
     private static final String KEYSTORE_ALIAS = "password_encryption_alias";
     private static final String ANDROID_KEYSTORE = "AndroidKeyStore";

@@ -20,6 +20,11 @@ import java.util.Locale;
 
 import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
+/**
+ * Clase Fragment que se encarga de la vista para añadir productos.
+ * No tiene nada de especial, simplemente métodos para recoger la información de los elementos visuales
+ * y para mostrar toast en caso de éxito y de error
+ */
 public class AddProductFragment extends Fragment {
 
     private FragmentAddProductBinding binding;
@@ -33,8 +38,6 @@ public class AddProductFragment extends Fragment {
     private EditText categoryField;
 
     private String PRODUCT_SAVED_SUCCESFULLY;
-    private String IMAGE_SAVED_SUCCESFULLY;
-    private String IMAGE_NOT_SAVED;
     private String PRODUCT_NOT_SAVED;
     private String EMPTY_FIELDS;
     private String ERROR;
@@ -57,8 +60,6 @@ public class AddProductFragment extends Fragment {
         this.uploadButton = binding.uploadButton;
         this.categoryField = binding.categoryField;
         this.PRODUCT_SAVED_SUCCESFULLY = getString(R.string.product_save);
-        this.IMAGE_SAVED_SUCCESFULLY = getString(R.string.image_saved);
-        this.IMAGE_NOT_SAVED = getString(R.string.image_not_saved);
         this.PRODUCT_NOT_SAVED = getString(R.string.product_not_save);
         this.EMPTY_FIELDS = getString(R.string.empty_fields);
         this.ERROR = getString(R.string.error);
@@ -78,7 +79,7 @@ public class AddProductFragment extends Fragment {
         return categoryField.getText().toString();
     }
 
-public float getPriceField() {
+    public float getPriceField() {
         if(priceField.getText().toString().isEmpty())
             return 0.0f;
         return Float.parseFloat(priceField.getText().toString());
@@ -109,14 +110,6 @@ public float getPriceField() {
                     .show();
         });
     }
-    public void imageSavedSuccesfully() {
-        requireActivity().runOnUiThread(() -> {
-            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
-                            ,SuperiorToastWithHeadersPreDesigned.SUCCESS_TOAST)
-                    .setToastHeaderText(IMAGE_SAVED_SUCCESFULLY)
-                    .show();
-        });
-    }
     public void productNotSaved() {
         requireActivity().runOnUiThread(() -> {
             SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
@@ -125,15 +118,6 @@ public float getPriceField() {
                     .show();
         });
     }
-    public void imageNotSaved() {
-        requireActivity().runOnUiThread(() -> {
-            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(requireContext().getApplicationContext()
-                            ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
-                    .setToastHeaderText(IMAGE_NOT_SAVED)
-                    .show();
-        });
-    }
-
 
     @Override
     public void onDestroyView() {
