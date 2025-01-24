@@ -149,12 +149,7 @@ public class ProductMessageBuilder {
             throw new IllegalStateException("Only one request at the same time");
         this.insertProductRequest = true;
         this.product = product;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1048576];
-        while(imageStream.read(buffer) != -1) {
-            outputStream.write(buffer);
-        }
-        this.imageStream = outputStream.toByteArray();
+        this.imageStream = imageStream.readAllBytes();
         return this;
     }
     public ProductMessageBuilder deleteProductRequest(Product product) throws IOException {
