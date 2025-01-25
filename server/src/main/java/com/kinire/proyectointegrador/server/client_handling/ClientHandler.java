@@ -141,7 +141,7 @@ public class ClientHandler extends Thread {
                 );
             }
         } else if(message.isInsertProductRequest()) {
-            if(getBytes(message.getImageStream()).length > 1_000_000_000) {
+            if(getBytes(message.getImageStream()).length > 1_048_576) {
                 outputStream.writeObject(false);
                 logger.log(Level.SEVERE, "Image too big");
                 return;

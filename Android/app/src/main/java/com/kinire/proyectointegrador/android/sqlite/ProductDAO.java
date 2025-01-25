@@ -50,6 +50,7 @@ public class ProductDAO {
         SQLiteDatabase db = sqlite.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         while(cursor.moveToNext()) {
+            System.out.println(cursor.getLong(cursor.getColumnIndex(AdminSqlite.ID_COLUMN_NAME)));
             products.add(new Product(
                     cursor.getLong(cursor.getColumnIndex(AdminSqlite.ID_COLUMN_NAME)),
                     cursor.getString(cursor.getColumnIndex(AdminSqlite.NAME_COLUMN_NAME)),
