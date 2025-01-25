@@ -86,6 +86,10 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
                 setProducts();
             });
         } else {
+            Connection.getInstance().setProductsUpdatedPromise(() -> {
+                Connection.getInstance().getNotStoredProducts(viewModel.getProductsData(), product -> productGot(product, false), (e) -> fragment.error());
+            });
+            Connection.getInstance().setConnectionLostPromise(fragment::errorConnectionLost);
             setProducts();
         }
     }

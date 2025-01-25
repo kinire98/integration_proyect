@@ -10,11 +10,6 @@ public class DataSource {
     private static final HikariConfig config = new HikariConfig();
     private static final HikariDataSource ds;
     static {
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
         config.setDriverClassName("org.mariadb.jdbc.Driver");
         config.setJdbcUrl("jdbc:mariadb://localhost/tpv_prod");
         config.setUsername("integrador");

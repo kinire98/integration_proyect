@@ -6,6 +6,7 @@ package com.kinire.proyectointegrador.desktop.ui.dialogs;
 
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
+import com.kinire.proyectointegrador.desktop.Main;
 import com.kinire.proyectointegrador.desktop.ui.frame.MainFrame;
 
 import javax.swing.*;
@@ -280,6 +281,11 @@ public class AddProductDialog extends javax.swing.JDialog {
     }
 
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new AddProductDialog(null, false).setVisible(true);
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addProductButton;

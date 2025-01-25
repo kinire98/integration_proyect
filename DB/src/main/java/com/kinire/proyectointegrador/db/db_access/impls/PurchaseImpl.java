@@ -61,10 +61,10 @@ public class PurchaseImpl implements PurchaseDAO {
     @Override
     public Purchase selectPurchase(long id) {
         Purchase purchase = null;
-        String query = "SELECT * FROM purchases INNER JOIN tpv_test.purchased_products pp on purchases.id = pp.purchase_id " +
-                "INNER JOIN tpv_test.products p on p.id = pp.product_id " +
-                "INNER JOIN tpv_test.categories c on c.id = p.category_id " +
-                "INNER JOIN tpv_test.users u on u.username = purchases.username " +
+        String query = "SELECT * FROM purchases INNER JOIN tpv_prod.purchased_products pp on purchases.id = pp.purchase_id " +
+                "INNER JOIN tpv_prod.products p on p.id = pp.product_id " +
+                "INNER JOIN tpv_prod.categories c on c.id = p.category_id " +
+                "INNER JOIN tpv_prod.users u on u.username = purchases.username " +
                 "WHERE purchases.id = ?";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
@@ -114,10 +114,10 @@ public class PurchaseImpl implements PurchaseDAO {
     @Override
     public List<Purchase> getAllPurchases() {
         List<Purchase> purchases = new ArrayList<>();
-        String query = "SELECT * FROM purchases INNER JOIN tpv_test.purchased_products pp on purchases.id = pp.purchase_id " +
-                "INNER JOIN tpv_test.products p on p.id = pp.product_id " +
-                "INNER JOIN tpv_test.categories c on c.id = p.category_id " +
-                "INNER JOIN tpv_test.users u on u.username = purchases.username " +
+        String query = "SELECT * FROM purchases INNER JOIN tpv_prod.purchased_products pp on purchases.id = pp.purchase_id " +
+                "INNER JOIN tpv_prod.products p on p.id = pp.product_id " +
+                "INNER JOIN tpv_prod.categories c on c.id = p.category_id " +
+                "INNER JOIN tpv_prod.users u on u.username = purchases.username " +
                 "ORDER BY purchases.id";
         try (Connection connection = DataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -132,10 +132,10 @@ public class PurchaseImpl implements PurchaseDAO {
     @Override
     public List<Purchase> selectPurchaseByClient(User user) {
         List<Purchase> purchases = new ArrayList<>();
-        String query = "SELECT * FROM purchases INNER JOIN tpv_test.purchased_products pp on purchases.id = pp.purchase_id " +
-                "INNER JOIN tpv_test.products p on p.id = pp.product_id " +
-                "INNER JOIN tpv_test.categories c on c.id = p.category_id " +
-                "INNER JOIN tpv_test.users u on u.username = purchases.username " +
+        String query = "SELECT * FROM purchases INNER JOIN tpv_prod.purchased_products pp on purchases.id = pp.purchase_id " +
+                "INNER JOIN tpv_prod.products p on p.id = pp.product_id " +
+                "INNER JOIN tpv_prod.categories c on c.id = p.category_id " +
+                "INNER JOIN tpv_prod.users u on u.username = purchases.username " +
                 "WHERE u.username = ? " +
                 "ORDER BY purchases.id";
         try (Connection connection = DataSource.getConnection();
@@ -152,10 +152,10 @@ public class PurchaseImpl implements PurchaseDAO {
     @Override
     public List<Purchase> selectPurchaseByMonth(LocalDate date) {
         List<Purchase> purchases = new ArrayList<>();
-        String query = "SELECT * FROM purchases INNER JOIN tpv_test.purchased_products pp on purchases.id = pp.purchase_id " +
-                "INNER JOIN tpv_test.products p on p.id = pp.product_id " +
-                "INNER JOIN tpv_test.categories c on c.id = p.category_id " +
-                "INNER JOIN tpv_test.users u on u.username = purchases.username " +
+        String query = "SELECT * FROM purchases INNER JOIN tpv_prod.purchased_products pp on purchases.id = pp.purchase_id " +
+                "INNER JOIN tpv_prod.products p on p.id = pp.product_id " +
+                "INNER JOIN tpv_prod.categories c on c.id = p.category_id " +
+                "INNER JOIN tpv_prod.users u on u.username = purchases.username " +
                 "WHERE MONTH(purchase_date) = MONTH(?) AND " +
                 "YEAR(purchase_date) = YEAR(?) " +
                 "ORDER BY purchases.id";

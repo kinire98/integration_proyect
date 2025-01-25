@@ -50,7 +50,7 @@ public class ProductImpl implements ProductDAO {
     @Override
     public Product selectProductById(long id) {
         Product product = null;
-        String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on p.category_id = c.id WHERE p.id = ?";
+        String query = "SELECT * FROM products p INNER JOIN tpv_prod.categories c on p.category_id = c.id WHERE p.id = ?";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
@@ -78,7 +78,7 @@ public class ProductImpl implements ProductDAO {
     @Override
     public List<Product> selectProductByCategory(long categoryId) {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on p.category_id = c.id WHERE c.id = ?";
+        String query = "SELECT * FROM products p INNER JOIN tpv_prod.categories c on p.category_id = c.id WHERE c.id = ?";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, categoryId);
@@ -94,7 +94,7 @@ public class ProductImpl implements ProductDAO {
         if(ids.length < 2)
             throw new IllegalArgumentException("If you are going to use just one id use the getOne method");
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on p.category_id = c.id WHERE p.id IN (?" + ", ?".repeat(ids.length - 1) +
+        String query = "SELECT * FROM products p INNER JOIN tpv_prod.categories c on p.category_id = c.id WHERE p.id IN (?" + ", ?".repeat(ids.length - 1) +
                 ")";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
@@ -112,7 +112,7 @@ public class ProductImpl implements ProductDAO {
     @Override
     public List<Product> selectAllProducts() {
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on p.category_id = c.id";
+        String query = "SELECT * FROM products p INNER JOIN tpv_prod.categories c on p.category_id = c.id";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             getProductsWithStatement(products, statement);
@@ -127,7 +127,7 @@ public class ProductImpl implements ProductDAO {
         if(productsAlreadyFetched.isEmpty())
             throw new IllegalArgumentException("Product list must have some product");
         List<Product> products = new ArrayList<>();
-        String query = "SELECT * FROM products p INNER JOIN tpv_test.categories c on p.category_id = c.id" +
+        String query = "SELECT * FROM products p INNER JOIN tpv_prod.categories c on p.category_id = c.id" +
                 " WHERE p.id NOT IN (?" + ", ?".repeat(productsAlreadyFetched.size() - 1) + ")";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {

@@ -60,7 +60,7 @@ public class PurchaseProductImpl implements PurchasedProductDAO {
     @Override
     public ShoppingCartItem selectPurchasedProduct(long purchaseId, long productId) {
         ShoppingCartItem shoppingCartItem = null;
-        String query = "SELECT amount FROM purchased_products INNER JOIN tpv_test.products p INNER JOIN tpv_test.categories c ON p.category_id = c.id AND purchased_products.product_id = p.id  WHERE product_id = ? AND purchase_id = ?";
+        String query = "SELECT amount FROM purchased_products INNER JOIN tpv_prod.products p INNER JOIN tpv_categories.categories c ON p.category_id = c.id AND purchased_products.product_id = p.id  WHERE product_id = ? AND purchase_id = ?";
         try (Connection connection = DataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, productId);
@@ -92,14 +92,14 @@ public class PurchaseProductImpl implements PurchasedProductDAO {
     @Override
     public List<ShoppingCartItem> selectByPurchase(long purchaseId) {
         List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
-        String query = "SELECT amount FROM purchased_products INNER JOIN tpv_test.products p INNER JOIN tpv_test.categories c ON p.category_id = c.id AND purchased_products.product_id = p.id  WHERE purchase_id = ?";
+        String query = "SELECT amount FROM purchased_products INNER JOIN tpv_prod.products p INNER JOIN tpv_categories.categories c ON p.category_id = c.id AND purchased_products.product_id = p.id  WHERE purchase_id = ?";
         return getShoppingCartItems(purchaseId, shoppingCartItems, query);
     }
 
     @Override
     public List<ShoppingCartItem> selectByProduct(long productId) {
         List<ShoppingCartItem> shoppingCartItems = new ArrayList<>();
-        String query = "SELECT amount FROM purchased_products INNER JOIN tpv_test.products p INNER JOIN tpv_test.categories c ON p.category_id = c.id AND purchased_products.product_id = p.id  WHERE product_id = ?";
+        String query = "SELECT amount FROM purchased_products INNER JOIN tpv_prod.products p INNER JOIN tpv_categories.categories c ON p.category_id = c.id AND purchased_products.product_id = p.id  WHERE product_id = ?";
         return getShoppingCartItems(productId, shoppingCartItems, query);
     }
 
