@@ -143,10 +143,12 @@ public class ClientHandler extends Thread {
         } else if(message.isInsertProductRequest()) {
             if(getBytes(message.getImageStream()).length > 1_000_000_000) {
                 outputStream.writeObject(false);
+                logger.log(Level.SEVERE, "Image too big");
                 return;
             }
             if(ImageIO.read(message.getImageStream()) == null) {
                 outputStream.writeObject(false);
+                logger.log(Level.SEVERE, "Malformed image");
                 return;
             }
             message.getProduct().setImagePath("/root/pictures/" + message.getProduct().getImagePath() + ".png");
