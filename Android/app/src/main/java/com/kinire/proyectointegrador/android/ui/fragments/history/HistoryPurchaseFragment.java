@@ -16,7 +16,10 @@ import com.kinire.proyectointegrador.android.adapters.PurchaseHistoryAdapter;
 import com.kinire.proyectointegrador.android.controllers.fragments.HistoryPurchaseFragmentController;
 import com.kinire.proyectointegrador.android.databinding.FragmentHistoryPurchaseBinding;
 import com.kinire.proyectointegrador.client.Connection;
+import com.kinire.proyectointegrador.components.Purchase;
 
+
+import java.util.Iterator;
 
 import io.shubh.superiortoastlibrary.SuperiorToastWithHeadersPreDesigned;
 
@@ -61,9 +64,19 @@ public class HistoryPurchaseFragment extends Fragment {
     private void setObservers() {
         viewModel.getNoPurchasesMessage().observe(getViewLifecycleOwner(), noPurchaseHistoryText::setText);
         viewModel.getPurchases().observe(getViewLifecycleOwner(), purchases -> {
+            for (int i = 0; i < purchases.size(); i++) {
+                if(purchases.get(i) == null)  {
+                    Iterator<Purchase> purchaseIterator = purchases.iterator();
+                    while(purchaseIterator.hasNext()) {
+                        Purchase purchase = purchaseIterator.next();
+                        if(purchase == null)
+                            purchaseIterator.remove();
+                    }
+                    viewModel.setPurchases(purchases);
+                }
+            }
             PurchaseHistoryAdapter adapter = new PurchaseHistoryAdapter(this.requireContext(), R.layout.purchase_history_list_item, purchases);
-            if(purchases.get(0) != null)
-                this.purchasesHistoryList.setAdapter(adapter);
+            this.purchasesHistoryList.setAdapter(adapter);
         });
     }
 

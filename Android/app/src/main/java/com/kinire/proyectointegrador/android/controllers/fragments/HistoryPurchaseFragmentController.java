@@ -9,10 +9,14 @@ import com.kinire.proyectointegrador.android.parcelable_models.ParcelablePurchas
 import com.kinire.proyectointegrador.android.ui.activities.PurchaseViewActivity;
 import com.kinire.proyectointegrador.android.ui.fragments.history.HistoryPurchaseFragment;
 import com.kinire.proyectointegrador.android.ui.fragments.history.HistoryPurchaseViewModel;
+import com.kinire.proyectointegrador.android.utils.DeletedPurchase;
 import com.kinire.proyectointegrador.android.utils.UserAdmin;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.components.User;
+
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Controlador del fragmento del historial de compras.
@@ -33,6 +37,7 @@ public class HistoryPurchaseFragmentController implements AdapterView.OnItemClic
         this.viewModel.setNoPurchasesMessage(fragment.getString(R.string.no_purchase_history));
         this.PURCHASE_PARCELABLE_KEY = fragment.getString(R.string.purchase_parcelable_key);
         initConnection();
+        initCallbackForDeletedPurchase();
     }
     private void initConnection() {
         UserAdmin userAdmin = new UserAdmin(fragment.requireContext());
@@ -52,6 +57,23 @@ public class HistoryPurchaseFragmentController implements AdapterView.OnItemClic
                 fragment.errorConnectionToServer();
             });
         }
+    }
+    private void initCallbackForDeletedPurchase() {
+        DeletedPurchase.setUpdateCallback((id) -> {
+            List<Purchase> purchaseList = viewModel.getPurchases().getValue();
+            assert purchaseList != null;
+            if(!purchaseList.isEmpty()) {
+                Iterator<Purchase> purchaseIterator = purchaseList.iterator();
+                while(purchaseIterator.hasNext()) {
+                    Purchase purchase = purchaseIterator.next();
+                    if(purchase.getId() == id)
+                        purchaseIterator.remove();
+                }
+            }
+            fragment.requireActivity().runOnUiThread(() -> {
+                viewModel.setPurchases(purchaseList);
+            });
+        });
     }
 
     @Override

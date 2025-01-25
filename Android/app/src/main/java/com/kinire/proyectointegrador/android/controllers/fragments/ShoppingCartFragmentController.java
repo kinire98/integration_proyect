@@ -199,7 +199,6 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
             changeSelectedMenuItem();
             return;
         }
-        logger.log(Level.SEVERE, "Saving purchase");
         User user = userAdmin.getUser();
         purchase.setUser(user);
         purchase.setPurchaseDate(LocalDate.now());

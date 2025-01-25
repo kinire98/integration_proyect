@@ -7,6 +7,7 @@ import androidx.annotation.IdRes;
 import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.parcelable_models.ParcelablePurchase;
 import com.kinire.proyectointegrador.android.ui.activities.PurchaseViewActivity;
+import com.kinire.proyectointegrador.android.utils.DeletedPurchase;
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.components.ShoppingCartItem;
@@ -44,7 +45,10 @@ public class PurchaseViewActivityController implements View.OnClickListener {
         User user = new User();
         user.setUser(parcelablePurchase.getUserName());
         Purchase purchase = new Purchase(parcelablePurchase.getId(), parcelablePurchase.getPurchaseDate(), user, (ArrayList<ShoppingCartItem>) parcelablePurchase.getShoppingCartItems());
-        Connection.getInstance().deletePurchase(purchase, activity::finish, e -> {
+        Connection.getInstance().deletePurchase(purchase, () -> {
+            activity.finish();
+            DeletedPurchase.deletedPurchase(parcelablePurchase.getId());
+        } , e -> {
             activity.error();
         });
     }

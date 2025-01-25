@@ -87,7 +87,12 @@ public class UserActivityController implements View.OnClickListener, TextWatcher
     }
 
     private void userDoesntExist() {
-        this.user = new User(username, activity.askForNewPassword());
+        String password = activity.askForPassword();
+        this.user = new User(username, password);
+        if(password.isEmpty()) {
+            activity.passwordEmpty();
+            return;
+        }
         Connection.getInstance().insertUserData(user, () -> {
             userAdmin.setUser(user);
             returnToMainActivity();
