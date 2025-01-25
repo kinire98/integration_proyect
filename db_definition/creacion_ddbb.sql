@@ -1,4 +1,4 @@
-USE tpv_test;
+USE tpv_prod;
 CREATE TABLE categories(
   id BIGINT NOT NULL AUTO_INCREMENT,
   name VARCHAR(50),
