@@ -72,6 +72,7 @@ public class ProductActionActivity extends AppCompatActivity {
         this.initializeElements();
         this.setProductInformation();
         this.setListeners();
+        this.setUpToolbar();
         StyleDissonancesCorrection.setStatusBarCorrectColor(this);
     }
 
@@ -114,11 +115,9 @@ public class ProductActionActivity extends AppCompatActivity {
             changeProduct = amount >= 1;
             controller.setChangeProduct(changeProduct);
             if(changeProduct) {
-                setUpToolbar(ACTION_BAR_CHANGE_TITLE_PREFIX);
                 addProductButton.setText(CHANGE_PRODUCT_BUTTON_TEXT);
                 controller.setPosition(bundle.getInt(POSITION_PARCELABLE_KEY));
             } else {
-                setUpToolbar(ACTION_BAR_ADD_TITLE_PREFIX);
                 addProductButton.setText(ADD_PRODUCT_BUTTON_TEXT);
             }
             controller.setAmount(changeProduct ? amount : 1);
@@ -131,9 +130,9 @@ public class ProductActionActivity extends AppCompatActivity {
         this.addProductButton.setOnClickListener(controller);
     }
 
-    private void setUpToolbar(String prefix) {
+    private void setUpToolbar() {
         if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(prefix + " " + this.productName.getText().toString());
+            getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }

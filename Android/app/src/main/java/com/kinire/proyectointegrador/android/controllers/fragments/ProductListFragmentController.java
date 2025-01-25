@@ -47,6 +47,8 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
 
     private final UserAdmin userAdmin;
 
+    private static boolean firstTimeLoading = true;
+
     public ProductListFragmentController(ProductsListFragment fragment, ProductsListViewModel viewModel) {
         this.fragment = fragment;
         this.viewModel = viewModel;
@@ -67,9 +69,16 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
      */
     private void initProducts() {
         if(productDAO.areThereProducts()) {
-            List<Product> products = productDAO.getProducts();
-            products.forEach(product -> productGot(product, true));
-            this.productsInDB = true;
+            if(firstTimeLoading) {
+                List<Product> products = productDAO.getProducts();
+                products.forEach(product -> productGot(product, true));
+                this.productsInDB = true;
+                firstTimeLoading = false;
+            } else {
+                List<Product> products = productDAO.getProductsWithoutImages();
+                products.forEach(product -> productGot(product, true));
+                this.productsInDB = true;
+            }
         }
         initConnection();
     }
@@ -122,7 +131,8 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
      * @param fromLocal Indicador para saber si el producto está guardado en local o ha sido recibido en remoto
      */
     private void productGot(Product product, boolean fromLocal) {
-        ImageCache.setImage(product.getImagePath(), Drawable.createFromStream(new ByteArrayInputStream(product.getImage()), "remote"));
+        if(product.getImage() != null)
+            ImageCache.setImage(product.getImagePath(), Drawable.createFromStream(new ByteArrayInputStream(product.getImage()), "remote"));
         if(!fromLocal) {
             productDAO.insertProduct(product);
         }

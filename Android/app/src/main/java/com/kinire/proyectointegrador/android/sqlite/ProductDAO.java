@@ -67,9 +67,40 @@ public class ProductDAO {
         db.close();
         return products;
     }
+    @SuppressLint("Range")
+    public List<Product> getProductsWithoutImages() {
+        List<Product> products = new ArrayList<>();
+        String query = "SELECT " + AdminSqlite.ID_COLUMN_NAME + "," +
+                AdminSqlite.NAME_COLUMN_NAME + "," +
+                AdminSqlite.PRICE_COLUMN_NAME + "," +
+                AdminSqlite.IMAGE_PATH_COLUMN_NAME + "," +
+                AdminSqlite.DATE_COLUMN_NAME + "," +
+                AdminSqlite.CATEGORY_ID_COLUMN_NAME + "," +
+                AdminSqlite.CATEGORY_NAME_COLUMN_NAME
+                + " FROM " + AdminSqlite.PRODUCTS_TABLE_NAME;
+        SQLiteDatabase db = sqlite.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        while(cursor.moveToNext()) {
+            products.add(new Product(
+                    cursor.getLong(cursor.getColumnIndex(AdminSqlite.ID_COLUMN_NAME)),
+                    cursor.getString(cursor.getColumnIndex(AdminSqlite.NAME_COLUMN_NAME)),
+                    cursor.getFloat(cursor.getColumnIndex(AdminSqlite.PRICE_COLUMN_NAME)),
+                    cursor.getString(cursor.getColumnIndex(AdminSqlite.IMAGE_PATH_COLUMN_NAME)),
+                    LocalDate.parse(cursor.getString(cursor.getColumnIndex(AdminSqlite.DATE_COLUMN_NAME)), formatter),
+                    new Category(
+                            cursor.getLong(cursor.getColumnIndex(AdminSqlite.CATEGORY_ID_COLUMN_NAME)),
+                            cursor.getString(cursor.getColumnIndex(AdminSqlite.CATEGORY_NAME_COLUMN_NAME))
+                    ),
+                    null
+            ));
+        }
+        cursor.close();
+        db.close();
+        return products;
+    }
     public boolean areThereProducts() {
         boolean thereAreProducts;
-        String query = "SELECT * FROM " + AdminSqlite.PRODUCTS_TABLE_NAME;
+        String query = "SELECT " + AdminSqlite.ID_COLUMN_NAME + " FROM " + AdminSqlite.PRODUCTS_TABLE_NAME;
         SQLiteDatabase db = sqlite.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
         thereAreProducts = cursor.moveToNext();
