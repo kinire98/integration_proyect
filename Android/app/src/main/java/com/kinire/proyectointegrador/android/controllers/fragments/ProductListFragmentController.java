@@ -35,6 +35,10 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
 
     private final String PRODUCT_PARCELABLE_KEY;
 
+    private final String AMOUNT_PARCELABLE_KEY;
+
+    private final String POSITION_PARCELABLE_KEY;
+
     private final Logger logger = Logger.getLogger(ProductListFragmentController.class.getName());
 
     private final ProductDAO productDAO;
@@ -47,6 +51,8 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
         this.fragment = fragment;
         this.viewModel = viewModel;
         this.PRODUCT_PARCELABLE_KEY = fragment.getString(R.string.product_parcelable_key);
+        this.AMOUNT_PARCELABLE_KEY = fragment.getString(R.string.amount_parcelable_key);
+        this.POSITION_PARCELABLE_KEY = fragment.getString(R.string.position_parcelable_key);
         this.productDAO = new ProductDAO(fragment.requireContext());
         this.userAdmin = new UserAdmin(fragment.requireContext());
         fragment.requireActivity().runOnUiThread(() -> {
@@ -135,8 +141,13 @@ public class ProductListFragmentController implements AdapterView.OnItemClickLis
             return;
         if(userAdmin.getUser().isAdmin())
             return;
+        Product product = viewModel.getProductsData().get(position);
         Intent intent = new Intent(fragment.requireActivity(), ProductActionActivity.class);
-        intent.putExtra(PRODUCT_PARCELABLE_KEY, new ParcelableProduct(viewModel.getProductsData().get(position)));
+        if(ShoppingCartFragmentController.productExists(product)) {
+            intent.putExtra(AMOUNT_PARCELABLE_KEY, ShoppingCartFragmentController.getAmount(product));
+            intent.putExtra(POSITION_PARCELABLE_KEY, ShoppingCartFragmentController.getPosition(product));
+        }
+        intent.putExtra(PRODUCT_PARCELABLE_KEY, new ParcelableProduct(product));
         fragment.requireActivity().startActivity(intent);
     }
 }

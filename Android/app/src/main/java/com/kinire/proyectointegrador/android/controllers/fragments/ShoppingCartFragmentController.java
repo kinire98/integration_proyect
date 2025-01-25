@@ -90,6 +90,45 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
     }
 
     /**
+     * Comprueba si el producto ya existe en la compra
+     * @param product El produto a comprobar
+     * @return Si el producto existe o no
+     */
+    public static boolean productExists(Product product) {
+        for (ShoppingCartItem item : purchase.getShoppingCartItems()) {
+            if(item.getProduct().getId() == product.getId())
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Devuelve la cantidad de producto que hay guardada en caso de que el producto exista
+     * @param product El prooducto a conseguir la cantidad
+     * @return La cantidad. -1 si no existe
+     */
+    public static int getAmount(Product product) {
+        for (ShoppingCartItem item : purchase.getShoppingCartItems()) {
+            if(item.getProduct().getId() == product.getId())
+                return item.getAmount();
+        }
+        return -1;
+    }
+
+    /**
+     * Devuelve la posicion en la compra del producto entregado
+     * @param product El producto a comprobar la posicion
+         * @return La posicion en la que se encuentra. -1 sino se encuentra en la lista
+     */
+    public static int getPosition(Product product) {
+        for (int i = 0; i < purchase.getShoppingCartItems().size(); i++) {
+            if(purchase.getShoppingCartItems().get(i).getProduct().getId() == product.getId())
+                return i;
+        }
+        return -1;
+    }
+
+    /**
      * Vacía la compra, creando una nueva.
      * Este método se llama desde la vista de usuario para evitar que el carrito de un usuario pase
      * hacia otro
@@ -126,7 +165,8 @@ public class ShoppingCartFragmentController implements AdapterView.OnItemClickLi
      * Este método se encarga de actualizar los productos que se muestran en la vista del carrito
      */
     public static void refreshData() {
-        viewModel.setData(purchase);
+        if(viewModel != null)
+            viewModel.setData(purchase);
     }
 
     private void showHideButtons() {

@@ -75,6 +75,7 @@
         android:textSize="17sp"
         android:textColor="?attr/colorOnContainer"
         android:visibility="invisible"
+        android:background="?attr/colorTertiary"
         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/delete_shopping_cart"
@@ -100,6 +101,7 @@
         android:text="@string/empty_purchase"
         android:textSize="17sp"
         android:textColor="?attr/colorOnContainer"
+        android:background="?attr/colorTertiary"
         android:visibility="invisible"
         />
     <TextView
@@ -114,6 +116,7 @@
         android:textStyle="italic"
         android:text="@string/total_price"
         android:textSize="25sp"
+        android:background="?attr/colorTertiary"
         />
     <TextView
         android:id="@+id/total_price_field"
@@ -126,6 +129,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="25sp"
+        android:background="?attr/colorTertiary"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

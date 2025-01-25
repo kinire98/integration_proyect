@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".25"
+        app:layout_constraintGuide_percent=".15"
         />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/user_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".7"
+        app:layout_constraintGuide_percent=".65"
         />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/user_start"

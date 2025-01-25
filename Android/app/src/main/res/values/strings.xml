@@ -48,6 +48,8 @@
     <string name="empty_fields">Campos vacíos</string>
     <string name="error">Error</string>
     <string name="theme">Tema:</string>
+    <string name="empty_username">Usuario vacío</string>
+    <string name="empty_password">Contraseña vacía</string>
     <string-array name="themes">
         <item>Dispositivo</item>
         <item>Claro</item>

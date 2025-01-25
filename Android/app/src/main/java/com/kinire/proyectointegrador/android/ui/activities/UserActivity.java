@@ -52,6 +52,9 @@ public class UserActivity extends AppCompatActivity {
 
     private String INCORRECT_PASSWORD;
 
+    private String EMPTY_PASSWORD;
+    private String EMPTY_USER;
+
     private String SHOW_BACK_BUTTON_PARCELABLE_KEY;
 
     @Override
@@ -89,6 +92,8 @@ public class UserActivity extends AppCompatActivity {
         this.PASSWORD_FIELD_SET_BUTTON = getString(R.string.create_password_button);
         this.PASSWORD_FIELD_QUERY_BUTTON = getString(R.string.write_password_button);
         this.INCORRECT_PASSWORD = getString(R.string.incorrect_password);
+        this.EMPTY_PASSWORD = getString(R.string.empty_password);
+        this.EMPTY_USER = getString(R.string.empty_username);
         this.SHOW_BACK_BUTTON_PARCELABLE_KEY = getString(R.string.show_back_parcelable_key);
         this.controller = new UserActivityController(this);
     }
@@ -100,15 +105,61 @@ public class UserActivity extends AppCompatActivity {
 
     private void setListeners() {
         this.button.setOnClickListener(controller);
+        this.userField.addTextChangedListener(controller);
     }
 
     public String getUserNameContent() {
         return userField.getText().toString();
     }
 
+    /**
+     * Devuelve el EditText para hacer posible esconder el teclado cuando se introduce el usuario
+     * @return EdixText donde se escribe el nombre de usuario
+     */
+    public EditText getUserField() {
+        return userField;
+    }
+
+    /**
+     * Muestra un mensaje con un error de conectividad
+     */
     public void connectivityError() {
         Toast.makeText(this, connectivityError, Toast.LENGTH_SHORT).show();
     }
+
+    /**
+     * Muestra un mensaje de error indicando al usuario que no puede dejar el campo del usuario
+     * vacío
+     */
+    public void usernameEmpty() {
+        runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(getApplicationContext()
+                            ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(EMPTY_USER)
+                    .show();
+        });
+    }
+    /**
+     * Muestra un mensaje de error indicando al usuario que no puede dejar el campo de la contraseña
+     * vacío
+     */
+    public void passwordEmpty() {
+        runOnUiThread(() -> {
+            SuperiorToastWithHeadersPreDesigned.makeSuperiorToast(getApplicationContext()
+                            ,SuperiorToastWithHeadersPreDesigned.ERROR_TOAST)
+                    .setToastHeaderText(EMPTY_PASSWORD)
+                    .show();
+        });
+    }
+    /**
+     * Establece el contenido del campo del nombre de usuario
+     * @param content El contenido a establecer
+     */
+    public void setUsernameContent(String content) {
+        this.userField.setText(content);
+    }
+
+
 
     /**
      * Método para preguntar por la contraseña al usuario.
