@@ -4,6 +4,9 @@
  */
 package com.kinire.proyectointegrador.desktop.ui.dialogs;
 
+import com.kinire.proyectointegrador.desktop.controller.SettingsDialogController;
+import com.kinire.proyectointegrador.desktop.ui.frame.MainFrame;
+
 /**
  *
  * @author kinire
@@ -13,9 +16,14 @@ public class SettingsDialog extends javax.swing.JDialog {
     /**
      * Creates new form SettingsDiaglo
      */
+
+
+    private final SettingsDialogController controller;
+
     public SettingsDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.controller = new SettingsDialogController(this, (MainFrame) parent);
     }
 
     /**
@@ -122,20 +130,28 @@ public class SettingsDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void changeClientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeClientButtonActionPerformed
-        // TODO add your handling code here:
+        controller.changeUser();
     }//GEN-LAST:event_changeClientButtonActionPerformed
 
     private void changeCurrencyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeCurrencyButtonActionPerformed
-        // TODO add your handling code here:
+        controller.changeCurency();
     }//GEN-LAST:event_changeCurrencyButtonActionPerformed
 
     private void addProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductButtonActionPerformed
-        // TODO add your handling code here:
+        controller.addProduct();
     }//GEN-LAST:event_addProductButtonActionPerformed
 
     private void returnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnButtonActionPerformed
-        // TODO add your handling code here:
+        controller.finish();
     }//GEN-LAST:event_returnButtonActionPerformed
+
+    public void hideAddProductButton() {
+        addProductButton.setVisible(false);
+    }
+
+    public void showAddProductButton() {
+        addProductButton.setVisible(true);
+    }
 
 
 

@@ -11,6 +11,7 @@
         <Menu class="javax.swing.JMenu" name="fileMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Archivo"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="saveTo">
@@ -37,9 +38,10 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="addProduct">
+        <Menu class="javax.swing.JMenu" name="userMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Usuario"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="changeUser">
@@ -55,31 +57,17 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="Products">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Producto"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="openProductView">
-              <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+P"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="A&#xf1;adir producto"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="openProductViewActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
         <Menu class="javax.swing.JMenu" name="shoppingCartMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Carrito"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="savePurchaseMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+G"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Guardar compra"/>
               </Properties>
               <Events>
@@ -88,6 +76,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="emptyPurchaseMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+E"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Vaciar compras"/>
               </Properties>
               <Events>
@@ -96,6 +87,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="previousPurchasesMenu">
               <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+P"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Ver compras anteriores"/>
               </Properties>
               <Events>
@@ -167,13 +161,6 @@
                       </Group>
                   </Group>
               </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="225" max="-2" attributes="0"/>
-                  <Component id="notWellSeenLabel1" min="-2" pref="152" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="notWellSeenLabel2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
@@ -195,12 +182,7 @@
                       <Component id="shoppingCartPanel" max="32767" attributes="0"/>
                       <Component id="productsPanel" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="notWellSeenLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="notWellSeenLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -218,6 +200,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Ajustes"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="settingsButtonActionPerformed"/>
@@ -235,6 +218,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Ver historial"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="purchaseHistoryButtonActionPerformed"/>
@@ -252,6 +236,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Vaciar compra"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="emptyPurchaseButtonActionPerformed"/>
@@ -269,6 +254,7 @@
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Guardar compra"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="savePurchaseButtonActionPerformed"/>
@@ -367,9 +353,9 @@
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="4" rowCount="4">
                         <Column editable="false" title="Producto" type="java.lang.String"/>
-                        <Column editable="false" title="Precio unitario" type="java.lang.Float"/>
+                        <Column editable="false" title="Precio unitario" type="java.lang.String"/>
                         <Column editable="false" title="Cantidad" type="java.lang.Integer"/>
-                        <Column editable="true" title="Precio total" type="java.lang.Float"/>
+                        <Column editable="true" title="Precio total" type="java.lang.String"/>
                       </Table>
                     </Property>
                   </Properties>
@@ -385,9 +371,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" pref="62" max="-2" attributes="0"/>
+                      <Component id="priceLabel" min="-2" pref="62" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextField1" max="32767" attributes="0"/>
+                      <Component id="priceField" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -397,8 +383,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jTextField1" alignment="3" pref="69" max="32767" attributes="0"/>
-                          <Component id="jLabel1" alignment="3" max="32767" attributes="0"/>
+                          <Component id="priceField" alignment="3" pref="69" max="32767" attributes="0"/>
+                          <Component id="priceLabel" alignment="3" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -406,7 +392,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel1">
+            <Component class="javax.swing.JLabel" name="priceLabel">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="18" style="3"/>
@@ -418,7 +404,7 @@
                 <Property name="text" type="java.lang.String" value="Precio"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="priceField">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -429,28 +415,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="notWellSeenLabel1">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Dialog" size="10" style="0"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Si los productos no se ven bien,"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="notWellSeenLabel2">
-          <Properties>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Dialog" size="10" style="0"/>
-            </Property>
-            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="95" green="5e" red="15" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;a&gt;pulsa aqu&#xed;&lt;/a&gt;&lt;/html&gt;"/>
-          </Properties>
-          <Events>
-            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="notWellSeenLabel2MouseReleased"/>
-          </Events>
-        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

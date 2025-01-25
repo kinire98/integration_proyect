@@ -6,16 +6,19 @@ package com.kinire.proyectointegrador.desktop.ui.frame;
 
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.Product;
+import com.kinire.proyectointegrador.components.Purchase;
+import com.kinire.proyectointegrador.components.User;
 import com.kinire.proyectointegrador.desktop.controller.MainFrameController;
-import com.kinire.proyectointegrador.desktop.ui.list_renderer.CustomRenderer;
+import com.kinire.proyectointegrador.desktop.ui.list_renderer.CustomProductsRenderer;
+import com.kinire.proyectointegrador.desktop.utils.DiviseCalculator;
 import com.kinire.proyectointegrador.desktop.utils.ImageCache;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -31,73 +34,123 @@ public class MainFrame extends javax.swing.JFrame {
 
 
     private final static Color MAIN_BLUE = new Color(21, 94, 149);
-    private List<Product> products;
     private final DefaultListModel<Product> listModel = new DefaultListModel<>();
 
     private int i = 0;// No es una variable local por las lambdas
 
-    private boolean connectionStarted = false;
 
     private final MainFrameController controller;
 
     public MainFrame() {
         initComponents();
         setLocationRelativeTo(null);
-        this.products = new ArrayList<>();
-        initList();
         setTitle(TITLE);
-        System.setProperty("java.awt.application.name", TITLE);
         this.controller = new MainFrameController(this);
-        productsList.addMouseListener(controller);
+        controller.changeUser();
     }
 
-
-    private void initList() {
+    public void initList() {
         i = 0;
         listModel.clear();
-        if(!connectionStarted) {
-            Connection.startInstance(() -> {
-                Connection.getInstance().setConnectionLostPromise(() -> {
-                    // TODO: connection lost promise here
-                });
-                Connection.getInstance().setProductsUpdatedPromise(() -> {
-                    initList();
-                });
-                Connection.getInstance().getProducts(product -> {
-                    try {
-                        ImageCache.putImage(product.getImagePath(), new ImageIcon(ImageIO.read(new ByteArrayInputStream(product.getImage()))));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    SwingUtilities.invokeLater(() -> {
-                        listModel.add(i, product);
-                        i++;
-                    });
-                }, e -> {
-
-                });
-            });
-            connectionStarted = true;
-        } else {
-            Connection.getInstance().getProducts(product -> {
-                try {
-                    ImageCache.putImage(product.getImagePath(), new ImageIcon(ImageIO.read(new ByteArrayInputStream(product.getImage()))));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        emptyPurchaseButton.setEnabled(false);
+        savePurchaseButton.setEnabled(false);
+        purchaseHistoryButton.setEnabled(false);
+        settingsButton.setEnabled(false);
+        fileMenu.setEnabled(false);
+        userMenu.setEnabled(false);
+        shoppingCartMenu.setEnabled(false);
+        productsList.removeMouseListener(controller);
+        Connection.getInstance().getProducts(product -> {
+            controller.addProduct(product);
+            try {
+                ImageCache.putImage(product.getImagePath(), new ImageIcon(ImageIO.read(new ByteArrayInputStream(product.getImage()))));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SwingUtilities.invokeLater(() -> {
                 listModel.add(i, product);
                 i++;
-                productsList.setModel(listModel);
-            }, e -> {
-
             });
-        }
+        }, this::checkUserPrivileges, e -> {
 
+        });
         productsList.setModel(listModel);
-        productsList.setCellRenderer(new CustomRenderer());
+        productsList.setCellRenderer(new CustomProductsRenderer());
     }
 
+    public void emptyTable() {
+        DefaultTableModel model = (DefaultTableModel) shoppingCartTable.getModel();
+        model.setRowCount(0);
+        SwingUtilities.invokeLater(() -> {
+            shoppingCartTable.repaint();
+        });
+    }
 
+    public void setTableModel(Object[][] objects) {
+        DefaultTableModel model = (DefaultTableModel) shoppingCartTable.getModel();
+        model.setRowCount(0);
+        for (int j = 0; j < objects.length; j++) {
+            model.addRow(objects[j]);
+        }
+        SwingUtilities.invokeLater(() -> {
+            shoppingCartTable.setModel(model);
+        });
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        checkUserPrivileges();
+    }
+
+    public Purchase getCurrentPurchase() {
+        return currentPurchase;
+    }
+
+    public void setCurrentPurchase(Purchase currentPurchase) {
+        this.currentPurchase = currentPurchase;
+    }
+
+    public void recalculateCartValues() {
+        controller.showShoppingCartState();
+    }
+
+    public void setTotalPrice(float price) {
+        this.priceField.setText(
+                String.format(
+                        Locale.getDefault(),
+                        "%.2f%s",
+                        DiviseCalculator.getPrice(price),
+                        DiviseCalculator.getSymbol()
+                )
+        );
+    }
+
+    public void checkUserPrivileges() {
+        settingsButton.setEnabled(true);
+        userMenu.setEnabled(true);
+        shoppingCartMenu.setEnabled(true);
+        purchaseHistoryButton.setEnabled(true);
+        fileMenu.setEnabled(true);
+        open.setEnabled(true);
+        if(!user.isAdmin()) {
+            emptyPurchaseButton.setEnabled(true);
+            savePurchaseButton.setEnabled(true);
+            saveTo.setEnabled(true);
+            savePurchaseMenu.setEnabled(true);
+            emptyPurchaseMenu.setEnabled(false);
+            productsList.addMouseListener(controller);
+        } else {
+            saveTo.setEnabled(false);
+            savePurchaseMenu.setEnabled(false);
+            emptyPurchaseMenu.setEnabled(false);
+            this.emptyTable();
+            productsList.removeMouseListener(controller);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,18 +176,14 @@ public class MainFrame extends javax.swing.JFrame {
         shoppingCartItemsScroll = new javax.swing.JScrollPane();
         shoppingCartTable = new javax.swing.JTable();
         roundedPanel2 = new com.kinire.proyectointegrador.desktop.ui.modifiedComponents.RoundedPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        notWellSeenLabel1 = new javax.swing.JLabel();
-        notWellSeenLabel2 = new javax.swing.JLabel();
+        priceLabel = new javax.swing.JLabel();
+        priceField = new javax.swing.JTextField();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         saveTo = new javax.swing.JMenuItem();
         open = new javax.swing.JMenuItem();
-        addProduct = new javax.swing.JMenu();
+        userMenu = new javax.swing.JMenu();
         changeUser = new javax.swing.JMenuItem();
-        Products = new javax.swing.JMenu();
-        openProductView = new javax.swing.JMenuItem();
         shoppingCartMenu = new javax.swing.JMenu();
         savePurchaseMenu = new javax.swing.JMenuItem();
         emptyPurchaseMenu = new javax.swing.JMenuItem();
@@ -146,6 +195,7 @@ public class MainFrame extends javax.swing.JFrame {
         settingsButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         settingsButton.setForeground(new java.awt.Color(255, 255, 255));
         settingsButton.setText("Ajustes");
+        settingsButton.setEnabled(false);
         settingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 settingsButtonActionPerformed(evt);
@@ -156,6 +206,7 @@ public class MainFrame extends javax.swing.JFrame {
         purchaseHistoryButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         purchaseHistoryButton.setForeground(new java.awt.Color(255, 255, 255));
         purchaseHistoryButton.setText("Ver historial");
+        purchaseHistoryButton.setEnabled(false);
         purchaseHistoryButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 purchaseHistoryButtonActionPerformed(evt);
@@ -166,6 +217,7 @@ public class MainFrame extends javax.swing.JFrame {
         emptyPurchaseButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         emptyPurchaseButton.setForeground(new java.awt.Color(255, 255, 255));
         emptyPurchaseButton.setText("Vaciar compra");
+        emptyPurchaseButton.setEnabled(false);
         emptyPurchaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 emptyPurchaseButtonActionPerformed(evt);
@@ -176,6 +228,7 @@ public class MainFrame extends javax.swing.JFrame {
         savePurchaseButton.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         savePurchaseButton.setForeground(new java.awt.Color(255, 255, 255));
         savePurchaseButton.setText("Guardar compra");
+        savePurchaseButton.setEnabled(false);
         savePurchaseButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 savePurchaseButtonActionPerformed(evt);
@@ -223,7 +276,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.Float.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true
@@ -259,14 +312,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(shoppingCartItemsScroll))
         );
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 3, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Precio");
+        priceLabel.setFont(new java.awt.Font("Dialog", 3, 18)); // NOI18N
+        priceLabel.setForeground(new java.awt.Color(255, 255, 255));
+        priceLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        priceLabel.setText("Precio");
 
-        jTextField1.setEditable(false);
-        jTextField1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        priceField.setEditable(false);
+        priceField.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        priceField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         javax.swing.GroupLayout roundedPanel2Layout = new javax.swing.GroupLayout(roundedPanel2);
         roundedPanel2.setLayout(roundedPanel2Layout);
@@ -274,9 +327,9 @@ public class MainFrame extends javax.swing.JFrame {
             roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roundedPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(priceLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1)
+                .addComponent(priceField)
                 .addContainerGap())
         );
         roundedPanel2Layout.setVerticalGroup(
@@ -284,22 +337,10 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(roundedPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(roundedPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(priceField, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+                    .addComponent(priceLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        notWellSeenLabel1.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        notWellSeenLabel1.setText("Si los productos no se ven bien,");
-
-        notWellSeenLabel2.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
-        notWellSeenLabel2.setForeground(new java.awt.Color(21, 94, 149));
-        notWellSeenLabel2.setText("<html><a>pulsa aquí</a></html>");
-        notWellSeenLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                notWellSeenLabel2MouseReleased(evt);
-            }
-        });
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -322,12 +363,6 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(settingsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(225, 225, 225)
-                .addComponent(notWellSeenLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(notWellSeenLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,14 +381,11 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(roundedPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(shoppingCartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(productsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10)
-                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(notWellSeenLabel1)
-                    .addComponent(notWellSeenLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(30, 30, 30))
         );
 
         fileMenu.setText("Archivo");
+        fileMenu.setEnabled(false);
 
         saveTo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         saveTo.setText("Guardar compra");
@@ -375,7 +407,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         menuBar.add(fileMenu);
 
-        addProduct.setText("Usuario");
+        userMenu.setText("Usuario");
+        userMenu.setEnabled(false);
 
         changeUser.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         changeUser.setText("Cambiar usuario");
@@ -384,25 +417,14 @@ public class MainFrame extends javax.swing.JFrame {
                 changeUserActionPerformed(evt);
             }
         });
-        addProduct.add(changeUser);
+        userMenu.add(changeUser);
 
-        menuBar.add(addProduct);
-
-        Products.setText("Producto");
-
-        openProductView.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        openProductView.setText("Añadir producto");
-        openProductView.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                openProductViewActionPerformed(evt);
-            }
-        });
-        Products.add(openProductView);
-
-        menuBar.add(Products);
+        menuBar.add(userMenu);
 
         shoppingCartMenu.setText("Carrito");
+        shoppingCartMenu.setEnabled(false);
 
+        savePurchaseMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         savePurchaseMenu.setText("Guardar compra");
         savePurchaseMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -411,6 +433,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         shoppingCartMenu.add(savePurchaseMenu);
 
+        emptyPurchaseMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         emptyPurchaseMenu.setText("Vaciar compras");
         emptyPurchaseMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -419,6 +442,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         shoppingCartMenu.add(emptyPurchaseMenu);
 
+        previousPurchasesMenu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         previousPurchasesMenu.setText("Ver compras anteriores");
         previousPurchasesMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -446,71 +470,58 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
-        // TODO add your handling code here:
+        controller.openSettings();
     }//GEN-LAST:event_settingsButtonActionPerformed
 
     private void purchaseHistoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseHistoryButtonActionPerformed
-        // TODO add your handling code here:
+        controller.seePurchaseHistory();
     }//GEN-LAST:event_purchaseHistoryButtonActionPerformed
 
     private void emptyPurchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emptyPurchaseButtonActionPerformed
-        // TODO add your handling code here:
+        controller.emptyPurchase();
     }//GEN-LAST:event_emptyPurchaseButtonActionPerformed
 
     private void savePurchaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePurchaseButtonActionPerformed
-        // TODO add your handling code here:
+        controller.savePurchase();
     }//GEN-LAST:event_savePurchaseButtonActionPerformed
 
     private void previousPurchasesMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousPurchasesMenuActionPerformed
-        // TODO add your handling code here:
+        controller.seePurchaseHistory();
     }//GEN-LAST:event_previousPurchasesMenuActionPerformed
 
     private void emptyPurchaseMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emptyPurchaseMenuActionPerformed
-        // TODO add your handling code here:
+        controller.emptyPurchase();
     }//GEN-LAST:event_emptyPurchaseMenuActionPerformed
 
     private void savePurchaseMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePurchaseMenuActionPerformed
-        // TODO add your handling code here:
+        controller.emptyPurchase();
     }//GEN-LAST:event_savePurchaseMenuActionPerformed
 
-    private void openProductViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openProductViewActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_openProductViewActionPerformed
-
     private void changeUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUserActionPerformed
-        // TODO add your handling code here:
+        controller.changeUser();
     }//GEN-LAST:event_changeUserActionPerformed
 
     private void openActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openActionPerformed
-        // TODO add your handling code here:
+        controller.seePurchaseHistory();
     }//GEN-LAST:event_openActionPerformed
 
     private void saveToActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveToActionPerformed
-        // TODO add your handling code here:
+        controller.savePurchase();
     }//GEN-LAST:event_saveToActionPerformed
 
-    private void notWellSeenLabel2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_notWellSeenLabel2MouseReleased
-        initList();
-    }//GEN-LAST:event_notWellSeenLabel2MouseReleased
-
-
+    //<editor-fold>
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu Products;
-    private javax.swing.JMenu addProduct;
     private javax.swing.JMenuItem changeUser;
     private com.kinire.proyectointegrador.components.Purchase currentPurchase;
     private javax.swing.JButton emptyPurchaseButton;
     private javax.swing.JMenuItem emptyPurchaseMenu;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JLabel notWellSeenLabel1;
-    private javax.swing.JLabel notWellSeenLabel2;
     private javax.swing.JMenuItem open;
-    private javax.swing.JMenuItem openProductView;
     private javax.swing.JMenuItem previousPurchasesMenu;
+    private javax.swing.JTextField priceField;
+    private javax.swing.JLabel priceLabel;
     private javax.swing.JLabel productsLabel;
     private javax.swing.JList<Product> productsList;
     private javax.swing.JPanel productsPanel;
@@ -527,5 +538,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel shoppingCartPanel;
     private javax.swing.JTable shoppingCartTable;
     private com.kinire.proyectointegrador.components.User user;
+    private javax.swing.JMenu userMenu;
     // End of variables declaration//GEN-END:variables
+    //</editor-fold>
 }

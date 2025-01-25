@@ -280,13 +280,6 @@ public class AddProductDialog extends javax.swing.JDialog {
         return true;
     }
 
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new AddProductDialog(null, false).setVisible(true);
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addProductButton;
     private javax.swing.JTextField categoryField;

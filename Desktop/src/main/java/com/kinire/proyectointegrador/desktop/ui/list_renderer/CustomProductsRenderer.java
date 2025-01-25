@@ -7,14 +7,15 @@ import com.kinire.proyectointegrador.desktop.utils.ImageCache;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Locale;
 
-public class CustomRenderer extends DefaultListCellRenderer implements ListCellRenderer<Object> {
+public class CustomProductsRenderer extends DefaultListCellRenderer implements ListCellRenderer<Object> {
     private static final int iconTextGap = 10;
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         Product product = (Product) value;
         setText("<html><div style=\"width:300px;\"></div><center><i>" + product.getCategory().getName() + ":</i> <b>" + product.getName() + "</b><br><hr><br>" +
-                "<i><b>" + DiviseCalculator.getPrice(product.getPrice()) + DiviseCalculator.getSymbol() + "</b></i></center></html>");
+                "<i><b>" + String.format(Locale.getDefault(), "%.2f", DiviseCalculator.getPrice(product.getPrice())) + DiviseCalculator.getSymbol() + "</b></i></center></html>");
         ImageIcon imageIcon = ImageCache.getImage(product.getImagePath());
         setIcon(resizeImage(imageIcon, 200, (imageIcon.getIconHeight() * 200) / imageIcon.getIconWidth()));
         setIconTextGap(iconTextGap);

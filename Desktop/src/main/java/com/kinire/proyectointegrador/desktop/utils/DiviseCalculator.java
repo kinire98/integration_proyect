@@ -2,9 +2,17 @@ package com.kinire.proyectointegrador.desktop.utils;
 
 public class DiviseCalculator {
     public final static String dollar = "$";
-    public final static String euro = "$";
+    public final static String euro = "€";
     public final static String pound = "£";
     public final static String yen = "¥";
+    private final static String peseta = "₧";
+    private static final String[] currencies = {
+            peseta,
+            euro,
+            dollar,
+            pound,
+            yen
+    };
 
     private static String divise = "€";
     public static float getPrice(float price) {
@@ -14,6 +22,8 @@ public class DiviseCalculator {
             return price * 0.84f;
         if(divise.equals(yen))
             return price * 163.54f;
+        if(divise.equals(peseta))
+            return price * 166.39f;
         return price;
     }
     public static String getSymbol() {
@@ -22,12 +32,17 @@ public class DiviseCalculator {
 
     public static void setSymbol(String symbol) {
         if(
-                !symbol.equals(dollar) ||
-                        !symbol.equals(euro) ||
-                        !symbol.equals(pound) ||
-                        !symbol.equals(yen)
+                !symbol.equals(dollar) &&
+                        !symbol.equals(euro) &&
+                        !symbol.equals(pound) &&
+                        !symbol.equals(yen) &&
+                        !symbol.equals(peseta)
         )
             return;
         divise = symbol;
+    }
+
+    public static String[] getCurrencies() {
+        return currencies;
     }
 }
