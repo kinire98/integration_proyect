@@ -2,6 +2,7 @@ package com.kinire.proyectointegrador.android.controllers.activities;
 
 import android.content.Intent;
 
+import com.kinire.proyectointegrador.android.R;
 import com.kinire.proyectointegrador.android.ui.activities.MainActivity;
 import com.kinire.proyectointegrador.android.ui.activities.SettingsActivity;
 import com.kinire.proyectointegrador.android.ui.activities.UserActivity;
@@ -27,10 +28,13 @@ public class MainActivityController {
 
     private boolean startUserActivity = false;
 
+    private String PARCELABLE_SHOW_BACK_BUTTON_KEY;
+
     public MainActivityController(MainActivity activity) {
         this.activity = activity;
         this.userAdmin = new UserAdmin(activity);
         this.username = userAdmin.getUser();
+        this.PARCELABLE_SHOW_BACK_BUTTON_KEY = activity.getString(R.string.show_back_parcelable_key);
         userNameManagement();
     }
     private void userNameManagement() {
@@ -52,6 +56,7 @@ public class MainActivityController {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startUserActivity = true;
         }
+        intent.putExtra(PARCELABLE_SHOW_BACK_BUTTON_KEY, !startUserActivity);
         activity.startActivity(intent);
     }
 

@@ -16,7 +16,7 @@ public class DataSource {
             throw new RuntimeException(e);
         }
         config.setDriverClassName("org.mariadb.jdbc.Driver");
-        config.setJdbcUrl("jdbc:mariadb://localhost/tpv_test");
+        config.setJdbcUrl("jdbc:mariadb://localhost/tpv_prod");
         config.setUsername("integrador");
         config.setPassword("");
         config.addDataSourceProperty( "cachePrepStmts" , "true" );

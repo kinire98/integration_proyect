@@ -42,6 +42,8 @@ public class UserActivity extends AppCompatActivity {
 
     private String connectivityError;
 
+    private boolean showBackButton;
+
     private String PASSWORD_FIELD_SET_TITLE;
     private String PASSWORD_FIELD_QUERY_TITLE;
 
@@ -49,6 +51,8 @@ public class UserActivity extends AppCompatActivity {
     private String PASSWORD_FIELD_QUERY_BUTTON;
 
     private String INCORRECT_PASSWORD;
+
+    private String SHOW_BACK_BUTTON_PARCELABLE_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +65,17 @@ public class UserActivity extends AppCompatActivity {
             return insets;
         });
         this.initializeElements();
+        this.getBundleElements();
+        this.setToolbar();
         this.setListeners();
         StyleDissonancesCorrection.setStatusBarCorrectColor(this);
+    }
+
+    private void getBundleElements() {
+        Bundle bundle = getIntent().getExtras();
+        if(bundle == null)
+            return;
+        showBackButton = bundle.getBoolean(SHOW_BACK_BUTTON_PARCELABLE_KEY);
     }
 
     private void initializeElements() {
@@ -76,10 +89,16 @@ public class UserActivity extends AppCompatActivity {
         this.PASSWORD_FIELD_SET_BUTTON = getString(R.string.create_password_button);
         this.PASSWORD_FIELD_QUERY_BUTTON = getString(R.string.write_password_button);
         this.INCORRECT_PASSWORD = getString(R.string.incorrect_password);
+        this.SHOW_BACK_BUTTON_PARCELABLE_KEY = getString(R.string.show_back_parcelable_key);
         this.controller = new UserActivityController(this);
     }
 
-    public void setListeners() {
+    private void setToolbar() {
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(showBackButton);
+    }
+
+    private void setListeners() {
         this.button.setOnClickListener(controller);
     }
 

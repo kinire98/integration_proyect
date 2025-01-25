@@ -59,4 +59,5 @@
     <string name="amount_parcelable_key">331844e4-a47d-4013-84d2-e4a1d8b3a4ad</string>
     <string name="position_parcelable_key">7d4e2a97-95cd-47e5-bd01-2b4107d84def</string>
     <string name="purchase_parcelable_key">a819f7e7-aa9b-48c2-96f8-a475f5820152</string>
+    <string name="show_back_parcelable_key">9f1bf559-1fa6-475b-90a2-000c8f7fe0ca</string>
 </resources>
