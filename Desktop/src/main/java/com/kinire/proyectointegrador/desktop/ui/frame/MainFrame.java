@@ -18,6 +18,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -74,6 +75,16 @@ public class MainFrame extends javax.swing.JFrame {
         }, this::checkUserPrivileges, e -> {
 
         });
+        productsList.setModel(listModel);
+        productsList.setCellRenderer(new CustomProductsRenderer());
+    }
+
+    public void reloadList() {
+        List<Product> products = controller.getProducts();
+        listModel.clear();
+        for (int j = 0; j < products.size(); j++) {
+            listModel.add(j, products.get(j));
+        }
         productsList.setModel(listModel);
         productsList.setCellRenderer(new CustomProductsRenderer());
     }

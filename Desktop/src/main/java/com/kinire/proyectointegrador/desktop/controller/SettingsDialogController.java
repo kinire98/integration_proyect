@@ -53,7 +53,7 @@ public class SettingsDialogController {
                         0
                 ))
         );
-        mainFrame.initList();
+        mainFrame.reloadList();
         mainFrame.recalculateCartValues();
     }
 

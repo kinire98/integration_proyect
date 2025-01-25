@@ -68,6 +68,9 @@ public class MainFrameController extends MouseAdapter {
         this.products.add(product);
     }
 
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
 
     public void seePurchaseHistory() {
         if(frame.getUser().isAdmin()) {
@@ -189,7 +192,12 @@ public class MainFrameController extends MouseAdapter {
         if(!connectionStarted) {
             Connection.startInstance(() -> {
                 Connection.getInstance().setConnectionLostPromise(this::connectionLost);
-                Connection.getInstance().setProductsUpdatedPromise(frame::initList);
+                Connection.getInstance().setProductsUpdatedPromise(() -> {
+                    Connection.getInstance().getUpdatedProducts(products, product -> {
+                        products.add(product);
+                        frame.reloadList();
+                    }, e -> {});
+                });
                 Connection.getInstance().userExists(this.username, this::userExists, this::userDoesntExist, (e) -> {
                     e.printStackTrace();
                 });
