@@ -36,6 +36,7 @@ public class Main {
                 handler.start();
             }
         } catch (IOException e) {
+            e.printStackTrace();
             logger.log(Level.SEVERE, e.getLocalizedMessage());
         }
     }
