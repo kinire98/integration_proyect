@@ -4,9 +4,11 @@
 
 package com.kinire.proyectointegrador.desktop;
 
+import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.desktop.ui.frame.MainFrame;
 
 import javax.swing.*;
+import java.io.IOException;
 
 /**
  *

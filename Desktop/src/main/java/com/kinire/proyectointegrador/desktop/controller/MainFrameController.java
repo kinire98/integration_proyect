@@ -17,12 +17,15 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MainFrameController extends MouseAdapter implements ListSelectionListener {
+public class MainFrameController extends MouseAdapter implements ListSelectionListener, WindowListener {
 
     private final static String SELECT_AMOUNT_TITLE = "Selecciona una cantidad";
     private final static String SELECT_AMOUNT_MESSAGE = "Selecciona una cantidad: ";
@@ -410,5 +413,42 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
                 return item;
         }
         return null;
+    }
+
+    @Override
+    public void windowOpened(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent windowEvent) {
+        try {
+            Connection.getInstance().close();
+        } catch (IOException e) {}
+    }
+
+    @Override
+    public void windowClosed(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent windowEvent) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent windowEvent) {
+
     }
 }

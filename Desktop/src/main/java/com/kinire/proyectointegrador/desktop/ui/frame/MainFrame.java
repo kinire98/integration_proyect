@@ -53,6 +53,7 @@ public class MainFrame extends javax.swing.JFrame {
         this.controller = new MainFrameController(this);
         controller.changeUser();
         shoppingCartTable.getSelectionModel().addListSelectionListener(controller);
+        this.addWindowListener(controller);
 
     }
 
