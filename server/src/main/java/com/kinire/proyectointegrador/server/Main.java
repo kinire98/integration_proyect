@@ -25,7 +25,7 @@ public class Main {
             Runtime.getRuntime().addShutdownHook(connections);
             while(true) {
                 if(System.currentTimeMillis() - startTime >= 60) {
-                    new ProcessBuilder("mvn","exec:java","-Dexec.mainClass=com.kinire.proyectointegrador.server.report.Main").start();
+                    new ProcessBuilder("/usr/bin/mvn","exec:java","-Dexec.mainClass=com.kinire.proyectointegrador.server.report.Main").start();
                 }
                 logger.log(Level.INFO, "Awaiting requests...");
                 Socket socket = server.accept();
