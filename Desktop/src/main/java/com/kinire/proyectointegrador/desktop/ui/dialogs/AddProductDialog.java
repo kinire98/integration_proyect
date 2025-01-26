@@ -42,7 +42,7 @@ public class AddProductDialog extends javax.swing.JDialog {
     private static final String ERROR = "Error";
     private static final String PRODUCT_UPLOADED_SUCCSESFULLY = "El producto se ha guardado con éxito";
     private static final String SUCCESS = "Éxito";
-    private static final String TITLE = "Añadir producto";
+    private static final String TITLE = "Añadir producto - Karrefú";
 
 
 

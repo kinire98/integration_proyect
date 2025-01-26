@@ -1,22 +1,12 @@
-package com.kinire.proyectointegrador.desktop.controller;
+package com.kinire.proyectointegrador.desktop.utils;
 
 import com.kinire.proyectointegrador.client.Connection;
 import com.kinire.proyectointegrador.components.User;
-import com.kinire.proyectointegrador.desktop.ui.dialogs.AddProductDialog;
-import com.kinire.proyectointegrador.desktop.ui.dialogs.SettingsDialog;
 import com.kinire.proyectointegrador.desktop.ui.frame.MainFrame;
-import com.kinire.proyectointegrador.desktop.utils.DiviseCalculator;
 
 import javax.swing.*;
 
-public class SettingsDialogController {
-
-    private SettingsDialog dialog;
-
-    private static final String CHOOSE_CURRENCY = "Elige una divisa: ";
-    private static final String CHOOSE_CURRENCY_TITLE = "Selector de divisas";
-
-    private final MainFrame mainFrame;
+public class UserAdmin {
     private final static String ERROR = "Error";
     private final static String ENTER_USERNAME = "Cliente:";
     private final static String ENTER_USERNAME_TITLE = "Introducir nombre de cliente";
@@ -29,50 +19,15 @@ public class SettingsDialogController {
     private final static String EMPTY_USER_FIELD = "No dejes el campo de usuario vacío";
     private final static String EMPTY_PASSWORD_FIELD = "No dejes el campo de la contraseña vacío";
 
+    private final MainFrame mainFrame;
+
     private String username;
 
-    public SettingsDialogController(SettingsDialog dialog, MainFrame mainFrame) {
-        this.dialog = dialog;
+    public UserAdmin(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
-        if(mainFrame.getUser().isAdmin())
-            dialog.showAddProductButton();
-        else
-            dialog.hideAddProductButton();
     }
-
-
-    public void changeCurency() {
-        String option = ((String) JOptionPane.showInputDialog(
-                dialog,
-                CHOOSE_CURRENCY,
-                CHOOSE_CURRENCY_TITLE,
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                DiviseCalculator.getCurrencies(),
-                DiviseCalculator.getSymbol()
-        ));
-        if(option == null)
-            return;
-        DiviseCalculator.setSymbol(
-                option
-        );
-        mainFrame.reloadList();
-        mainFrame.recalculateCartValues();
-    }
-
-    public void addProduct() {
-        AddProductDialog dialog = new AddProductDialog(mainFrame, true);
-        dialog.setVisible(true);
-        dialog.dispose();
-    }
-
-
-    public void finish() {
-        dialog.setVisible(false);
-    }
-
     public void changeUser() {
-        String username = JOptionPane.showInputDialog(dialog, ENTER_USERNAME, ENTER_USERNAME_TITLE, JOptionPane.PLAIN_MESSAGE);
+        String username = JOptionPane.showInputDialog(mainFrame, ENTER_USERNAME, ENTER_USERNAME_TITLE, JOptionPane.PLAIN_MESSAGE);
         if(username == null || username.isEmpty())
             return;
         this.username = username;
@@ -82,19 +37,16 @@ public class SettingsDialogController {
     private void userExists() {
         String password = getPassword(ENTER_PASSWORD_TITLE, ENTER_PASSWORD);
         if(password == null || password.isEmpty()) {
-            JOptionPane.showMessageDialog(dialog, EMPTY_PASSWORD_FIELD, ERROR, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(mainFrame, EMPTY_PASSWORD_FIELD, ERROR, JOptionPane.ERROR_MESSAGE);
             return;
         }
         User user = new User(username, password);
         Connection.getInstance().isUserDataCorrect(user, () -> {
             mainFrame.setUser(user);
             mainFrame.checkUserPrivileges();
-            if(user.isAdmin())
-                dialog.showAddProductButton();
-            else
-                dialog.hideAddProductButton();
+
         }, () -> {
-            JOptionPane.showMessageDialog(dialog, WRONG_PASSWORD, WRONG_PASSWORD_TITLE, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(mainFrame, WRONG_PASSWORD, WRONG_PASSWORD_TITLE, JOptionPane.ERROR_MESSAGE);
             userExists();
         }, e -> {
 
@@ -104,17 +56,14 @@ public class SettingsDialogController {
     private void userDoesntExist() {
         String password = getPassword(ENTER_NEW_PASSWORD_TITLE, ENTER_NEW_PASSWORD);
         if(password == null || password.isEmpty()) {
-            JOptionPane.showMessageDialog(dialog, EMPTY_PASSWORD_FIELD, ERROR, JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(mainFrame, EMPTY_PASSWORD_FIELD, ERROR, JOptionPane.ERROR_MESSAGE);
             return;
         }
         User user = new User(username, password);
         Connection.getInstance().insertUserData(user, () -> {
             mainFrame.setUser(user);
             mainFrame.checkUserPrivileges();
-            if(user.isAdmin())
-                dialog.showAddProductButton();
-            else
-                dialog.hideAddProductButton();
+
         }, e -> {
 
         } );
@@ -139,5 +88,4 @@ public class SettingsDialogController {
         }
         return null;
     }
-
 }

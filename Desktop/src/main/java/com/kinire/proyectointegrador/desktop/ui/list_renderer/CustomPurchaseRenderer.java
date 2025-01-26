@@ -16,7 +16,7 @@ public class CustomPurchaseRenderer extends DefaultListCellRenderer implements L
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         ShoppingCartItem item = (ShoppingCartItem) value;
         setText("<html><div style=\"width:300px;\"></div><center><i>" + item.getProduct().getCategory().getName() + ":</i> <b>" + item.getProduct().getName() + "</b><br><hr><br>" +
-                "<i><b>" + String.format(Locale.getDefault(), "%.2f", DiviseCalculator.getPrice(item.getProduct().getPrice())) + DiviseCalculator.getSymbol() + "* " + item.getAmount() +
+                "<i><b>" + String.format(Locale.getDefault(), "%.2f", DiviseCalculator.getPrice(item.getProduct().getPrice())) + DiviseCalculator.getSymbol() + " * " + item.getAmount() +
                 " = " + String.format(Locale.getDefault(), "%.2f", DiviseCalculator.getPrice(item.getPrice())) + DiviseCalculator.getSymbol() +  "</b></i></center></html>");
         ImageIcon imageIcon = ImageCache.getImage(item.getProduct().getImagePath());
         setIcon(resizeImage(imageIcon, 200, (imageIcon.getIconHeight() * 200) / imageIcon.getIconWidth()));

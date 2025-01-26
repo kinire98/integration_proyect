@@ -15,9 +15,12 @@ import com.kinire.proyectointegrador.desktop.utils.ImageCache;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,8 +49,11 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle(TITLE);
+
         this.controller = new MainFrameController(this);
         controller.changeUser();
+        shoppingCartTable.getSelectionModel().addListSelectionListener(controller);
+
     }
 
     public void initList() {
@@ -94,10 +100,15 @@ public class MainFrame extends javax.swing.JFrame {
         model.setRowCount(0);
         SwingUtilities.invokeLater(() -> {
             shoppingCartTable.repaint();
+            controller.completedTableOperation();
         });
     }
 
     public void setTableModel(Object[][] objects) {
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setHorizontalAlignment(JLabel.CENTER);
+        shoppingCartTable.setDefaultRenderer(String.class, renderer);
+        shoppingCartTable.setDefaultRenderer(Integer.class, renderer);
         DefaultTableModel model = (DefaultTableModel) shoppingCartTable.getModel();
         model.setRowCount(0);
         for (int j = 0; j < objects.length; j++) {
@@ -105,6 +116,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         SwingUtilities.invokeLater(() -> {
             shoppingCartTable.setModel(model);
+            controller.completedTableOperation();
         });
     }
 
@@ -141,6 +153,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void checkUserPrivileges() {
+        productsList.removeMouseListener(controller);
         settingsButton.setEnabled(true);
         userMenu.setEnabled(true);
         shoppingCartMenu.setEnabled(true);
@@ -152,15 +165,18 @@ public class MainFrame extends javax.swing.JFrame {
             savePurchaseButton.setEnabled(true);
             saveTo.setEnabled(true);
             savePurchaseMenu.setEnabled(true);
-            emptyPurchaseMenu.setEnabled(false);
+            emptyPurchaseMenu.setEnabled(true);
             productsList.addMouseListener(controller);
         } else {
             saveTo.setEnabled(false);
             savePurchaseMenu.setEnabled(false);
             emptyPurchaseMenu.setEnabled(false);
             this.emptyTable();
-            productsList.removeMouseListener(controller);
         }
+    }
+
+    public JTable getShoppingCartTable() {
+        return shoppingCartTable;
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -509,7 +525,7 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_savePurchaseMenuActionPerformed
 
     private void changeUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUserActionPerformed
-        controller.changeUser();
+        controller.changeUserStarted();
     }//GEN-LAST:event_changeUserActionPerformed
 
     private void openActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openActionPerformed
