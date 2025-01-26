@@ -4,6 +4,8 @@ import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.db.db_access.DAOs.CategoryDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,6 +72,27 @@ public class CategoryImpl implements CategoryDAO {
             logger.log(Level.SEVERE, e.getLocalizedMessage());
         }
         return category;
+    }
+
+    @Override
+    public List<Category> selectAll() {
+        List<Category> categories = new ArrayList<>();
+        String query = "SELECT * FROM categories";
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet set = statement.executeQuery();
+            while (set.next()) {
+                categories.add(
+                        new Category(
+                                set.getLong("id"),
+                                set.getString("name"))
+                );
+            }
+            set.close();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, e.getLocalizedMessage());
+        }
+        return categories;
     }
 
     @Override

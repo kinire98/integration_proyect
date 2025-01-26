@@ -93,7 +93,7 @@ public class Connection {
         this.socket.close();
     }
 
-    public void getProducts(ProductFunction successPromise, ErrorFunction failurePromise) {
+    public void getProducts(ProductFunction successPromise, EmptyFunction finishPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
                 logger.log(Level.INFO, "Sending products request");
@@ -107,7 +107,7 @@ public class Connection {
                     Product product = (Product) inputStream.readObject();
                     successPromise.apply(product);
                 }
-
+                finishPromise.apply();
             } catch (IOException | ClassNotFoundException e) {
                 failurePromise.apply(e);
                 return;

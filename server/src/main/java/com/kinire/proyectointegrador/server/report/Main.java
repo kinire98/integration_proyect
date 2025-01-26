@@ -1,10 +1,10 @@
-package com.kinire.proyectointegrador.db.report;
+package com.kinire.proyectointegrador.server.report;
 
 import com.kinire.proyectointegrador.components.Category;
 import com.kinire.proyectointegrador.components.Product;
 import com.kinire.proyectointegrador.components.Purchase;
 import com.kinire.proyectointegrador.components.ShoppingCartItem;
-import com.kinire.proyectointegrador.db.db_access.impls.PurchaseImpl;
+import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,16 +18,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        if(args.length != 1) {
-            System.err.println("Introduce the path for storing the reports");
-            return;
-        }
-        File dir = new File(args[0]);
-        if(!dir.isDirectory()) {
-            System.err.println("The path must be a directory");
-            return;
-        }
-        File file = new File(dir, LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
+        File file = new File("/root/reports", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));
         try {
             if(!file.createNewFile()) {
                 System.err.println("There was an error creating the file for the report. Make sure you have the right" +
@@ -35,7 +26,7 @@ public class Main {
                 return;
             }
             StringBuilder message = new StringBuilder();
-            List<Purchase> purchases = new PurchaseImpl().selectPurchaseByMonth(LocalDate.now());
+            List<Purchase> purchases = DAOInstances.getPurchaseDAO().selectPurchaseByMonth(LocalDate.now());
             message.append("----------------------------------").append(System.lineSeparator());
             message.append("Number of purchases this month: ").append(purchases.size());
             message.append(System.lineSeparator());

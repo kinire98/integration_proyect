@@ -15,7 +15,7 @@ public class Main {
 
             User user = new User("Iker", "1234");
             Connection.getInstance().getProducts((products) -> {
-            }, e -> e.printStackTrace());
+            },() -> {}, e -> e.printStackTrace());
         });
 
     }
