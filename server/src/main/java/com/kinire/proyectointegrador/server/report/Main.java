@@ -30,14 +30,14 @@ public class Main {
             message.append("----------------------------------").append(System.lineSeparator());
             message.append("Number of purchases this month: ").append(purchases.size());
             message.append(System.lineSeparator());
-            HashMap<Product, Integer> products = new HashMap<>();
-            HashMap<Category, Integer> category = new HashMap<>();
+            HashMap<String, Integer> products = new HashMap<>();
+            HashMap<String, Integer> category = new HashMap<>();
             double totalSold = 0.0;
             int totalSales = 0;
             for (Purchase purchase : purchases) {
                 for(ShoppingCartItem shoppingCartItem : purchase.getShoppingCartItems()) {
-                    products.put(shoppingCartItem.getProduct(), products.getOrDefault(shoppingCartItem.getProduct(), 0) + 1);
-                    category.put(shoppingCartItem.getProduct().getCategory(), category.getOrDefault(shoppingCartItem.getProduct().getCategory(), 0) + 1);
+                    products.put(shoppingCartItem.getProduct().getName(), products.getOrDefault(shoppingCartItem.getProduct().getName(), 0) + 1);
+                    category.put(shoppingCartItem.getProduct().getCategory().getName(), category.getOrDefault(shoppingCartItem.getProduct().getCategory().getName(), 0) + 1);
                     totalSales++;
                 }
             }
@@ -48,14 +48,14 @@ public class Main {
             message.append("Average per sale: ").append(averagePerSale).append("€").append(System.lineSeparator());
             message.append("----------------------------------").append(System.lineSeparator());
             message.append("Total of products: ").append(System.lineSeparator());
-            for(Product product : products.keySet()) {
-                message.append("Total sold of ").append(product.getName()).append(":").append(System.lineSeparator());
+            for(String product : products.keySet()) {
+                message.append("Total sold of ").append(product).append(":").append(System.lineSeparator());
                 message.append('\t').append(products.get(product)).append(System.lineSeparator());
             }
             message.append("----------------------------------").append(System.lineSeparator());
             message.append("Total of categories: ").append(System.lineSeparator());
-            for (Category category1 : category.keySet()) {
-                message.append("Total sold of ").append(category1.getName()).append(":").append(System.lineSeparator());
+            for (String category1 : category.keySet()) {
+                message.append("Total sold of ").append(category1).append(":").append(System.lineSeparator());
                 message.append('\t').append(category.get(category1)).append(System.lineSeparator());
             }
             message.append("----------------------------------").append(System.lineSeparator());
