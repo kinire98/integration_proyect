@@ -24,7 +24,7 @@ public class Main {
         try (ServerSocket server = new ServerSocket(CommonValues.tcpListeningPort)) {
             Runtime.getRuntime().addShutdownHook(connections);
             while(true) {
-                if(System.currentTimeMillis() - startTime >= 60) {
+                if(System.currentTimeMillis() - startTime >= 3600000) {
                     new ProcessBuilder("/usr/bin/mvn","exec:java","-Dexec.mainClass=com.kinire.proyectointegrador.server.report.Main").start();
                 }
                 logger.log(Level.INFO, "Awaiting requests...");
