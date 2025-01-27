@@ -3,6 +3,9 @@ package com.kinire.proyectointegrador.server.DAOInstances;
 import com.kinire.proyectointegrador.db.db_access.DAOs.*;
 import com.kinire.proyectointegrador.db.db_access.impls.*;
 
+/**
+ * Instancias de los DAOs
+ */
 public class DAOInstances {
 
     private static CategoryDAO categoryDAO;

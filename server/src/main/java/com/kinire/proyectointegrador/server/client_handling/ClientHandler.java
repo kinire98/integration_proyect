@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Clase que maneja las conexiones TCP
+ */
 public class ClientHandler extends Thread {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(ClientHandler.class);
@@ -51,6 +54,11 @@ public class ClientHandler extends Thread {
         } catch (IOException e) {}
     }
 
+    /**
+     * Cierra los flujos, la conexión, llama al cierre del Socket UDP
+     * y finaliza el hilo
+     * @throws IOException En caso de que surja algún error de entrada salida
+     */
     public void close() throws IOException {
         this.running = false;
         this.udpClientHandler.close();
@@ -59,10 +67,18 @@ public class ClientHandler extends Thread {
         this.socket.close();
         this.interrupt();
     }
+
+    /**
+     * Devuelve si la conexión está abierta
+     * @return Si la conexión está abierta
+     */
     public boolean isConnected() {
         return socket.isConnected();
     }
 
+    /**
+     * Avisa a la conexión UDP para que avise de que se ha añadido algún producto nuevo
+     */
     public void notifyProductUpdate() {
         udpClientHandler.queueNotificationOfProductUpdate();
     }

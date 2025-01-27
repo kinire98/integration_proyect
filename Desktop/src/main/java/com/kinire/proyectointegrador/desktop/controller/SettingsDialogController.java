@@ -9,6 +9,9 @@ import com.kinire.proyectointegrador.desktop.utils.DiviseCalculator;
 
 import javax.swing.*;
 
+/**
+ * Controlador para la vista de ajustes
+ */
 public class SettingsDialogController {
 
     private SettingsDialog dialog;
@@ -40,7 +43,9 @@ public class SettingsDialogController {
             dialog.hideAddProductButton();
     }
 
-
+    /**
+     * Abre el menú para el cambio de divisa
+     */
     public void changeCurency() {
         String option = ((String) JOptionPane.showInputDialog(
                 dialog,
@@ -60,6 +65,9 @@ public class SettingsDialogController {
         mainFrame.recalculateCartValues();
     }
 
+    /**
+     * Abre la vista de adición de productos
+     */
     public void addProduct() {
         AddProductDialog dialog = new AddProductDialog(mainFrame, true);
         dialog.setVisible(true);
@@ -67,10 +75,16 @@ public class SettingsDialogController {
     }
 
 
+    /**
+     * Finaliza esta vista
+     */
     public void finish() {
         dialog.setVisible(false);
     }
 
+    /**
+     * Inicia el proceso para cambiar de usuario
+     */
     public void changeUser() {
         String username = JOptionPane.showInputDialog(dialog, ENTER_USERNAME, ENTER_USERNAME_TITLE, JOptionPane.PLAIN_MESSAGE);
         if(username == null || username.isEmpty())

@@ -16,6 +16,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Clase encargada de generar un archivo con informes de productos vendidos
+ */
 public class Main {
     public static void main(String[] args) {
         File file = new File("/root/reports", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_TIME));

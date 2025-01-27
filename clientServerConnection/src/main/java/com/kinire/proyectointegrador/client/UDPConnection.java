@@ -1,32 +1,19 @@
 package com.kinire.proyectointegrador.client;
 
 import com.kinire.proyectointegrador.CommonValues;
-import com.kinire.proyectointegrador.client.exceptions.FileDoesNotExistException;
-import com.kinire.proyectointegrador.client.exceptions.RequestNotFulfilledException;
-import com.kinire.proyectointegrador.client.exceptions.UnknownException;
-import com.kinire.proyectointegrador.client.lamba_interfaces.EmptyFunction;
-import com.kinire.proyectointegrador.client.lamba_interfaces.ErrorFunction;
-import com.kinire.proyectointegrador.client.lamba_interfaces.InputStreamFunction;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.logging.Level;
+
 import java.util.logging.Logger;
 
+
+/**
+ * Clase que maneja la conexión UDP
+ */
 class UDPConnection extends Thread {
 
     private final InetAddress address;
@@ -66,10 +53,6 @@ class UDPConnection extends Thread {
     @Override
     public void run() {
        while(running) {
-           //Si hay una solicitud para una imagen se atiende primero, antes que la prueba de conexion
-           //logger.log(Level.INFO, "Number of image requests awaiting" + imageSolicitudes.size());
-
-
            status();
             try {
                 Thread.sleep(100);
@@ -80,6 +63,11 @@ class UDPConnection extends Thread {
     }
 
 
+    /**
+     *  Pregunta el status al servidor.
+     *  Puede recibir dos valores, o conectado o que hay valores nuevos
+     *  En el caso de que perdiese la conexión o hubiese productos nuevos se ejecutarían las promesas guardadas en la clase Connection.
+     */
     private void status() {
         try {
             byte[] buffer = new byte[1024];

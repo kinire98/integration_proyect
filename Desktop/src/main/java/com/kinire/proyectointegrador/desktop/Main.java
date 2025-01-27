@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.io.IOException;
 
 /**
- *
+ * Clase principal del proyecto. Se encarga de arrancar la vista principal y establecer el LookAndFeel
  * @author kinire
  */
 public class Main {

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- *
+ * Vista principal de la aplicación
  * @author kinire
  */
 public class MainFrame extends javax.swing.JFrame {
@@ -57,6 +57,9 @@ public class MainFrame extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Solo se ejecuta una vez y recoge los productos de la red y los pone en la lista de productos
+     */
     public void initList() {
         i = 0;
         listModel.clear();
@@ -86,6 +89,9 @@ public class MainFrame extends javax.swing.JFrame {
         productsList.setCellRenderer(new CustomProductsRenderer());
     }
 
+    /**
+     * Recarga la lista de los productos, en caso de un cambio de divisa o adición de un producto nuevo
+     */
     public void reloadList() {
         List<Product> products = controller.getProducts();
         listModel.clear();
@@ -96,6 +102,9 @@ public class MainFrame extends javax.swing.JFrame {
         productsList.setCellRenderer(new CustomProductsRenderer());
     }
 
+    /**
+     * Vacía la tabla que muestra el carrito
+     */
     public void emptyTable() {
         DefaultTableModel model = (DefaultTableModel) shoppingCartTable.getModel();
         model.setRowCount(0);
@@ -105,6 +114,10 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Muestra la información del carrito en la tabla
+     * @param objects La información necesaria para el modelo. Cada posición del array primario es una fila de la tabla
+     */
     public void setTableModel(Object[][] objects) {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
@@ -121,27 +134,50 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
+    /**
+     * Getter para el usuario
+     * @return Usuario actual
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Setter para el usuario
+     * @param user El usuario a guardar
+     */
     public void setUser(User user) {
         this.user = user;
         checkUserPrivileges();
     }
 
+    /**
+     * Getter para la compra actual
+     * @return Compra actual
+     */
     public Purchase getCurrentPurchase() {
         return currentPurchase;
     }
 
+    /**
+     * Setter para reemplazar la compra
+     * @param currentPurchase Compra para reemplazar
+     */
     public void setCurrentPurchase(Purchase currentPurchase) {
         this.currentPurchase = currentPurchase;
     }
 
+    /**
+     * Permite recalcular los valores de la tabla ante un cambio de divisa
+     */
     public void recalculateCartValues() {
         controller.showShoppingCartState();
     }
 
+    /**
+     * Cambia el campo de precio total en el TextField correspondiente
+     * @param price El precio a cambiar
+     */
     public void setTotalPrice(float price) {
         this.priceField.setText(
                 String.format(
@@ -153,6 +189,9 @@ public class MainFrame extends javax.swing.JFrame {
         );
     }
 
+    /**
+     * Comprueba los privilegios del usuario en la vista principal
+     */
     public void checkUserPrivileges() {
         productsList.removeMouseListener(controller);
         settingsButton.setEnabled(true);
@@ -176,6 +215,10 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Devuelve la tabla del carrito
+     * @return La tabla del carrito
+     */
     public JTable getShoppingCartTable() {
         return shoppingCartTable;
     }

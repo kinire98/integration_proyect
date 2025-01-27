@@ -25,6 +25,9 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador del Frame principal
+ */
 public class MainFrameController extends MouseAdapter implements ListSelectionListener, WindowListener {
 
     private final static String SELECT_AMOUNT_TITLE = "Selecciona una cantidad";
@@ -76,14 +79,24 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
         this.userAdmin = new UserAdmin(frame);
     }
 
+    /**
+     * Agrega productos a la lista para el uso posterior
+     * @param product El producto a agregar
+     */
     public void addProduct(Product product) {
         this.products.add(product);
     }
 
+    /**
+     * Devuelve la lista con los productos
+     * @return La lista de productos
+     */
     public ArrayList<Product> getProducts() {
         return products;
     }
-
+    /**
+     * Permite ver el historial de compras
+     */
     public void seePurchaseHistory() {
         if(frame.getUser().isAdmin()) {
             Connection.getInstance().getAllPurchases(this::showPurchaseChooser, e -> {});
@@ -91,6 +104,10 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
             Connection.getInstance().getClientPurchases(frame.getUser(), this::showPurchaseChooser, e -> {});
         }
     }
+
+    /**
+     * Etablece el usuario al principio del arranque del programa
+     */
     public void changeUserStarted() {
         userAdmin.changeUser();
     }
@@ -136,7 +153,9 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
         }
     }
 
-
+    /**
+     * Guarda la compra que se encuentra actualmente el Frame principal
+     */
     public void savePurchase() {
         if(frame.getCurrentPurchase().getShoppingCartItems().isEmpty()) {
             JOptionPane.showMessageDialog(frame, EMPTY_PURCHASE, ERROR, JOptionPane.ERROR_MESSAGE);
@@ -153,6 +172,9 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
         emptyPurchase();
     }
 
+    /**
+     * Vacía la compra actual
+     */
     public void emptyPurchase() {
         if(frame.getCurrentPurchase().getShoppingCartItems().isEmpty()) {
             JOptionPane.showMessageDialog(frame, EMPTY_PURCHASE, ERROR, JOptionPane.ERROR_MESSAGE);
@@ -163,6 +185,9 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
         frame.emptyTable();
     }
 
+    /**
+     * Abre la vista de ajustes
+     */
     public void openSettings() {
         SettingsDialog dialog = new SettingsDialog(frame, true);
         dialog.setVisible(true);
@@ -170,7 +195,9 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
     }
 
 
-
+    /**
+     * Actualiza la tabla del carrito de la compra
+     */
     public void showShoppingCartState() {
         Object[][] objects = new Object[frame.getCurrentPurchase().getShoppingCartItems().size()][4];
         for (int i = 0; i < frame.getCurrentPurchase().getShoppingCartItems().size(); i++) {
@@ -265,6 +292,10 @@ public class MainFrameController extends MouseAdapter implements ListSelectionLi
                 item.setAmount(amount);
         }
     }
+
+    /**
+     * Cambia el usuario
+     */
     public void changeUser() {
         this.username = getData(ENTER_USERNAME_TITLE, ENTER_USERNAME, EMPTY_USER_FIELD, ERROR);
         if(!connectionStarted) {

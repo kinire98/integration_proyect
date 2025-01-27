@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- *
+ * Vista de adición de productos
  * @author kinire
  */
 public class AddProductDialog extends javax.swing.JDialog {

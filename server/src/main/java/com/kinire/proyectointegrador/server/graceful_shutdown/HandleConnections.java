@@ -6,6 +6,9 @@ import com.kinire.proyectointegrador.server.data_consistency.DataConsistency;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Clase que se encarga del cierre de todas las conexiones y de la interrupción correcta de los hilos
+ */
 public class HandleConnections extends Thread {
     private final ArrayList<ClientHandler> handlers;
 
@@ -17,6 +20,10 @@ public class HandleConnections extends Thread {
         this.consistency = consistency;
     }
 
+    /**
+     * Añade una conexión a cerrar más adelante
+     * @param handler Conexión a cerrar más adelante
+     */
     public void addHandler(ClientHandler handler) {
         this.handlers.add(handler);
     }

@@ -8,7 +8,7 @@ import com.kinire.proyectointegrador.desktop.controller.SettingsDialogController
 import com.kinire.proyectointegrador.desktop.ui.frame.MainFrame;
 
 /**
- *
+ * Vista de ajustes
  * @author kinire
  */
 public class SettingsDialog extends javax.swing.JDialog {

@@ -3,12 +3,13 @@ package com.kinire.proyectointegrador.desktop.ui.modifiedComponents;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * JPanel con los bordes redondeados
+ */
 public class RoundedPanel extends JPanel {
     protected int _strokeSize = 1;
-    protected Color _shadowColor = Color.BLACK;
     protected boolean _highQuality = true;
     protected Dimension _arcs = new Dimension(10, 10);
-    protected int _shadowAlpha = 0;
 
     protected Color _backgroundColor = new Color(21, 94, 149);
 
@@ -28,7 +29,6 @@ public class RoundedPanel extends JPanel {
 
         int width = getWidth();
         int height = getHeight();
-        Color shadowColorA = new Color(_shadowColor.getRed(), _shadowColor.getGreen(), _shadowColor.getBlue(), _shadowAlpha);
         Graphics2D graphics = (Graphics2D) g;
 
         if(_highQuality) {

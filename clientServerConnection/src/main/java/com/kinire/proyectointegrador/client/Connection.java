@@ -23,6 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Clase manejadora de las conexiones TCP
+ */
 public class Connection {
 
     private static Connection self;
@@ -44,9 +47,18 @@ public class Connection {
     private EmptyFunction productsUpdatedPromise;
     private EmptyFunction connectionLostPromise;
 
+    /**
+     * Comprueba si se ha inicado la instancia de la conexión
+     * @return Si se ha iniciado la instancia de la conexión
+     */
     public static boolean isInstanceStarted() {
         return self != null;
     }
+
+    /**
+     * Inicia la instancia de la conexión y ejecuta una promesa justo después
+     * @param promise Promesa a ejeutar tras iniciar la conexión
+     */
     public static void startInstance(EmptyFunction promise) {
         if(self == null) {
             try {
@@ -78,14 +90,26 @@ public class Connection {
         udpConnection.start();
     }
 
+    /**
+     * Establece una promesa que se ejecutará en caso de que actualice algún producto
+     * @param productsUpdatedPromise Promesa a ejecutar
+     */
     public void setProductsUpdatedPromise(EmptyFunction productsUpdatedPromise) {
         this.productsUpdatedPromise = productsUpdatedPromise;
     }
 
+    /**
+     * Establece una promesa que se ejecutará en caso de que se pierda la conexión
+     * @param connectionLostPromise Promesa a ejecutar
+     */
     public void setConnectionLostPromise(EmptyFunction connectionLostPromise) {
         this.connectionLostPromise = connectionLostPromise;
     }
 
+    /**
+     * Cierra la conexión
+     * @throws IOException Excepción de entrada salida
+     */
     public void close() throws IOException {
         this.udpConnection.close();
         this.inputStream.close();
@@ -93,6 +117,12 @@ public class Connection {
         this.socket.close();
     }
 
+    /**
+     * Pide todos los productos que contiene la base de datos remota
+     * @param successPromise Promesa que recibe un producto que se ejecutará cada vez que se reciba uno
+     * @param finishPromise Promesa que se ejecutará al final de recibir todos los productos
+     * @param failurePromise Promesa en caso de que se produzca algún fallo
+     */
     public void getProducts(ProductFunction successPromise, EmptyFunction finishPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -114,7 +144,14 @@ public class Connection {
             }
         }).start();
     }
-    //Update as in create
+
+    /**
+     * Añade un producto (es update cómo en cargar o insertar no actualizar)
+     * @param product El producto a añadir
+     * @param imageStream El flujo de la imagen
+     * @param successPromise Promesa en caso de éxito
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void updateProduct(Product product, InputStream imageStream, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -133,6 +170,13 @@ public class Connection {
             }
         }).start();
     }
+
+    /**
+     * Borra un prodcuto de la base de datos (sin uso en el proeycto)
+     * @param product El producto a eliminar
+     * @param successPromise Promesa en caso de éxito
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void deleteProduct(Product product, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -151,6 +195,14 @@ public class Connection {
             }
         }).start();
     }
+
+    /**
+     * Función que se encarga de comprobar si existe un usuario con el nombre de usuario recibido por parámetro
+     * @param username El nombre de usuario
+     * @param truePromise Promesa en caso de que sí exista
+     * @param falsePromise Promesa en caso de que no exista
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void userExists(String username, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -178,6 +230,14 @@ public class Connection {
 
     }
 
+    /**
+     * Comprueba si la información del usuario es correcta, incluyendo la contraseña.
+     * SE DEBE DE HABER LLAMADO ANTES AL MÉTODO userExists
+     * @param user El usuario a comprobar
+     * @param truePromise Promesa en caso de datos correctos
+     * @param falsePromise Promesa en caso de datos incorrectos
+     * @param failurePromise Promesa en caso de fallo
+     */
     public void isUserDataCorrect(User user, EmptyFunction truePromise, EmptyFunction falsePromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -197,6 +257,12 @@ public class Connection {
         }).start();
     }
 
+    /**
+     * Envía una solicitud para crear un nuevo usuario
+     * @param user El usuario a crear
+     * @param successPromise Promesa en caso de éxito
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void insertUserData(User user, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -215,6 +281,13 @@ public class Connection {
             }
         }).start();
     }
+
+    /**
+     * Envía una solicitud de guardado de compra
+     * @param purchase La compra a guardar
+     * @param successPromise Promesa en caso de éxito
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void uploadPurchase(Purchase purchase, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -234,6 +307,13 @@ public class Connection {
             }
         }).start();
     }
+
+    /**
+     * Envía una solicitud para borrar una compra
+     * @param purchase La compra a borrar
+     * @param successPromise Promesa en caso de éxito
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void deletePurchase(Purchase purchase, EmptyFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -252,6 +332,13 @@ public class Connection {
             }
         }).start();
     }
+
+    /**
+     * Solicitud para obtener todas las compras de un usuario
+     * @param user El usuario en cuestión
+     * @param successPromise Promesa que recibe una lista de compras en caso de éxito
+     * @param failurePromise Promesa en caso de error
+     */
     public void getClientPurchases(User user, MultiplePurchasesFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             List<Object> purchases = null;
@@ -281,6 +368,13 @@ public class Connection {
             );
         }).start();
     }
+
+    /**
+     * Envía una solicitud para obtener todas las compras.
+     * Solo debe ejecutarse en caso de que el usuario sea un usuario administrador
+     * @param successPromise Promesa que recibe las compras en caso de éxito
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void getAllPurchases(MultiplePurchasesFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             List<Object> purchases = null;
@@ -310,6 +404,13 @@ public class Connection {
             );
         }).start();
     }
+
+    /**
+     * Enviá una solititud para recibir todos los productos que no se tienen actualmente
+     * @param products Los productos que se tienen actualmente
+     * @param successPromise Promesa que recibe un producto a la vez que no tiene el usuario
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void getNotStoredProducts(List<Product> products, ProductFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             products.forEach(product -> product.setImage(null));
@@ -330,6 +431,14 @@ public class Connection {
             }
         }).start();
     }
+
+    /**
+     * Envía una solicitud para obtener los productos que han sido actualizados.
+     * (No implementado en los clientes)
+     * @param products Los productos que se tienen actualmente
+     * @param successPromise Promesa en caso de éxito que recibe un producto al mismo tiempo
+     * @param failurePromise Promesa en caso de fracaso
+     */
     public void getUpdatedProducts(List<Product> products, ProductFunction successPromise, ErrorFunction failurePromise) {
         new Thread(() -> {
             try {
@@ -350,9 +459,17 @@ public class Connection {
             }
         }).start();
     }
+
+    /**
+     * Ejecuta la promesa guardad para cuándo se actualizan los productos
+     */
     void productsUpdated() {
         new Thread(productsUpdatedPromise::apply).start();
     }
+
+    /**
+     * Ejercuta la promesa guardad para cuándo se pierde la conexión
+     */
     void connectionLost() {
         new Thread(connectionLostPromise::apply).start();
     }

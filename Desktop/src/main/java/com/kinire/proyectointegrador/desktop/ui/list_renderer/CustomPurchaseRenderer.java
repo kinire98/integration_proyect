@@ -10,6 +10,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Locale;
 
+/**
+ * Renderizador para la lista de compras de la vista de compra
+ */
 public class CustomPurchaseRenderer extends DefaultListCellRenderer implements ListCellRenderer<Object> {
     private static final int iconTextGap = 10;
     @Override

@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Locale;
 
+/**
+ * Renderizador para la lista de productos de la vista principal
+ */
 public class CustomProductsRenderer extends DefaultListCellRenderer implements ListCellRenderer<Object> {
     private static final int iconTextGap = 10;
     @Override

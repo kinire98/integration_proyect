@@ -5,10 +5,16 @@ import com.kinire.proyectointegrador.server.DAOInstances.DAOInstances;
 
 import java.util.List;
 
+/**
+ * Clase que se ejecuta en Daemon que se encarga de evitar que haya nombres de clases duplicados
+ */
 public class DataConsistency extends Thread {
 
     private volatile boolean running = true;
 
+    /**
+     * Interrumpe el hilo
+     */
     public void finish() {
         running = false;
         this.interrupt();

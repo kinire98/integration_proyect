@@ -14,7 +14,7 @@ import javax.swing.*;
 import java.util.Locale;
 
 /**
- *
+ * Vista de compras
  * @author kinire
  */
 public class PurchaseDialog extends javax.swing.JDialog {
@@ -58,6 +58,10 @@ public class PurchaseDialog extends javax.swing.JDialog {
         productsList.setCellRenderer(new CustomPurchaseRenderer());
     }
 
+    /**
+     * Establece si el usuario ha cerrado la vista decidiendo borrar la compra
+     * @return Si el usuario ha decidido borrar la compra
+     */
     public boolean isDelete() {
         return delete;
     }

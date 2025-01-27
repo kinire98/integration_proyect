@@ -9,7 +9,6 @@ CREATE TABLE products(
   name VARCHAR(30),
   price DECIMAL(10, 2),
   image_path VARCHAR(100),
-  last_modification DATE,
   category_id BIGINT,
   PRIMARY KEY(ID),
   FOREIGN KEY(category_id)

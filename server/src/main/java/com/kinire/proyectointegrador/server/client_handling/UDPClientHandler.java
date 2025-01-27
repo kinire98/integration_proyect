@@ -13,13 +13,13 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/**
+ * Clase que maneja la comunicación UDP
+ */
 public class UDPClientHandler extends Thread {
 
     private final InetAddress address;
@@ -47,11 +47,18 @@ public class UDPClientHandler extends Thread {
         }
     }
 
+    /**
+     * Cierra el socket e interrumpe el hilo
+     */
     public void close() {
         this.running = false;
         socket.close();
         this.interrupt();
     }
+
+    /**
+     * Pone en cola una solicitud de aviso de productos actualizados
+     */
     public void queueNotificationOfProductUpdate() {
         productUpdateSignaled = true;
     }

@@ -6,6 +6,9 @@ import com.kinire.proyectointegrador.desktop.ui.frame.MainFrame;
 
 import javax.swing.*;
 
+/**
+ * Clase para la administración de los usuarios
+ */
 public class UserAdmin {
     private final static String ERROR = "Error";
     private final static String ENTER_USERNAME = "Cliente:";
@@ -26,6 +29,10 @@ public class UserAdmin {
     public UserAdmin(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
     }
+
+    /**
+     * Inicio del proceso del cambio de usuario
+     */
     public void changeUser() {
         String username = JOptionPane.showInputDialog(mainFrame, ENTER_USERNAME, ENTER_USERNAME_TITLE, JOptionPane.PLAIN_MESSAGE);
         if(username == null || username.isEmpty())
